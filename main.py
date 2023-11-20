@@ -53,9 +53,6 @@ class Game:
                 self.users[data['N']].change_direction(direction)
                 self.users[data['N']].rect.center = (data['x'], data['y'])
 
-
-
-
     def _event(self):
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
@@ -111,3 +108,5 @@ if __name__ == '__main__':
     game.start_window()
     game.new()
     game.run()
+
+# Hello
