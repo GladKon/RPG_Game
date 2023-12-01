@@ -8,7 +8,7 @@ from player import Player
 from users import User
 from helper import res
 from map import TileMap, Camera
-from starting_window import window1, window2, window3
+from starting_window import start_window, registration, menu
 
 
 class Game:
@@ -64,22 +64,16 @@ class Game:
 
     def start_window(self):
         geme = True
-        resultat = 0
+        resultat = 'start_window'
         while geme:
-
-            if resultat == 0:
-                resultat = window1(self)
-
-            elif resultat == 2:
-                resultat = window2(self)
-
-            elif resultat == 1:
-                resultat = window3(self)
-                if resultat == 3:
-                    geme = False
-                elif resultat == 5:
-                    self.life = False
-                    geme = False
+            resultat = start_window(self, resultat)
+            resultat = registration(self, resultat)
+            resultat = menu(self, resultat)
+            if resultat == 'game':
+                geme = False
+            elif resultat == 'exit':
+                self.life = False
+                geme = False
 
     def _update(self):
         self.all_sprite.update()

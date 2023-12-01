@@ -24,8 +24,8 @@ class InputField:
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_RETURN:  # ENTER
-                    print(self.text)
-                    self.text = ''
+                    self.active = False
+                    self.color = self.color_active if self.active else self.color_inactive
                 elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                 else:

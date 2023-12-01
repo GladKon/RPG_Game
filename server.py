@@ -2,11 +2,13 @@ import socket
 import threading
 import json
 
+
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server.bind(("127.0.0.1", 19450))
 users = []
 server.listen()
+
 
 
 def handel_client(client):
