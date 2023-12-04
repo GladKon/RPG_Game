@@ -8,7 +8,7 @@ from player import Player
 from users import User
 from helper import res
 from map import TileMap, Camera
-from starting_window import start_window, registration, menu
+from starting_window import start_window, registration, menu, window_input, room, input_room,create_room
 
 
 class Game:
@@ -67,8 +67,13 @@ class Game:
         resultat = 'start_window'
         while geme:
             resultat = start_window(self, resultat)
+            resultat = window_input(self,resultat)
             resultat = registration(self, resultat)
             resultat = menu(self, resultat)
+            resultat = room(self, resultat)
+            resultat = input_room(self, resultat)
+            resultat = create_room(self, resultat)
+
             if resultat == 'game':
                 geme = False
             elif resultat == 'exit':

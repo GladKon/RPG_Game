@@ -7,6 +7,7 @@ font = pygame.font.Font(None, 36)  # Установка шрифта
 class InputField:
     def __init__(self, x, y, w, h):
         self.rect = pygame.Rect(x, y, w, h)
+        self.width = w
         self.color_inactive = pygame.Color((255, 0, 0))
         self.color_active = pygame.Color((0, 255, 0))
         self.color = self.color_inactive
@@ -33,7 +34,7 @@ class InputField:
                 self.txt_surface = font.render(self.text, True, (0, 0, 0))
 
     def draw(self, screen):
-        width = max(200, self.txt_surface.get_width() + 10)
+        width = max(self.width, self.txt_surface.get_width() + 10)
         self.rect.w = width
         pygame.draw.rect(screen, self.color, self.rect, 2)
         screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
