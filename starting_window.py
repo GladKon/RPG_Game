@@ -24,25 +24,28 @@ def create_button(text: str, x, y, w, h, self):
 
 
 def start_window(self, running):
-    while running == 'start_window':
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                running = 'exit'
-            if event.type == pg.MOUSEBUTTONUP:
-                mouse_pos = pg.mouse.get_pos()
-                if 430 < mouse_pos[0] < 530 and 200 < mouse_pos[1] < 250:
-                    running = button_start_window_menu()
-                if 360 < mouse_pos[0] < 660 and 300 < mouse_pos[1] < 350:
-                    running = button_start_window_registration()
+    if running == 'start_window':
+        while running == 'start_window':
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    running = 'exit'
+                if event.type == pg.MOUSEBUTTONUP:
+                    mouse_pos = pg.mouse.get_pos()
+                    if 430 < mouse_pos[0] < 530 and 200 < mouse_pos[1] < 250:
+                        running = button_start_window_menu()
+                    if 360 < mouse_pos[0] < 660 and 300 < mouse_pos[1] < 350:
+                        running = button_start_window_registration()
 
-        self.screen.fill((0, 250, 0))
+            self.screen.fill((0, 250, 0))
 
-        self.clock.tick(60)
+            self.clock.tick(60)
 
-        create_button('Войти', 430, 200, 100, 50, self)
-        create_button('Зарегистрироваться', 360, 300, 300, 50, self)
-        pg.display.update()
-    return running
+            create_button('Войти', 430, 200, 100, 50, self)
+            create_button('Зарегистрироваться', 360, 300, 300, 50, self)
+            pg.display.update()
+        return running
+    else:
+        return running
 
 
 def button_start_window_menu():
@@ -93,7 +96,9 @@ def registration(self, running):
             password_input2.draw(self.screen)
             self.clock.tick(60)
             pg.display.update()
-    return running
+        return running
+    else:
+        return running
 
 
 def button_registration(login_input, password_input, password_input2):
@@ -135,6 +140,8 @@ def window_input(self, running):
                         running = button_input(login_input.text, password_input.text)
                     if 420 < mouse_pos[0] < 520 and 500 < mouse_pos[1] < 550:
                         running = button_input_back()
+                        print(running)
+
 
             self.screen.fill((0, 250, 100))
             self.screen.blit(name, (100, 100))
@@ -149,7 +156,9 @@ def window_input(self, running):
             password_input.draw(self.screen)
             self.clock.tick(60)
             pg.display.update()
-    return running
+        return running
+    else:
+        return running
 
 
 def button_input(login, password):
@@ -274,9 +283,9 @@ def create_room(self, running):
             room_max_player.handle_event(event)
             if event.type == pg.MOUSEBUTTONUP:
                 mouse_pos = pg.mouse.get_pos()
-                if 430 < mouse_pos[0] < 530 and 300 < mouse_pos[1] < 350:
-                    pass
-                elif 430 < mouse_pos[0] < 530 and 400 < mouse_pos[1] < 450:
+                if 430 < mouse_pos[0] < 530 and 350 < mouse_pos[1] < 400:
+                    running = button_create_room(room_name.text, room_password.text, room_max_player.text)
+                elif 430 < mouse_pos[0] < 530 and 450 < mouse_pos[1] < 500:
                     running = button_create_room_back()
 
         self.screen.fill((0, 250, 0))
@@ -287,11 +296,39 @@ def create_room(self, running):
         room_max_player.draw(self.screen)
         room_password.draw(self.screen)
         self.clock.tick(60)
-        create_button('Создать', 430, 400, 100, 50, self)
-        create_button('Назад', 430, 400, 100, 50, self)
+        create_button('Создать', 430, 350, 100, 50, self)
+        create_button('Назад', 430, 450, 100, 50, self)
         pg.display.update()
     return running
 
 
 def button_create_room_back():
+    return 'room'
+
+
+def button_create_room(name, password, max_player = 15):
+    d = {'name': name, 'password': password, 'limited': max_player}
+    data = requests.post('http://127.0.0.1:5000/create_room', data=d)
+
+    return_data = json.loads(data.text)
+    print(return_data)
+    if return_data == {'response': 'create', 'status': 201}:
+        return 'game_room'
+
+def game_room(self, running):
+    while running == 'game_room':
+        for event in pg.event.get():
+
+            if event.type == pg.QUIT:
+                running = 'exit'
+            if event.type == pg.MOUSEBUTTONUP:
+                mouse_pos = pg.mouse.get_pos()
+                if 430 < mouse_pos[0] < 530 and 400 < mouse_pos[1] < 450:
+                    running = button_game_room_back()
+            self.screen.fill((0, 250, 0))
+            self.clock.tick(60)
+            create_button('Назад', 430, 400, 100, 50, self)
+            pg.display.update()
+
+def button_game_room_back():
     return 'room'

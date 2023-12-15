@@ -8,7 +8,7 @@ from player import Player
 from users import User
 from helper import res
 from map import TileMap, Camera
-from starting_window import start_window, registration, menu, window_input, room, input_room,create_room
+from starting_window import start_window, registration, menu, window_input, room, input_room,create_room, game_room
 
 
 class Game:
@@ -18,8 +18,8 @@ class Game:
         pg.display.set_caption(Title)
         pg.display.set_icon(pg.image.load(res / 'Images' / 'frog.png'))
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect(("127.0.0.1", 19450))
-        self.number = self.client.recv(1024).decode('utf-8')
+        # self.client.connect(("127.0.0.1", 19450))
+        # self.number = self.client.recv(1024).decode('utf-8')
         self.users = {}
         self.clock = pg.time.Clock()
         self.life = True
@@ -68,11 +68,13 @@ class Game:
         while geme:
             resultat = start_window(self, resultat)
             resultat = window_input(self,resultat)
+            # print(resultat)
             resultat = registration(self, resultat)
             resultat = menu(self, resultat)
             resultat = room(self, resultat)
             resultat = input_room(self, resultat)
             resultat = create_room(self, resultat)
+            resultat = game_room(self, resultat)
 
             if resultat == 'game':
                 geme = False
@@ -108,4 +110,4 @@ if __name__ == '__main__':
     game.new()
     game.run()
 
-# Hello
+
