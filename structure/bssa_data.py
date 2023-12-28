@@ -3,7 +3,7 @@ import sqlite3
 
 def create_db():
     # Подключение к базе данных (или создание, если она не существует)
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect('../users.db')
     cursor = conn.cursor()
 
     # Создание таблицы, если она ещё не создана
@@ -18,7 +18,7 @@ def create_db():
 
 
 def add_user(username, password):
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect('../users.db')
     cursor = conn.cursor()
 
     # Добавление нового пользователя
@@ -28,7 +28,7 @@ def add_user(username, password):
 
 
 def is_exist(username):
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect('../users.db')
     cursor = conn.cursor()
 
     # Проверка существования пользователя
@@ -39,7 +39,7 @@ def is_exist(username):
 
 
 def validate_user(username, password):
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect('../users.db')
     cursor = conn.cursor()
 
     # Проверка соответствия логина и пароля

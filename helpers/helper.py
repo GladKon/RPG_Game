@@ -12,4 +12,4 @@ class SpriteHelper:
     def get_image(self, x, y, w, h):
         return self.sheet.subsurface(x, y, w, h)
 
-res = Path('res')
+res = Path('../res')

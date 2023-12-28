@@ -3,12 +3,12 @@ import socket
 import threading
 import json
 
-from Settings import *
-from player import Player
-from users import User
-from helper import res
-from map import TileMap, Camera
-from starting_window import start_window, registration, menu, window_input, room, input_room,create_room, game_room
+from RPG_Game.structure.Settings import *
+from RPG_Game.helpers.player import Player
+from RPG_Game.helpers.users import User
+from RPG_Game.helpers.helper import res
+from RPG_Game.structure.map import TileMap, Camera
+from RPG_Game.structure.starting_window import start_window, registration, menu, window_input, room, input_room,create_room, game_room
 
 
 class Game:
@@ -23,6 +23,7 @@ class Game:
         self.users = {}
         self.clock = pg.time.Clock()
         self.life = True
+        self.state = 'START_WINDOW'
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
@@ -63,24 +64,27 @@ class Game:
                 self.player.Sprint = 1
 
     def start_window(self):
-        geme = True
-        resultat = 'start_window'
-        while geme:
-            resultat = start_window(self, resultat)
-            resultat = window_input(self,resultat)
-            # print(resultat)
-            resultat = registration(self, resultat)
-            resultat = menu(self, resultat)
-            resultat = room(self, resultat)
-            resultat = input_room(self, resultat)
-            resultat = create_room(self, resultat)
-            resultat = game_room(self, resultat)
+        while self.state != 'EXIT':
+            match self.state:
+                case 'START_WINDOW':
+                    start_window(self)
+                case 'INPUT':
+                    window_input(self)
+                case 'REGISTRATION':
+                    registration(self)
+                case 'MENU':
+                    menu(self)
+                case 'ROOM':
+                    room(self)
+                case 'INPUT_ROOM':
+                    input_room(self)
+                case 'CREATE_ROOM':
+                    create_room(self)
+                case 'GAME_ROOM':
+                    game_room(self)
 
-            if resultat == 'game':
-                geme = False
-            elif resultat == 'exit':
-                self.life = False
-                geme = False
+
+
 
     def _update(self):
         self.all_sprite.update()

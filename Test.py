@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 
-from RPG_Game.bssa_data import add_user, is_exist, validate_user
-from room import Room
+from RPG_Game.structure.bssa_data import add_user, is_exist, validate_user
+from RPG_Game.structure.room import Room
 
 app = Flask(__name__)
 
