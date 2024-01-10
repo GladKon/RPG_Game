@@ -1,9 +1,11 @@
 import pygame as pg
 import requests
 import json
+import socket
 
 from RPG_Game.helpers.Booton_class import Button
 from RPG_Game.helpers.input_class import InputField
+
 
 pg.init()
 
@@ -165,7 +167,7 @@ def window_input(self):
             self.screen.blit(password, (100, 200))
 
             b1.draw(self.screen)
-            b1.draw(self.screen)
+            b2.draw(self.screen)
             login_input.draw(self.screen)
             password_input.draw(self.screen)
 
@@ -251,6 +253,12 @@ def room(self):
 
 def input_room(self):
     b1 = Button('Назад', 430, 400, 100, 50)
+    b2 = Button('Войти',430, 350, 100, 50)
+    name_room = InputField(360, 100, 200, 50)
+    password_room = InputField(360, 200, 200, 50)
+
+    name = font.render('Введите название комнаты', True, (0, 10, 0))
+    password = font.render('Введите пароль от комнаты', True, (0, 10, 0))
 
     while self.state == 'INPUT_ROOM':
         for event in pg.event.get():
@@ -260,16 +268,30 @@ def input_room(self):
             elif b1.handle_event(event):
                 self.state = 'MENU'
                 break
+            elif b2.handle_event(event):
+                self.state = inpit_room(name_room.text,password_room.text)
+                break
+            name_room.handle_event(event)
+            password_room.handle_event(event)
 
         self.screen.fill((0, 250, 0))
+        self.screen.blit(name, (100, 100))
+        self.screen.blit(password, (200, 100))
 
         b1.draw(self.screen)
+        b2.draw(self.screen)
+        name_room.draw(self.screen)
+        password_room.draw(self.screen)
+
 
         self.clock.tick(60)
         pg.display.update()
 
 
-
+def inpit_room(name,password):
+    d = {'name': name, 'password': password}
+    data = requests.post('http://127.0.0.1:5000/input_room', data=d)
+    return 'GAME_ROOM' if data.status_code == 200 else 'INPUT_ROOM'
 
 
 
@@ -319,11 +341,7 @@ def create_room(self):
 def button_create_room(name, password, max_player = 15):
     d = {'name': name, 'password': password, 'limited': max_player}
     data = requests.post('http://127.0.0.1:5000/create_room', data=d)
-
-    return_data = json.loads(data.text)
-    print(return_data)
-    if return_data == {'response': 'create', 'status': 201}:
-        return 'GAME_ROOM'
+    return 'GAME_ROOM' if data.status_code == 201 else 'CREATE_ROOM'
 
 def game_room(self):
     b1 = Button('Назад', 430, 400, 100, 50)
@@ -336,7 +354,7 @@ def game_room(self):
 
             self.screen.fill((0, 250, 0))
 
-
+            b1.draw(self.screen)
 
             self.clock.tick(60)
             pg.display.update()

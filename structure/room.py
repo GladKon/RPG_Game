@@ -5,7 +5,7 @@ import threading
 import json
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('127.0.0.1', 19450))
+server.bind(('127.0.0.1', 19451))
 server.listen()
 
 
@@ -17,8 +17,8 @@ class Room:
         self.pasword = password
         self._players_in_room = []
         self.limit_of_user = limited
-        treading = threading.Thread(target=self.listening_user, args=())
-        treading.start()
+
+
 
     def generate_id(self):
         A = '1234567890!@#$%^&*"№;:?qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
@@ -39,15 +39,6 @@ class Room:
     def is_full(self):
         return len(self._players_in_room) == self.limit_of_user
 
-    def listening_user(self):
-        while True:
-            client, a = server.accept()
-            number = str(len(self._players_in_room)).encode('utf-8')
-            self._players_in_room.append(client)
-            client.send(number)
-            treading = threading.Thread(target=self.handle_client, args=(client,))
-            treading.start()
-
     def handle_client(self, client):
         while True:
             try:
@@ -63,3 +54,27 @@ class Room:
                 self._players_in_room.remove(client)
                 client.close()
                 break
+
+
+
+
+rooms = []
+
+
+def listening_user():
+    while True:
+        client, a = server.accept()
+        name_of_room = client.recv(1024)
+        if name_of_room not in rooms:
+            rooms.append(name_of_room)
+        for room in rooms:
+            if room.name == name_of_room:
+                number = str(len(room._players_in_room)).encode('utf-8')
+                room._players_in_room.append(client)
+                client.send(number)
+                t = threading.Thread(target=room.handle_client, args=(client,))
+                t.start()
+
+
+treading = threading.Thread(target=listening_user, args=())
+treading.start()

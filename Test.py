@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 
 from RPG_Game.structure.bssa_data import add_user, is_exist, validate_user
-from RPG_Game.structure.room import Room
+from RPG_Game.structure.room import Room, rooms
+
 
 app = Flask(__name__)
+
 
 
 @app.route('/')
@@ -39,6 +41,17 @@ def create_room():
     password = request.form['password']
     limited = request.form['limited']
     r = Room(name_room, password, limited)
-    return jsonify({'response': 'create', 'status': 201})
+    rooms.append(r)
+    return jsonify({'response': 'create', 'status': 201}), 201
+
+@app.route('/input_room', methods=['POST'])
+def input_room():
+    name = request.form['name']
+    password = request.form['password']
+    for room in rooms:
+        if room.name == name:
+            return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify({'response': 'stop', 'status': 412})
+        else:
+            return jsonify({'response': 'stop', 'status': 401})
 
 app.run()

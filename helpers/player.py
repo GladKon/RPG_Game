@@ -3,7 +3,7 @@ import json
 
 from RPG_Game.helpers.helper import SpriteHelper
 from pygame.math import Vector2
-from Settings import Sloy_player
+from RPG_Game.structure.Settings import Sloy_player
 
 
 class Player(pg.sprite.Sprite):
