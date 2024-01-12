@@ -5,7 +5,7 @@ import socket
 
 from RPG_Game.helpers.Booton_class import Button
 from RPG_Game.helpers.input_class import InputField
-
+from RPG_Game.helpers.list_class import TextList
 
 pg.init()
 
@@ -40,8 +40,6 @@ def start_window(self):
                 self.state = 'REGISTRATION'
                 break
 
-
-
         self.screen.fill((0, 250, 0))
         self.clock.tick(60)
 
@@ -51,64 +49,58 @@ def start_window(self):
         pg.display.update()
 
 
-
-
-
-
 def registration(self):
-        b1 = Button('Зарегистрироваться', 340, 400, 300, 50)
-        b2 = Button('Назад', 420, 500, 100, 50)
+    b1 = Button('Зарегистрироваться', 340, 400, 300, 50)
+    b2 = Button('Назад', 420, 500, 100, 50)
 
-        login_input = InputField(360, 100, 200, 50)
-        password_input = InputField(360, 200, 200, 50)
-        password_input2 = InputField(360, 300, 200, 50)
+    login_input = InputField(360, 100, 200, 50)
+    password_input = InputField(360, 200, 200, 50)
+    password_input2 = InputField(360, 300, 200, 50)
 
-        name = font.render('Введите никмейм', True, (0, 10, 0))
-        password = font.render('Введите пароль', True, (0, 10, 0))
-        password2 = font.render('Подтвертите пароль', True, (0, 10, 0))
-        name_error = font.render('Существующее имя', True, (255, 0, 0))
-        password_error = font.render('Разные пароли', True, (255, 0, 0))
+    name = font.render('Введите никмейм', True, (0, 10, 0))
+    password = font.render('Введите пароль', True, (0, 10, 0))
+    password2 = font.render('Подтвертите пароль', True, (0, 10, 0))
+    name_error = font.render('Существующее имя', True, (255, 0, 0))
+    password_error = font.render('Разные пароли', True, (255, 0, 0))
 
-        running = None
-        while self.state == 'REGISTRATION':
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    self.state = 'EXIT'
+    running = None
+    while self.state == 'REGISTRATION':
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                self.state = 'EXIT'
+                break
+            elif b1.handle_event(event):
+                runnig = button_registration(login_input.text, password_input.text, password_input2.text)
+                if runnig == 'MENU':
+                    self.state = 'MENU'
                     break
-                elif b1.handle_event(event):
-                     runnig = button_registration(login_input.text, password_input.text, password_input2.text)
-                     if runnig == 'MENU':
-                        self.state = 'MENU'
-                        break
 
-                elif b2.handle_event(event):
-                    self.state = 'START_WINDOW'
-                    break
-                login_input.handle_event(event)
-                password_input.handle_event(event)
-                password_input2.handle_event(event)
+            elif b2.handle_event(event):
+                self.state = 'START_WINDOW'
+                break
+            login_input.handle_event(event)
+            password_input.handle_event(event)
+            password_input2.handle_event(event)
 
+        self.screen.fill((0, 250, 100))
+        self.screen.blit(name, (100, 100))
 
-            self.screen.fill((0, 250, 100))
-            self.screen.blit(name, (100, 100))
+        if running == 'name_error':
+            self.screen.blit(name_error, (600, 110))
+        if running == 'password_error':
+            self.screen.blit(password_error, (600, 250))
 
-            if running == 'name_error':
-                self.screen.blit(name_error, (600, 110))
-            if running == 'password_error':
-                self.screen.blit(password_error, (600, 250))
+        self.screen.blit(password, (100, 200))
+        self.screen.blit(password2, (100, 300))
 
-            self.screen.blit(password, (100, 200))
-            self.screen.blit(password2, (100, 300))
+        b1.draw(self.screen)
+        b2.draw(self.screen)
+        login_input.draw(self.screen)
+        password_input.draw(self.screen)
+        password_input2.draw(self.screen)
 
-            b1.draw(self.screen)
-            b2.draw(self.screen)
-            login_input.draw(self.screen)
-            password_input.draw(self.screen)
-            password_input2.draw(self.screen)
-
-            self.clock.tick(60)
-            pg.display.update()
-
+        self.clock.tick(60)
+        pg.display.update()
 
 
 def button_registration(login_input, password_input, password_input2):
@@ -125,55 +117,48 @@ def button_registration(login_input, password_input, password_input2):
         return 'password_error'
 
 
-
-
-
 def window_input(self):
-        b1 = Button('Войти', 420, 400, 100, 50)
-        b2 = Button('Назад', 420, 500, 100, 50)
-        login_input = InputField(360, 100, 200, 50)
-        password_input = InputField(360, 200, 200, 50)
+    b1 = Button('Войти', 420, 400, 100, 50)
+    b2 = Button('Назад', 420, 500, 100, 50)
+    login_input = InputField(360, 100, 200, 50)
+    password_input = InputField(360, 200, 200, 50)
 
-        name = font.render('Введите никмейм', True, (0, 10, 0))
-        password = font.render('Введите пароль', True, (0, 10, 0))
-        error = font.render('Неверное имя или пароль!', True, (255, 0, 0))
-        running = None
+    name = font.render('Введите никмейм', True, (0, 10, 0))
+    password = font.render('Введите пароль', True, (0, 10, 0))
+    error = font.render('Неверное имя или пароль!', True, (255, 0, 0))
+    running = None
 
-        while self.state == 'INPUT':
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    self.state = 'EXIT'
+    while self.state == 'INPUT':
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                self.state = 'EXIT'
+                break
+            elif b1.handle_event(event):
+                running = button_input(login_input.text, password_input.text)
+                if running == 'MENU':
+                    self.state = 'MENU'
                     break
-                elif b1.handle_event(event):
-                    running = button_input(login_input.text, password_input.text)
-                    if running == 'MENU':
-                        self.state = 'MENU'
-                        break
-                elif b2.handle_event(event):
-                    self.state = 'START_WINDOW'
-                    break
-                login_input.handle_event(event)
-                password_input.handle_event(event)
+            elif b2.handle_event(event):
+                self.state = 'START_WINDOW'
+                break
+            login_input.handle_event(event)
+            password_input.handle_event(event)
 
+        self.screen.fill((0, 250, 100))
+        self.screen.blit(name, (100, 100))
 
+        if running == 'error':
+            self.screen.blit(error, (570, 150))
 
+        self.screen.blit(password, (100, 200))
 
-            self.screen.fill((0, 250, 100))
-            self.screen.blit(name, (100, 100))
+        b1.draw(self.screen)
+        b2.draw(self.screen)
+        login_input.draw(self.screen)
+        password_input.draw(self.screen)
 
-            if running == 'error':
-                self.screen.blit(error, (570, 150))
-
-            self.screen.blit(password, (100, 200))
-
-            b1.draw(self.screen)
-            b2.draw(self.screen)
-            login_input.draw(self.screen)
-            password_input.draw(self.screen)
-
-            self.clock.tick(60)
-            pg.display.update()
-
+        self.clock.tick(60)
+        pg.display.update()
 
 
 def button_input(login, password):
@@ -184,9 +169,6 @@ def button_input(login, password):
         return 'MENU'
     else:
         return 'error'
-
-
-
 
 
 def menu(self):
@@ -214,10 +196,6 @@ def menu(self):
 
         self.clock.tick(60)
         pg.display.update()
-
-
-
-
 
 
 def room(self):
@@ -249,11 +227,9 @@ def room(self):
         pg.display.update()
 
 
-
-
 def input_room(self):
     b1 = Button('Назад', 430, 400, 100, 50)
-    b2 = Button('Войти',430, 350, 100, 50)
+    b2 = Button('Войти', 430, 350, 100, 50)
     name_room = InputField(360, 100, 200, 50)
     password_room = InputField(360, 200, 200, 50)
 
@@ -269,7 +245,7 @@ def input_room(self):
                 self.state = 'MENU'
                 break
             elif b2.handle_event(event):
-                self.state = inpit_room(name_room.text,password_room.text)
+                self.state = inpit_room(name_room.text, password_room.text)
                 break
             name_room.handle_event(event)
             password_room.handle_event(event)
@@ -283,16 +259,14 @@ def input_room(self):
         name_room.draw(self.screen)
         password_room.draw(self.screen)
 
-
         self.clock.tick(60)
         pg.display.update()
 
 
-def inpit_room(name,password):
+def inpit_room(name, password):
     d = {'name': name, 'password': password}
     data = requests.post('http://127.0.0.1:5000/input_room', data=d)
     return 'GAME_ROOM' if data.status_code == 200 else 'INPUT_ROOM'
-
 
 
 def create_room(self):
@@ -320,7 +294,6 @@ def create_room(self):
             room_password.handle_event(event)
             room_max_player.handle_event(event)
 
-
         self.screen.fill((0, 250, 0))
         self.screen.blit(name_room, (100, 100))
         self.screen.blit(text_password, (100, 200))
@@ -336,15 +309,15 @@ def create_room(self):
         pg.display.update()
 
 
-
-
-def button_create_room(name, password, max_player = 15):
+def button_create_room(name, password, max_player=15):
     d = {'name': name, 'password': password, 'limited': max_player}
     data = requests.post('http://127.0.0.1:5000/create_room', data=d)
     return 'GAME_ROOM' if data.status_code == 201 else 'CREATE_ROOM'
 
+
 def game_room(self):
     b1 = Button('Назад', 430, 400, 100, 50)
+    l1 = TextList(['wer','we','r','t'], (236, 10, 100), 430, 200, 50)
     while self.state == 'GAME_ROOM':
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -355,8 +328,12 @@ def game_room(self):
             self.screen.fill((0, 250, 0))
 
             b1.draw(self.screen)
+            l1.draw(self.screen)
 
             self.clock.tick(60)
             pg.display.update()
+
+
+
 
 
