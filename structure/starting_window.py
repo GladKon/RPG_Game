@@ -3,7 +3,7 @@ import requests
 import json
 import socket
 
-from RPG_Game.helpers.Booton_class import Button
+from RPG_Game.helpers.button_class import Button
 from RPG_Game.helpers.input_class import InputField
 from RPG_Game.helpers.list_class import TextList
 

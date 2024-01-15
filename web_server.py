@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from RPG_Game.structure.bssa_data import add_user, is_exist, validate_user
+from RPG_Game.structure.db_functions import add_user, is_exist, validate_user
 from RPG_Game.structure.room import Room, rooms
 
 
@@ -54,4 +54,4 @@ def input_room():
         else:
             return jsonify({'response': 'stop', 'status': 401})
 
-app.run()
+app.run(port=5000)

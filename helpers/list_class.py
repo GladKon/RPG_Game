@@ -17,4 +17,3 @@ class TextList:
 
             draw = self.font.render(str(counter) + ' ' + line, True, self.color)
             screen.blit(draw, (self.x, self.y + self.line_spacing * (counter - 1)))
-

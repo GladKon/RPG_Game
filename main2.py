@@ -8,8 +8,7 @@ from RPG_Game.helpers.player import Player
 from RPG_Game.helpers.users import User
 from RPG_Game.helpers.helper import res
 from RPG_Game.structure.map import TileMap, Camera
-from RPG_Game.structure.starting_window import start_window, registration, menu, window_input, room, input_room, \
-    create_room, game_room
+from RPG_Game.structure.starting_window import start_window, registration, menu, window_input, room, input_room,create_room, game_room
 
 
 class Game:
@@ -84,6 +83,9 @@ class Game:
                 case 'GAME_ROOM':
                     game_room(self)
 
+
+
+
     def _update(self):
         self.all_sprite.update()
         self.camera.update(self.player)
@@ -111,3 +113,5 @@ if __name__ == '__main__':
     game.start_window()
     game.new()
     game.run()
+
+
