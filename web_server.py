@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from RPG_Game.structure.bssa_data import add_user, is_exist, validate_user
+from RPG_Game.structure.db_function import add_user, is_exist, validate_user
 from RPG_Game.structure.room import Room, rooms
 
 
@@ -53,5 +53,14 @@ def input_room():
             return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify({'response': 'stop', 'status': 412})
         else:
             return jsonify({'response': 'stop', 'status': 401})
+
+
+@app.route('/room/<string:name>/get_users', methods=['GET'])
+def get_users(name: str):
+    for room in rooms:
+        if name == room.name:
+            return jsonify({'Response': 'Success', 'User': room.show_user()}) ,200
+    return jsonify({'Response': 'Not found'}) ,404
+
 
 app.run()

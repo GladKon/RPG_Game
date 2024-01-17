@@ -24,6 +24,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.life = True
         self.state = 'START_WINDOW'
+        self.data = {}
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()

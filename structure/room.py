@@ -64,9 +64,9 @@ rooms = []
 def listening_user():
     while True:
         client, a = server.accept()
-        name_of_room = client.recv(1024)
-        if name_of_room not in rooms:
-            rooms.append(name_of_room)
+        name_of_room = json.loads(client.recv(1024).decode('utf-8'))
+
+
         for room in rooms:
             if room.name == name_of_room:
                 number = str(len(room._players_in_room)).encode('utf-8')

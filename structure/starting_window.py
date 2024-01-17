@@ -3,7 +3,7 @@ import requests
 import json
 import socket
 
-from RPG_Game.helpers.Booton_class import Button
+from RPG_Game.helpers.button_class import Button
 from RPG_Game.helpers.input_class import InputField
 from RPG_Game.helpers.list_class import TextList
 
@@ -287,6 +287,7 @@ def create_room(self):
                 self.state = 'EXIT'
                 break
             elif b1.handle_event(event):
+                self.data['room_name'] = room_name.text
                 self.state = button_create_room(room_name.text, room_password.text, room_max_player.text)
             elif b2.handle_event(event):
                 self.state = 'ROOM'
@@ -316,24 +317,35 @@ def button_create_room(name, password, max_player=15):
 
 
 def game_room(self):
-    b1 = Button('Назад', 430, 400, 100, 50)
-    l1 = TextList(['wer','we','r','t'], (236, 10, 100), 430, 200, 50)
+    make_req(self.data['room_name'])
+
+    self.client.connect(("127.0.0.1", 19451))
+    fool = json.dumps(self.data['room_name']).encode('utf-8')
+    self.client.send(fool)
+
+    b1 = Button('Назад', 430, 500, 100, 45)
+    b2 = Button('Запустить', 430, 450, 100, 45)
+    l1 = TextList(['wer'], (236, 10, 100), 430, 100, 50)
     while self.state == 'GAME_ROOM':
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.state = 'EXIT'
             elif b1.handle_event(event):
                 self.state = 'ROOM'
+            elif b2.handle_event(event):
+                pass
 
             self.screen.fill((0, 250, 0))
 
             b1.draw(self.screen)
+            b2.draw(self.screen)
             l1.draw(self.screen)
 
             self.clock.tick(60)
             pg.display.update()
 
 
-
+def make_req(name):
+    data = requests.get(f'http://127.0.0.1:5000/room/{name}/get_users')
 
 
