@@ -4,13 +4,13 @@ from RPG_Game.helpers.helper import SpriteHelper
 from pygame.math import Vector2
 from RPG_Game.structure.Settings import Sloy_player
 
-class User(pg.sprite.Sprite):
+class User_game(pg.sprite.Sprite):
     speed = 3
 
     def __init__(self, game, path, pos):
         self._layer = Sloy_player
         super().__init__(game.all_sprite)
-
+        self.name = ''
         # self.sprite_sheet = SpriteHelper(path)
         # self.image = self.sprite_sheet.get_image(0, 0, 32, 32)
         sprite_sheet = SpriteHelper(path, scale=2)

@@ -1,16 +1,9 @@
 from flask import Flask, request, jsonify
 
-from RPG_Game.structure.db_function import add_user, is_exist, validate_user
-from RPG_Game.structure.room import Room, rooms
-
+from db_function import add_user, is_exist, validate_user
+from room import Room, rooms
 
 app = Flask(__name__)
-
-
-
-@app.route('/')
-def func1():
-    return 'Привет!'
 
 
 @app.route('/registration', methods=['POST'])
@@ -44,23 +37,26 @@ def create_room():
     rooms.append(r)
     return jsonify({'response': 'create', 'status': 201}), 201
 
+
 @app.route('/input_room', methods=['POST'])
 def input_room():
     name = request.form['name']
     password = request.form['password']
+    username = request.form['username']
     for room in rooms:
         if room.name == name:
-            return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify({'response': 'stop', 'status': 412})
-        else:
-            return jsonify({'response': 'stop', 'status': 401})
+            room.add_user(username)
+            return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify(
+                {'response': 'stop', 'status': 412})
+    return jsonify({'response': 'stop', 'status': 401})
 
 
 @app.route('/room/<string:name>/get_users', methods=['GET'])
 def get_users(name: str):
     for room in rooms:
         if name == room.name:
-            return jsonify({'Response': 'Success', 'User': room.show_user()}) ,200
-    return jsonify({'Response': 'Not found'}) ,404
+            return jsonify({'Response': 'Success', 'User': room.show_user()}), 200
+    return jsonify({'Response': 'Not found'}), 404
 
 
 app.run()

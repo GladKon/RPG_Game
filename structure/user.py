@@ -2,7 +2,7 @@ from random import choice
 class User:
     def __init__(self):
         self.id = self.generate_id()
-        self.name = 'Name'
+
         # self.clas.image = "image"
         # self.x,self.y = 0,0
         self.Xp = 0
