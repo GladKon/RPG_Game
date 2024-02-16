@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
 
-from db_function import add_user, is_exist, validate_user
+
 from room import Room, rooms
+from UserDAO import UserDAO
 
 app = Flask(__name__)
+user_dao = UserDAO('users.db')
+user_dao.create_db()
 
 
 @app.route('/registration', methods=['POST'])
@@ -11,10 +14,10 @@ def registration():
     username = request.form['name']
     password = request.form['password']
 
-    if is_exist(username):
+    if user_dao.is_exist(username):
         return jsonify({'response': 'Aleready exist', 'status': 409})
     else:
-        add_user(username, password)
+        user_dao.add_user(username, password)
         return jsonify({'response': 'create', 'status': 201})
 
 
@@ -22,7 +25,7 @@ def registration():
 def input():
     username = request.form['name']
     password = request.form['password']
-    if validate_user(username, password):
+    if user_dao.validate_user(username, password):
         return jsonify({'response': 'input', 'status': 200})
     else:
         return jsonify({'response': 'exsit', 'status': 401})

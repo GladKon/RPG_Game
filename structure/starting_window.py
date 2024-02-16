@@ -236,7 +236,7 @@ def input_room(self):
                 self.state = 'MENU'
                 break
             elif b2.handle_event(event):
-                self.data['room_name'] = name_room.text
+                self.data['name_of_room'] = name_room.text
                 self.state = connect_to_room(name_room.text, password_room.text, self.data['name'])
                 break
             name_room.handle_event(event)
@@ -273,7 +273,7 @@ def create_room(self):
                 self.state = 'EXIT'
                 break
             elif b1.handle_event(event):
-                self.data['room_name'] = room_name.text
+                self.data['name_of_room'] = room_name.text
                 self.state = create_a_room(room_name.text, room_password.text, room_max_player.text)
                 if self.state == 'GAME_ROOM':
                     connect_to_room(room_name.text, room_password.text, self.data['name'])
@@ -299,7 +299,7 @@ def create_room(self):
 
 
 def game_room(self):
-    users = get_list_of_users(self.data['room_name'])
+    users = get_list_of_users(self.data['name_of_room'])
 
     # self.client.connect(("127.0.0.1", 19451))
     # fool = json.dumps(self.data['room_name']).encode('utf-8')

@@ -88,7 +88,7 @@ class Game:
 
     def connect_player(self):
         self.client.connect(('127.0.0.1', 19451))
-        self.client.send(json.dumps(self.data['room_name']).encode('utf-8'))
+        self.client.send(json.dumps(self.data).encode('utf-8'))
         self.number = self.client.recv(1024).decode('utf-8')
 
     def _update(self):
