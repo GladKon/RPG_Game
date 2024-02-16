@@ -1,16 +1,12 @@
 from flask import Flask, request, jsonify
 
-from RPG_Game.structure.db_functions import add_user, is_exist, validate_user
-from RPG_Game.structure.room import Room, rooms
-
+from db_functions import add_user, is_exist, validate_user
+from room import Room, rooms
+from UserDAO import UserDAO
 
 app = Flask(__name__)
-
-
-
-@app.route('/')
-def func1():
-    return 'Привет!'
+user_dao = UserDAO("users.db")
+user_dao.create_db()
 
 
 @app.route('/registration', methods=['POST'])
@@ -18,10 +14,10 @@ def registration():
     username = request.form['name']
     password = request.form['password']
 
-    if is_exist(username):
+    if user_dao.is_exist(username):
         return jsonify({'response': 'Aleready exist', 'status': 409})
     else:
-        add_user(username, password)
+        user_dao.add_user(username, password)
         return jsonify({'response': 'create', 'status': 201})
 
 
@@ -29,7 +25,7 @@ def registration():
 def input():
     username = request.form['name']
     password = request.form['password']
-    if validate_user(username, password):
+    if user_dao.validate_user(username, password):
         return jsonify({'response': 'input', 'status': 200})
     else:
         return jsonify({'response': 'exsit', 'status': 401})
@@ -44,14 +40,26 @@ def create_room():
     rooms.append(r)
     return jsonify({'response': 'create', 'status': 201}), 201
 
+
 @app.route('/input_room', methods=['POST'])
 def input_room():
     name = request.form['name']
     password = request.form['password']
+    user = request.form['user']
     for room in rooms:
         if room.name == name:
-            return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify({'response': 'stop', 'status': 412})
-        else:
-            return jsonify({'response': 'stop', 'status': 401})
+            room.add_user(user)
+            return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify(
+                {'response': 'stop', 'status': 412})
+    return jsonify({'response': 'Stop', 'status': 401})
 
-app.run(port=5000)
+
+@app.route('/room/<string:name>/get_users', methods=['GET'])
+def get_users(name: str):
+    for room in rooms:
+        if room.name == name:
+            return jsonify({'Response': 'Success', 'Users': room.show_user()}), 200
+    return jsonify({'Response': 'Not Found'}), 404
+
+
+app.run(port=5002)

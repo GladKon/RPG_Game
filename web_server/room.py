@@ -16,9 +16,8 @@ class Room:
         self.name = name_room
         self.pasword = password
         self._players_in_room = []
+        self._players_in_room_id = []
         self.limit_of_user = limited
-
-
 
     def generate_id(self):
         A = '1234567890!@#$%^&*"№;:?qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
@@ -46,7 +45,7 @@ class Room:
                 data = json.loads(data.decode('utf-8'))
 
                 data = json.dumps(data).encode('utf-8')
-                for soct in self._players_in_room:
+                for soct in self._players_in_room_id:
                     if soct != client:
                         soct.send(data)
 
@@ -56,21 +55,18 @@ class Room:
                 break
 
 
-
-
 rooms = []
 
 
 def listening_user():
     while True:
         client, a = server.accept()
-        name_of_room = client.recv(1024)
-        if name_of_room not in rooms:
-            rooms.append(name_of_room)
+        name_of_room = json.loads(client.recv(1024).decode('utf-8'))
+
         for room in rooms:
             if room.name == name_of_room:
                 number = str(len(room._players_in_room)).encode('utf-8')
-                room._players_in_room.append(client)
+                room._players_in_room_id.append(client)
                 client.send(number)
                 t = threading.Thread(target=room.handle_client, args=(client,))
                 t.start()

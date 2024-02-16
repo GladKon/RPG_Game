@@ -14,6 +14,8 @@ class TextList:
 
     def draw(self, screen):
         for counter, line in enumerate(self.text_list, start=1):
-
             draw = self.font.render(str(counter) + ' ' + line, True, self.color)
             screen.blit(draw, (self.x, self.y + self.line_spacing * (counter - 1)))
+
+    def update_list(self, new_list):
+        self.text_list = new_list

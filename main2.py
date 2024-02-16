@@ -5,10 +5,12 @@ import json
 
 from RPG_Game.structure.settings import *
 from RPG_Game.helpers.player import Player
-from RPG_Game.helpers.users import User
+from RPG_Game.helpers.users import Userr
 from RPG_Game.helpers.helper import res
 from RPG_Game.structure.map import TileMap, Camera
-from RPG_Game.structure.starting_window import start_window, registration, menu, window_input, room, input_room,create_room, game_room
+from RPG_Game.structure.windows import start_window, registration, menu, window_input, room, input_room, \
+    create_room, game_room
+from structure.user import User
 
 
 class Game:
@@ -24,6 +26,8 @@ class Game:
         self.clock = pg.time.Clock()
         self.life = True
         self.state = 'START_WINDOW'
+        self.data = {}
+        self.user = User()
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
@@ -38,7 +42,7 @@ class Game:
             data = self.client.recv(1024)
             data = json.loads(data.decode('utf-8'))
             if data['N'] not in self.users:
-                self.users[data['N']] = User(self, res / 'Images' / 'player_sheet.png', (data['x'], data['y']))
+                self.users[data['N']] = Userr(self, res / 'Images' / 'player_sheet.png', (data['x'], data['y']))
             else:
                 x_old, y_old = self.users[data['N']].rect.center
                 x_new, y_new = (data['x'], data['y'])
@@ -82,9 +86,12 @@ class Game:
                     create_room(self)
                 case 'GAME_ROOM':
                     game_room(self)
-
-
-
+                case 'GAME':
+                    self.client.connect(("127.0.0.1", 19451))
+                    name_roomw = json.dumps(self.data["room_name"]).encode('UTF-8')
+                    self.client.send(name_roomw)
+                    self.number = self.client.recv(1024).decode('utf-8')
+                    break
 
     def _update(self):
         self.all_sprite.update()
@@ -113,5 +120,3 @@ if __name__ == '__main__':
     game.start_window()
     game.new()
     game.run()
-
-

@@ -4,7 +4,8 @@ from RPG_Game.helpers.helper import SpriteHelper
 from pygame.math import Vector2
 from RPG_Game.structure.settings import Sloy_player
 
-class User(pg.sprite.Sprite):
+
+class Userr(pg.sprite.Sprite):
     speed = 3
 
     def __init__(self, game, path, pos):
@@ -43,7 +44,6 @@ class User(pg.sprite.Sprite):
         self.direction = d
         self._Animation()
 
-
     def _Animation(self, frame_len=100):
 
         now = pg.time.get_ticks()
@@ -59,13 +59,10 @@ class User(pg.sprite.Sprite):
             if self.direction == 'r':
                 self.aimation = self.sprite_D
 
-
             self.image = self.aimation[self.animate]
-
 
             self.animate += 1
             if self.animate == 4:
                 self.animate = 0
 
             self.last_update = now
-

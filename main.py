@@ -5,11 +5,12 @@ import json
 
 from RPG_Game.structure.settings import *
 from RPG_Game.helpers.player import Player
-from RPG_Game.helpers.users import User
+from RPG_Game.helpers.users import Userr
 from RPG_Game.helpers.helper import res
 from RPG_Game.structure.map import TileMap, Camera
-from RPG_Game.structure.starting_window import start_window, registration, menu, window_input, room, input_room, \
+from RPG_Game.structure.windows import start_window, registration, menu, window_input, room, input_room, \
     create_room, game_room
+from structure.user import User
 
 
 class Game:
@@ -19,12 +20,12 @@ class Game:
         pg.display.set_caption(Title)
         pg.display.set_icon(pg.image.load(res / 'Images' / 'frog.png'))
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # self.client.connect(("127.0.0.1", 19450))
-        # self.number = self.client.recv(1024).decode('utf-8')
         self.users = {}
         self.clock = pg.time.Clock()
         self.life = True
         self.state = 'START_WINDOW'
+        self.data = {}
+        self.user = User()
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
@@ -39,7 +40,7 @@ class Game:
             data = self.client.recv(1024)
             data = json.loads(data.decode('utf-8'))
             if data['N'] not in self.users:
-                self.users[data['N']] = User(self, res / 'Images' / 'player_sheet.png', (data['x'], data['y']))
+                self.users[data['N']] = Userr(self, res / 'Images' / 'player_sheet.png', (data['x'], data['y']))
             else:
                 x_old, y_old = self.users[data['N']].rect.center
                 x_new, y_new = (data['x'], data['y'])
@@ -64,7 +65,7 @@ class Game:
             if event.type == pg.KEYUP and event.key == pg.K_LSHIFT:
                 self.player.Sprint = 1
 
-    def start_window(self):
+    def run(self):
         while self.state != 'EXIT':
             match self.state:
                 case 'START_WINDOW':
@@ -83,6 +84,15 @@ class Game:
                     create_room(self)
                 case 'GAME_ROOM':
                     game_room(self)
+                case 'GAME':
+                    self.connect_player()
+                    self.new()
+                    self.start_game()
+
+    def connect_player(self):
+        self.client.connect(("127.0.0.1", 19451))
+        self.client.send(json.dumps(self.data["room_name"]).encode('UTF-8'))
+        self.number = self.client.recv(1024).decode('utf-8')
 
     def _update(self):
         self.all_sprite.update()
@@ -96,7 +106,7 @@ class Game:
 
         pg.display.flip()
 
-    def run(self):
+    def start_game(self):
         tread = threading.Thread(target=self._resive_soct)
         tread.start()
         while self.life:
@@ -108,6 +118,4 @@ class Game:
 
 if __name__ == '__main__':
     game = Game()
-    game.start_window()
-    game.new()
     game.run()

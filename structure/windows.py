@@ -1,11 +1,11 @@
 import pygame as pg
 import requests
 import json
-import socket
 
 from RPG_Game.helpers.button_class import Button
 from RPG_Game.helpers.input_class import InputField
 from RPG_Game.helpers.list_class import TextList
+from RPG_Game.structure.request_functions import check_user, create_room_req, input_room_req
 
 pg.init()
 
@@ -106,7 +106,7 @@ def registration(self):
 def button_registration(login_input, password_input, password_input2):
     if password_input == password_input2:
         d = {'name': login_input, 'password': password_input}
-        data = requests.post('http://127.0.0.1:5000/registration', data=d)
+        data = requests.post('http://127.0.0.1:5002/registration', data=d)
 
         return_data = json.loads(data.text)
         if return_data == {'response': 'create', 'status': 201}:
@@ -134,9 +134,10 @@ def window_input(self):
                 self.state = 'EXIT'
                 break
             elif b1.handle_event(event):
-                running = button_input(login_input.text, password_input.text)
+                running = check_user(login_input.text, password_input.text)
                 if running == 'MENU':
                     self.state = 'MENU'
+                    self.user.name = login_input.text
                     break
             elif b2.handle_event(event):
                 self.state = 'START_WINDOW'
@@ -159,16 +160,6 @@ def window_input(self):
 
         self.clock.tick(60)
         pg.display.update()
-
-
-def button_input(login, password):
-    d = {'name': login, 'password': password}
-    data = requests.post('http://127.0.0.1:5000/input', data=d)
-    return_data = json.loads(data.text)
-    if return_data == {'response': 'input', 'status': 200}:
-        return 'MENU'
-    else:
-        return 'error'
 
 
 def menu(self):
@@ -245,8 +236,14 @@ def input_room(self):
                 self.state = 'MENU'
                 break
             elif b2.handle_event(event):
-                self.state = inpit_room(name_room.text, password_room.text)
-                break
+                self.state = input_room_req(name_room.text, password_room.text, self.user.name)
+                self.data['room_name'] = name_room.text
+                # if self.state == 'GAME_ROOM':
+                # self.client.connect(("127.0.0.1", 19451))
+                # name_roomw = json.dumps(name_room.text).encode('UTF-8')
+                # self.client.send(name_roomw)
+                # self.number = self.client.recv(1024).decode('utf-8')
+                self.state = 'GAME_ROOM'
             name_room.handle_event(event)
             password_room.handle_event(event)
 
@@ -261,12 +258,6 @@ def input_room(self):
 
         self.clock.tick(60)
         pg.display.update()
-
-
-def inpit_room(name, password):
-    d = {'name': name, 'password': password}
-    data = requests.post('http://127.0.0.1:5000/input_room', data=d)
-    return 'GAME_ROOM' if data.status_code == 200 else 'INPUT_ROOM'
 
 
 def create_room(self):
@@ -287,7 +278,10 @@ def create_room(self):
                 self.state = 'EXIT'
                 break
             elif b1.handle_event(event):
-                self.state = button_create_room(room_name.text, room_password.text, room_max_player.text)
+                self.data['room_name'] = room_name.text
+                self.state = create_room_req(room_name.text, room_password.text, room_max_player.text)
+                input_room_req(room_name.text, room_password.text, self.user.name)
+                # input_room(room_name.text, room_password.text)
             elif b2.handle_event(event):
                 self.state = 'ROOM'
             room_name.handle_event(event)
@@ -309,31 +303,34 @@ def create_room(self):
         pg.display.update()
 
 
-def button_create_room(name, password, max_player=15):
-    d = {'name': name, 'password': password, 'limited': max_player}
-    data = requests.post('http://127.0.0.1:5000/create_room', data=d)
-    return 'GAME_ROOM' if data.status_code == 201 else 'CREATE_ROOM'
-
-
 def game_room(self):
-    b1 = Button('Назад', 430, 400, 100, 50)
-    l1 = TextList(['wer','we','r','t'], (236, 10, 100), 430, 200, 50)
+    # self.client.connect(("127.0.0.1", 19451))
+    # fool = json.dumps(self.data['room_name']).encode('utf-8')
+    # self.client.send(fool)
+    make_req(self.data['room_name'])
+    b1 = Button('Назад', 430, 500, 100, 45)
+    b2 = Button('Запустить', 430, 450, 100, 45)
+    l1 = TextList(['wer'], (236, 10, 100), 430, 100, 50)
     while self.state == 'GAME_ROOM':
+        #make_req(self.data['room_name'])
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.state = 'EXIT'
             elif b1.handle_event(event):
                 self.state = 'ROOM'
+            elif b2.handle_event(event):
+                self.state = 'GAME'
 
             self.screen.fill((0, 250, 0))
 
             b1.draw(self.screen)
+            b2.draw(self.screen)
             l1.draw(self.screen)
 
             self.clock.tick(60)
             pg.display.update()
 
 
-
-
-
+def make_req(name):
+    data = requests.get(f'http://127.0.0.1:5002/room/{name}/get_users')
+    print(data.text)

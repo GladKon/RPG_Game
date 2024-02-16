@@ -1,12 +1,11 @@
 from random import choice
+
+
 class User:
     def __init__(self):
         self.id = self.generate_id()
-        self.name = 'Name'
-        # self.clas.image = "image"
-        # self.x,self.y = 0,0
+        self.name = ''
         self.Xp = 0
-        # self.clas = self.clas
         self.leveling = 0
         self.lvl = 0
 
@@ -22,4 +21,3 @@ class User:
         for i in range(30):
             self.id += choice(A)
         return self.id
-
