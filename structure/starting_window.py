@@ -7,6 +7,7 @@ from RPG_Game.helpers.button_class import Button
 from RPG_Game.helpers.input_class import InputField
 from RPG_Game.helpers.list_class import TextList
 from RPG_Game.structure.request_function import check_users, connect_to_room, create_a_room, get_list_of_users
+
 pg.init()
 
 font = pg.font.Font(None, 36)
@@ -62,6 +63,10 @@ def registration(self):
     password2 = font.render('Подтвертите пароль', True, (0, 10, 0))
     name_error = font.render('Существующее имя', True, (255, 0, 0))
     password_error = font.render('Разные пароли', True, (255, 0, 0))
+    short = font.render('Короткий пароль', True, (100, 0, 0))
+    alfavit = font.render('Пароль должен '
+                          'содержать латинские буквы', True, (100, 0, 0))
+    slogno = font.render('Пароль должен содержать символы', True, (100, 0, 0))
 
     running = None
     while self.state == 'REGISTRATION':
@@ -70,10 +75,13 @@ def registration(self):
                 self.state = 'EXIT'
                 break
             elif b1.handle_event(event):
-                runnig = button_registration(login_input.text, password_input.text, password_input2.text)
-                if runnig == 'MENU':
-                    self.state = 'MENU'
-                    break
+                running = password_hard(password_input2.text)
+                if running == True:
+                    running = button_registration(login_input.text, password_input.text, password_input2.text)
+                    if running == 'MENU':
+                        self.state = 'MENU'
+                        break
+
 
             elif b2.handle_event(event):
                 self.state = 'START_WINDOW'
@@ -89,6 +97,12 @@ def registration(self):
             self.screen.blit(name_error, (600, 110))
         if running == 'password_error':
             self.screen.blit(password_error, (600, 250))
+        if running == 'password_short':
+            self.screen.blit(short, (600, 250))
+        if running == 'password_alfavit':
+            self.screen.blit(alfavit, (600, 250))
+        if running == 'password_simvol':
+            self.screen.blit(slogno, (600, 250))
 
         self.screen.blit(password, (100, 200))
         self.screen.blit(password2, (100, 300))
@@ -115,6 +129,24 @@ def button_registration(login_input, password_input, password_input2):
             return 'name_error'
     else:
         return 'password_error'
+
+
+def password_hard(password):
+    bukva = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x',
+             'c', 'v', 'b', 'n', 'm', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H',
+             'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    simvol = ['!', '@', '<', '>', '.', '/', '?', ',', ';', ':', '|', '[', ']', '{', '}', '-', '_', '=', '*', '+']
+
+    if len(password) >= 10:
+        for i in password:
+            if i in bukva:
+                for i in password:
+                    if i in simvol:
+                        return True
+                return 'password_simvol'
+        return 'password_alfavit'
+    else:
+        return 'password_short'
 
 
 def window_input(self):
@@ -325,9 +357,3 @@ def game_room(self):
 
             self.clock.tick(60)
             pg.display.update()
-
-
-
-
-
-
