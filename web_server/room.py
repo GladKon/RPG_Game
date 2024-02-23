@@ -49,7 +49,9 @@ class Room:
                 data = json.loads(data.decode('utf-8'))
 
                 data = json.dumps(data).encode('utf-8')
+                print(self._players_in_room)
                 for user in self._players_in_room:
+                    print(user, type(user))
                     if user.socket != client:
                         user.socket.send(data)
 

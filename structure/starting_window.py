@@ -5,7 +5,9 @@ import socket
 
 from RPG_Game.helpers.button_class import Button
 from RPG_Game.helpers.input_class import InputField
+from RPG_Game.helpers.input_password import InputPassword
 from RPG_Game.helpers.list_class import TextList
+from RPG_Game.helpers.line_break import LineBreak
 from RPG_Game.structure.request_function import check_users, connect_to_room, create_a_room, get_list_of_users
 
 pg.init()
@@ -55,18 +57,17 @@ def registration(self):
     b2 = Button('Назад', 420, 500, 100, 50)
 
     login_input = InputField(360, 100, 200, 50)
-    password_input = InputField(360, 200, 200, 50)
-    password_input2 = InputField(360, 300, 200, 50)
+    password_input = InputPassword(360, 200, 200, 50)
+    password_input2 = InputPassword(360, 300, 200, 50)
 
     name = font.render('Введите никмейм', True, (0, 10, 0))
     password = font.render('Введите пароль', True, (0, 10, 0))
     password2 = font.render('Подтвертите пароль', True, (0, 10, 0))
     name_error = font.render('Существующее имя', True, (255, 0, 0))
     password_error = font.render('Разные пароли', True, (255, 0, 0))
-    short = font.render('Короткий пароль', True, (100, 0, 0))
-    alfavit = font.render('Пароль должен '
-                          'содержать латинские буквы', True, (100, 0, 0))
-    slogno = font.render('Пароль должен содержать символы', True, (100, 0, 0))
+    short = LineBreak('Короткий пароль', 1, (100, 0, 0))
+    alfavit = LineBreak('Пароль должен содержать латинские буквы', 3, (100, 0, 0))
+    slogno = LineBreak('Пароль должен содержать символы', 3, (100, 0, 0))
 
     running = None
     while self.state == 'REGISTRATION':
@@ -76,7 +77,7 @@ def registration(self):
                 break
             elif b1.handle_event(event):
                 running = password_hard(password_input2.text)
-                if running == True:
+                if running == 'True':
                     running = button_registration(login_input.text, password_input.text, password_input2.text)
                     if running == 'MENU':
                         self.state = 'MENU'
@@ -98,11 +99,11 @@ def registration(self):
         if running == 'password_error':
             self.screen.blit(password_error, (600, 250))
         if running == 'password_short':
-            self.screen.blit(short, (600, 250))
+            short.draw((600, 200), self.screen, 40)
         if running == 'password_alfavit':
-            self.screen.blit(alfavit, (600, 250))
+            alfavit.draw((600, 200), self.screen, 40)
         if running == 'password_simvol':
-            self.screen.blit(slogno, (600, 250))
+            slogno.draw((600, 200), self.screen, 40)
 
         self.screen.blit(password, (100, 200))
         self.screen.blit(password2, (100, 300))
@@ -142,7 +143,7 @@ def password_hard(password):
             if i in bukva:
                 for i in password:
                     if i in simvol:
-                        return True
+                        return 'True'
                 return 'password_simvol'
         return 'password_alfavit'
     else:
@@ -153,7 +154,7 @@ def window_input(self):
     b1 = Button('Войти', 420, 400, 100, 50)
     b2 = Button('Назад', 420, 500, 100, 50)
     login_input = InputField(360, 100, 200, 50)
-    password_input = InputField(360, 200, 200, 50)
+    password_input = InputPassword(360, 200, 200, 50)
 
     name = font.render('Введите никмейм', True, (0, 10, 0))
     password = font.render('Введите пароль', True, (0, 10, 0))

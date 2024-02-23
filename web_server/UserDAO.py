@@ -29,6 +29,16 @@ class UserDAO:
 
             cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_password))
             connect.commit()
+    def delite_user(self, username):
+        with sqlite3.connect('users.db') as connect:
+            cursor = connect.cursor()
+            connect.execute("DELETE FROM users WHERE username= ?", (username,))
+
+            connect.commit()
+            cursor.close()
+
+
+
 
     def is_exist(self, username):
         with sqlite3.connect('users.db') as connect:
