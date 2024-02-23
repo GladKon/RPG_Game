@@ -3,13 +3,16 @@ import json
 
 
 def check_users(login, password):
-    d = {'name': login, 'password': password}
-    data = requests.post('http://127.0.0.1:5000/input', data=d)
-    return_data = json.loads(data.text)
-    if return_data == {'response': 'input', 'status': 200}:
-        return 'MENU'
-    else:
-        return 'error'
+    try:
+        d = {'name': login, 'password': password}
+        data = requests.post('http://127.0.0.1:5000/input', data=d)
+        return_data = json.loads(data.text)
+        if return_data == {'response': 'input', 'status': 200}:
+            return 'MENU'
+        else:
+            return 'error'
+    except requests.exceptions.ConnectionError:
+        return 'error_server'
 
 def connect_to_room(name, password, username):
     d = {'name': name, 'password': password, 'username': username}

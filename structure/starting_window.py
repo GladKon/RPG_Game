@@ -159,6 +159,7 @@ def window_input(self):
     name = font.render('Введите никмейм', True, (0, 10, 0))
     password = font.render('Введите пароль', True, (0, 10, 0))
     error = font.render('Неверное имя или пароль!', True, (255, 0, 0))
+    server_error = LineBreak('На сервере ошибка', 1, (250,0,0))
     running = None
 
     while self.state == 'INPUT':
@@ -183,6 +184,8 @@ def window_input(self):
 
         if running == 'error':
             self.screen.blit(error, (570, 150))
+        if running == 'error_server':
+            server_error.draw((570, 150),self.screen, 40)
 
         self.screen.blit(password, (100, 200))
 
