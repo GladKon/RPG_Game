@@ -2,6 +2,7 @@ import pygame as pg
 import requests
 import json
 import socket
+import time
 
 from RPG_Game.helpers.button_class import Button
 from RPG_Game.helpers.input_class import InputField
@@ -159,7 +160,7 @@ def window_input(self):
     name = font.render('Введите никмейм', True, (0, 10, 0))
     password = font.render('Введите пароль', True, (0, 10, 0))
     error = font.render('Неверное имя или пароль!', True, (255, 0, 0))
-    server_error = LineBreak('На сервере ошибка', 1, (250,0,0))
+    server_error = LineBreak('На сервере ошибка', 1, (250, 0, 0))
     running = None
 
     while self.state == 'INPUT':
@@ -185,7 +186,7 @@ def window_input(self):
         if running == 'error':
             self.screen.blit(error, (570, 150))
         if running == 'error_server':
-            server_error.draw((570, 150),self.screen, 40)
+            server_error.draw((570, 150), self.screen, 40)
 
         self.screen.blit(password, (100, 200))
 
@@ -274,6 +275,7 @@ def input_room(self):
             elif b2.handle_event(event):
                 self.data['name_of_room'] = name_room.text
                 self.state = connect_to_room(name_room.text, password_room.text, self.data['name'])
+                self.data['CREATER'] = False
                 break
             name_room.handle_event(event)
             password_room.handle_event(event)
@@ -313,6 +315,7 @@ def create_room(self):
                 self.state = create_a_room(room_name.text, room_password.text, room_max_player.text)
                 if self.state == 'GAME_ROOM':
                     connect_to_room(room_name.text, room_password.text, self.data['name'])
+                    self.data['CREATER'] = True
             elif b2.handle_event(event):
                 self.state = 'ROOM'
             room_name.handle_event(event)
@@ -337,26 +340,32 @@ def create_room(self):
 def game_room(self):
     users = get_list_of_users(self.data['name_of_room'])
 
-    # self.client.connect(("127.0.0.1", 19451))
-    # fool = json.dumps(self.data['room_name']).encode('utf-8')
-    # self.client.send(fool)
-
     b1 = Button('Назад', 430, 500, 100, 45)
     b2 = Button('Запустить', 430, 450, 100, 45)
     l1 = TextList(users, (236, 10, 100), 430, 100, 50)
+    start = time.time()
     while self.state == 'GAME_ROOM':
+        # код нужно улучшить
+        if time.time() - start >= 2:
+            users = get_list_of_users(self.data['name_of_room'])
+            l1 = TextList(users, (236, 10, 100), 430, 100, 50)
+            start = time.time()
+        # конец
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.state = 'EXIT'
             elif b1.handle_event(event):
                 self.state = 'ROOM'
-            elif b2.handle_event(event):
+            elif b2.handle_event(event) and self.data['CREATER']:
                 self.state = 'GAME'
 
             self.screen.fill((0, 250, 0))
 
             b1.draw(self.screen)
-            b2.draw(self.screen)
+
+            if self.data['CREATER']:
+                b2.draw(self.screen)
+
             l1.draw(self.screen)
 
             self.clock.tick(60)

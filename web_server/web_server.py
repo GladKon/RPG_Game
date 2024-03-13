@@ -9,6 +9,7 @@ user_dao = UserDAO('users.db')
 user_dao.create_db()
 
 
+
 @app.route('/registration', methods=['POST'])
 def registration():
     username = request.form['name']
@@ -48,7 +49,7 @@ def input_room():
     username = request.form['username']
     for room in rooms:
         if room.name == name:
-            room.add_user(username)
+            # room.add_user(username)
             return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify(
                 {'response': 'stop', 'status': 412})
     return jsonify({'response': 'stop', 'status': 401})
@@ -58,7 +59,7 @@ def input_room():
 def get_users(name: str):
     for room in rooms:
         if name == room.name:
-            return jsonify({'Response': 'Success', 'User': room.show_user()}), 200
+            return jsonify({'Response': 'Success', 'User': room.get_names()}), 200
     return jsonify({'Response': 'Not found'}), 404
 
 

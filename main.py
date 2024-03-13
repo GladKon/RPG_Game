@@ -37,7 +37,7 @@ class Game:
             data = self.client.recv(1024)
             data = json.loads(data.decode('utf-8'))
             if data['N'] not in self.users:
-                self.users[data['N']] = User_game(self, res / 'Images' / 'player_sheet.png', (data['x'], data['y']))
+                self.users[data['N']] = User_game(self, res / 'Images' / 'player_sheet_2.png', (data['x'], data['y']))
             else:
                 x_old, y_old = self.users[data['N']].rect.center
                 x_new, y_new = (data['x'], data['y'])
@@ -80,9 +80,9 @@ class Game:
                 case 'CREATE_ROOM':
                     create_room(self)
                 case 'GAME_ROOM':
+                    self.connect_player()
                     game_room(self)
                 case 'GAME':
-                    self.connect_player()
                     self.new()
                     self.start_game()
 

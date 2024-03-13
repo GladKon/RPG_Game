@@ -39,6 +39,14 @@ class Room:
     def show_user(self):
         return self._players_in_room
 
+    def get_names(self):
+        names = []
+
+        for u in self._players_in_room:
+            names.append(u.name)
+
+        return names
+
     def is_full(self):
         return len(self._players_in_room) == self.limit_of_user
 

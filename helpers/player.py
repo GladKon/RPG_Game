@@ -14,9 +14,6 @@ class Player(pg.sprite.Sprite):
         self.client = client
         self._layer = Sloy_player
         super().__init__(game.all_sprite)
-
-        # self.sprite_sheet = SpriteHelper(path)
-        # self.image = self.sprite_sheet.get_image(0, 0, 32, 32)
         sprite_sheet = SpriteHelper(path, scale=2)
         self._load_sprite(sprite_sheet)
         self.image = self.sprite_S[0]
