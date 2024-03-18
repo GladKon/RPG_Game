@@ -23,10 +23,7 @@ class Player(pg.sprite.Sprite):
         self.last_update = 0
         self.animate = 0
         self.Sprint = 1
-        X, Y = self.rect.center
-        target = {'x': X, 'y': Y, 'N': self.game.number}
-        data = json.dumps(target).encode('utf-8')
-        self.client.send(data)
+
 
 
     def _load_sprite(self, sprite_sheet):

@@ -1,10 +1,9 @@
-from random import choice
+from random import choice, randint
 from users import User
 
 import socket
 import threading
 import json
-
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('127.0.0.1', 19451))
@@ -13,6 +12,7 @@ server.listen()
 
 class Room:
     def __init__(self, name_room, password, limited=12):
+        self._start = False
         self.id = self.generate_id()
         self.type = None
         self.name = name_room
@@ -50,6 +50,17 @@ class Room:
     def is_full(self):
         return len(self._players_in_room) == self.limit_of_user
 
+    def start(self):
+        d = {}
+        for user in self._players_in_room:
+            d[user.number] = randint(30, 300), randint(30, 300)
+
+        for user in self._players_in_room:
+            user.socket.send(json.dumps(d).encode('utf-8'))
+
+            t = threading.Thread(target=self.handle_client, args=(user.socket,))
+            t.start()
+
     def handle_client(self, client):
         while True:
             try:
@@ -57,9 +68,7 @@ class Room:
                 data = json.loads(data.decode('utf-8'))
 
                 data = json.dumps(data).encode('utf-8')
-                print(self._players_in_room)
                 for user in self._players_in_room:
-                    print(user, type(user))
                     if user.socket != client:
                         user.socket.send(data)
 
@@ -67,6 +76,9 @@ class Room:
                 self._players_in_room.remove(client)
                 client.close()
                 break
+
+    def start_game(self):
+        self._start = True
 
 
 rooms = []
@@ -76,15 +88,12 @@ def listening_user():
     while True:
         client, a = server.accept()
         data = json.loads(client.recv(1024).decode('utf-8'))
-        user = User(data['name'], client)
-
         for room in rooms:
             if room.name == data['name_of_room']:
                 number = str(room.get_amount()).encode('utf-8')
+                user = User(data['name'], client, str(room.get_amount()))
                 room.add_user(user)
                 client.send(number)
-                t = threading.Thread(target=room.handle_client, args=(client,))
-                t.start()
 
 
 treading = threading.Thread(target=listening_user, args=())

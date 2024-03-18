@@ -63,4 +63,12 @@ def get_users(name: str):
     return jsonify({'Response': 'Not found'}), 404
 
 
+@app.route('/room/<string:name>/start_game', methods=['GET'])
+def start_game(name: str):
+    for room in rooms:
+        if name == room.name:
+            room.start()
+            return jsonify({'Response': 'Success'}), 200
+    return jsonify({'Response': 'Not found'}), 404
+
 app.run()

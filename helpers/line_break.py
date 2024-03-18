@@ -11,7 +11,6 @@ class LineBreak:
         self.RGB = RGB
         self.max = text.count(' ')
         self.step = self.max // self.line + 1
-        print(self.step)
 
     def draw(self, coor, screen, indent):
 

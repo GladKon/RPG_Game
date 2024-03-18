@@ -52,13 +52,14 @@ class User_game(pg.sprite.Sprite):
 
             if self.direction == 'u':
                 self.aimation = self.sprite_W
-            if self.direction == 'd':
+            elif self.direction == 'd':
                 self.aimation = self.sprite_S
-            if self.direction == 'l':
+            elif self.direction == 'l':
                 self.aimation = self.sprite_A
-            if self.direction == 'r':
+            elif self.direction == 'r':
                 self.aimation = self.sprite_D
-
+            else:
+                self.aimation = self.sprite_S
 
             self.image = self.aimation[self.animate]
 

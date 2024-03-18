@@ -357,7 +357,9 @@ def game_room(self):
             elif b1.handle_event(event):
                 self.state = 'ROOM'
             elif b2.handle_event(event) and self.data['CREATER']:
-                self.state = 'GAME'
+                data = requests.get(f'http://127.0.0.1:5000/room/{self.data["name_of_room"]}/start_game')
+                if data.status_code == 200:
+                    self.state = 'GAME'
 
             self.screen.fill((0, 250, 0))
 

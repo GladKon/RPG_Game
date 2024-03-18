@@ -27,8 +27,12 @@ class Game:
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
+        for u in self.users:
+            if u != self.number:
+                self.users[u] = User_game(self, res / 'Images' / 'player_sheet_2.png', (self.users[u][0], self.users[u][1]))
+            else:
 
-        self.player = Player(self, res / 'Images' / 'player_sheet.png', (100, 100), self.client)
+                self.player = Player(self, res / 'Images' / 'player_sheet.png', (self.users[u][0], self.users[u][1]), self.client)
         self.map = TileMap(self, res / 'Map' / 'Png.png', res / 'Map' / 'Карта.csv', 16)
         self.camera = Camera()
 
@@ -36,22 +40,20 @@ class Game:
         while self.life:
             data = self.client.recv(1024)
             data = json.loads(data.decode('utf-8'))
-            if data['N'] not in self.users:
-                self.users[data['N']] = User_game(self, res / 'Images' / 'player_sheet_2.png', (data['x'], data['y']))
-            else:
-                x_old, y_old = self.users[data['N']].rect.center
-                x_new, y_new = (data['x'], data['y'])
-                direction = None
-                if x_new < x_old:
-                    direction = 'l'
-                elif x_new > x_old:
-                    direction = 'r'
-                elif y_new < y_old:
-                    direction = 'u'
-                elif y_new > y_old:
-                    direction = 'd'
-                self.users[data['N']].change_direction(direction)
-                self.users[data['N']].rect.center = (data['x'], data['y'])
+            print(data)
+            x_old, y_old = self.users[data['N']].rect.center
+            x_new, y_new = (data['x'], data['y'])
+            direction = None
+            if x_new < x_old:
+                direction = 'l'
+            elif x_new > x_old:
+                direction = 'r'
+            elif y_new < y_old:
+                direction = 'u'
+            elif y_new > y_old:
+                direction = 'd'
+            self.users[data['N']].change_direction(direction)
+            self.users[data['N']].rect.center = (data['x'], data['y'])
 
     def _event(self):
         for event in pg.event.get():
@@ -81,6 +83,8 @@ class Game:
                     create_room(self)
                 case 'GAME_ROOM':
                     self.connect_player()
+                    t = threading.Thread(target=self.join_the_game, args=())
+                    t.start()
                     game_room(self)
                 case 'GAME':
                     self.new()
@@ -90,6 +94,10 @@ class Game:
         self.client.connect(('127.0.0.1', 19451))
         self.client.send(json.dumps(self.data).encode('utf-8'))
         self.number = self.client.recv(1024).decode('utf-8')
+
+    def join_the_game(self):
+        self.users = json.loads(self.client.recv(1024).decode('utf-8'))
+        self.state = "GAME"
 
     def _update(self):
         self.all_sprite.update()
