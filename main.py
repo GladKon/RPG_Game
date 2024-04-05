@@ -8,8 +8,7 @@ from RPG_Game.helpers.player import Player
 from RPG_Game.helpers.users import User_game
 from RPG_Game.helpers.helper import res
 from RPG_Game.structure.map import TileMap, Camera
-from RPG_Game.structure.starting_window import start_window, registration, menu, window_input, room, input_room, \
-    create_room, game_room
+from RPG_Game.structure.windows import Windows
 
 
 class Game:
@@ -24,6 +23,7 @@ class Game:
         self.life = True
         self.state = 'START_WINDOW'
         self.data = {}
+        self.window = Windows()
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
@@ -36,11 +36,10 @@ class Game:
         self.map = TileMap(self, res / 'Map' / 'Png.png', res / 'Map' / 'Карта.csv', 16)
         self.camera = Camera()
 
-    def _resive_soct(self):
+    def _contact_with_server(self):
         while self.life:
             data = self.client.recv(1024)
             data = json.loads(data.decode('utf-8'))
-            print(data)
             x_old, y_old = self.users[data['N']].rect.center
             x_new, y_new = (data['x'], data['y'])
             direction = None
@@ -68,24 +67,24 @@ class Game:
         while self.state != 'EXIT':
             match self.state:
                 case 'START_WINDOW':
-                    start_window(self)
+                    self.window.start_window(self)
                 case 'INPUT':
-                    window_input(self)
+                    self.window.window_input(self)
                 case 'REGISTRATION':
-                    registration(self)
+                    self.window.registration(self)
                 case 'MENU':
-                    menu(self)
+                    self.window.menu(self)
                 case 'ROOM':
-                    room(self)
+                    self.window.room(self)
+                case 'PLAYER_CHOOSE':
+                    self.window.player_choose(self)
                 case 'INPUT_ROOM':
-                    input_room(self)
+                    self.window.input_room(self)
                 case 'CREATE_ROOM':
-                    create_room(self)
+                    self.window.create_room(self)
                 case 'GAME_ROOM':
                     self.connect_player()
-                    t = threading.Thread(target=self.join_the_game, args=())
-                    t.start()
-                    game_room(self)
+                    self.window.game_room(self)
                 case 'GAME':
                     self.new()
                     self.start_game()
@@ -94,6 +93,9 @@ class Game:
         self.client.connect(('127.0.0.1', 19451))
         self.client.send(json.dumps(self.data).encode('utf-8'))
         self.number = self.client.recv(1024).decode('utf-8')
+
+        t = threading.Thread(target=self.join_the_game, args=())
+        t.start()
 
     def join_the_game(self):
         self.users = json.loads(self.client.recv(1024).decode('utf-8'))
@@ -112,7 +114,7 @@ class Game:
         pg.display.flip()
 
     def start_game(self):
-        tread = threading.Thread(target=self._resive_soct)
+        tread = threading.Thread(target=self._contact_with_server)
         tread.start()
         while self.life:
             self._event()

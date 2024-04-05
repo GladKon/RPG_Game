@@ -13,3 +13,20 @@ class SpriteHelper:
         return self.sheet.subsurface(x, y, w, h)
 
 res = Path('res')
+
+def password_hard(password):
+    bukva = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x',
+             'c', 'v', 'b', 'n', 'm', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H',
+             'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    simvol = ['!', '@', '<', '>', '.', '/', '?', ',', ';', ':', '|', '[', ']', '{', '}', '-', '_', '=', '*', '+']
+
+    if len(password) >= 10:
+        for i in password:
+            if i in bukva:
+                for i in password:
+                    if i in simvol:
+                        return 'True'
+                return 'password_simvol'
+        return 'password_alfavit'
+    else:
+        return 'password_short'
