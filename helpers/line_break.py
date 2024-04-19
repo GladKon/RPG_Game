@@ -1,7 +1,7 @@
 import pygame as pg
 
 pg.init()
-font = pg.font.Font(None, 36)
+font = pg.font.Font('fonts/test_font.ttf', 16)
 
 
 class LineBreak:
@@ -12,7 +12,7 @@ class LineBreak:
         self.max = text.count(' ')
         self.step = self.max // self.line + 1
 
-    def draw(self, coor, screen, indent):
+    def draw(self, coor, screen, indent=30):
 
         x, y = coor
         chet = 0
@@ -32,9 +32,4 @@ class LineBreak:
         slovo = font.render(text, True, self.RGB)
         screen.blit(slovo, (x, y))
 
-# screen = pg.display.set_mode((1000, 800))
-# short = LineBreak('Короткий пароль web server player', 6, (100, 0, 0))
-# while True:
-#     screen.fill((0, 250, 2))
-#     short.draw((600, 250), screen, 50)
-#     pg.display.flip()
+

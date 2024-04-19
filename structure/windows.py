@@ -5,9 +5,11 @@ import time
 from RPG_Game.helpers.button_class import Button
 from RPG_Game.helpers.helper import password_hard
 from RPG_Game.helpers.imagebutton import ImageButton
+from RPG_Game.helpers.imageskills import ImageSkill
 from RPG_Game.helpers.input_class import InputField, InputPassword
 from RPG_Game.helpers.list_class import TextList
 from RPG_Game.helpers.line_break import LineBreak
+from RPG_Game.structure.LevelingUP import mage1, draw, handle_event
 from RPG_Game.structure.request_function import MessageToServer
 
 
@@ -215,9 +217,10 @@ class Windows:
 
 
     def player_choose(self, game):
-        i1 = ImageButton('res/images_for_window/img.png','res/images_for_window/img2.png', (200, 200), 'Hello world')
-        i2 = ImageButton('res/images_for_window/img.png','res/images_for_window/img2.png', (500, 200), 'Goodbay')
+        i1 = ImageButton('res/images_for_window/img.png', (200, 200), 'Hello world')
+        # i2 = ImageButton('res/images_for_window/img.png', (500, 200), 'Goodbay')
         b1 = Button('Назад', 430, 500, 100, 50)
+        s1 = ImageSkill('res/images_for_window/img.png', (500, 200), 'Goodbay hello hello hello', 2)
 
         while game.state == 'PLAYER_CHOOSE':
             for event in pg.event.get():
@@ -225,8 +228,11 @@ class Windows:
                     game.state = 'EXIT'
                     break
                 elif i1.handle_event(event):
-                    pass
-                elif i2.handle_event(event):
+                    game.state = 'TREE_PLAYER'
+                    break
+                # elif i2.handle_event(event):
+                #     pass
+                elif s1.handle_event(event):
                     pass
                 elif b1.handle_event(event):
                     game.state = 'MENU'
@@ -235,12 +241,34 @@ class Windows:
             game.screen.fill((0, 250, 0))
 
             i1.draw(game.screen)
-            i2.draw(game.screen)
+            # i2.draw(game.screen)
             b1.draw(game.screen)
+            s1.draw(game.screen)
 
             game.clock.tick(60)
             pg.display.update()
 
+    def tree_player(self, game):
+        b1 = Button('Назад', 430, 500, 100, 50)
+        while game.state == 'TREE_PLAYER':
+            for event in pg.event.get():
+                handle_event(event, mage1)
+                # displey.handle_event(event)
+                if event.type == pg.QUIT:
+                    game.state = 'EXIT'
+                    break
+
+                elif b1.handle_event(event):
+                    game.state = 'MENU'
+                    break
+
+            game.screen.fill((0, 250, 0))
+
+            b1.draw(game.screen)
+            draw(game.screen, mage1)
+
+            game.clock.tick(60)
+            pg.display.update()
     def input_room(self, game):
         b1 = Button('Назад', 430, 400, 100, 50)
         b2 = Button('Войти', 430, 300, 100, 50)
