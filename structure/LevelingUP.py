@@ -30,6 +30,11 @@ def handle_event(event, node):
     for obj in node.children:
         handle_event(event, obj)
 
+def draw_text(screen, node):
+    if hasattr(node.obj,'draw_text'):
+        node.obj.draw_text(screen)
+    for obj in node.children:
+        draw_text(screen, obj)
 
 
 

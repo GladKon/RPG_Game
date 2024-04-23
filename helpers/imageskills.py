@@ -5,7 +5,7 @@ from RPG_Game.helpers.line_break import LineBreak
 
 
 class ImageSkill():
-    def __init__(self, path, coords, text='Привет мир и Россия', step=3, size=(100, 100)):
+    def __init__(self, path, coords, text='Привет мир и Россия и мы все дружно живём в социалистическом мире', step=3, size=(100, 100)):
         self.font = pygame.font.Font('fonts/test_font.ttf', 16)
         self.image = pygame.image.load(path)
         self.image = pygame.transform.scale(self.image, size)
@@ -39,9 +39,14 @@ class ImageSkill():
     def draw(self, screen):
         if self.activate:
             screen.blit(self.hover_image, self.hover_rect)
-            # screen.blit(self.image_ram, self.rect_ram)
-            pg.draw.rect(screen, (150, 50, 20), self.img_rect)
-            self.text.draw(self.text_cords, screen)
+
 
         else:
             screen.blit(self.image, self.rect)
+    def draw_text(self, screen):
+        if self.activate:
+            beakgraund_rect = pg.Rect(self.rect.right, self.rect.top, 250, (len(self.text.spisok) * 35))
+            pg.draw.rect(screen, (155, 150, 200), beakgraund_rect, border_radius=15)
+            pg.draw.rect(screen, (100, 50, 200), beakgraund_rect.inflate(5, 5), 5, border_radius=15)
+
+            self.text.draw((self.rect.right, self.rect.top), screen)

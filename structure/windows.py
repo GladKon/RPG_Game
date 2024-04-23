@@ -9,7 +9,7 @@ from RPG_Game.helpers.imageskills import ImageSkill
 from RPG_Game.helpers.input_class import InputField, InputPassword
 from RPG_Game.helpers.list_class import TextList
 from RPG_Game.helpers.line_break import LineBreak
-from RPG_Game.structure.LevelingUP import mage1, draw, handle_event
+from RPG_Game.structure.LevelingUP import mage1, draw, handle_event, draw_text
 from RPG_Game.structure.request_function import MessageToServer
 
 
@@ -244,6 +244,7 @@ class Windows:
             # i2.draw(game.screen)
             b1.draw(game.screen)
             s1.draw(game.screen)
+            s1.draw_text(game.screen)
 
             game.clock.tick(60)
             pg.display.update()
@@ -251,6 +252,7 @@ class Windows:
     def tree_player(self, game):
         b1 = Button('Назад', 430, 500, 100, 50)
         while game.state == 'TREE_PLAYER':
+
             for event in pg.event.get():
                 handle_event(event, mage1)
                 # displey.handle_event(event)
@@ -266,6 +268,8 @@ class Windows:
 
             b1.draw(game.screen)
             draw(game.screen, mage1)
+            draw_text(game.screen, mage1)
+
 
             game.clock.tick(60)
             pg.display.update()
