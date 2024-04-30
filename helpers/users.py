@@ -1,8 +1,8 @@
 import pygame as pg
 
-from RPG_Game.helpers.helper import SpriteHelper
+from helpers.helper import SpriteHelper
 from pygame.math import Vector2
-from RPG_Game.structure.Settings import Sloy_player
+from structure.Settings import Sloy_player
 
 class User_game(pg.sprite.Sprite):
     speed = 3

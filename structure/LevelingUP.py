@@ -1,8 +1,8 @@
 import threading
 
 import pygame as pg
-from RPG_Game.helpers.imagebutton import ImageButton
-from RPG_Game.helpers.imageskills import ImageSkill
+from helpers.imagebutton import ImageButton
+from helpers.imageskills import ImageSkill
 
 
 class Node():

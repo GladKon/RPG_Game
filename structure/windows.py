@@ -2,16 +2,15 @@ import pygame as pg
 import requests
 import time
 
-from RPG_Game.helpers.button_class import Button
-from RPG_Game.helpers.helper import password_hard
-from RPG_Game.helpers.imagebutton import ImageButton
-from RPG_Game.helpers.imageskills import ImageSkill
-from RPG_Game.helpers.input_class import InputField, InputPassword
-from RPG_Game.helpers.list_class import TextList
-from RPG_Game.helpers.line_break import LineBreak
-from RPG_Game.structure.LevelingUP import mage1, draw, handle_event, draw_text
-from RPG_Game.structure.request_function import MessageToServer
-
+from helpers.button_class import Button
+from helpers.helper import password_hard
+from helpers.imagebutton import ImageButton
+from helpers.imageskills import ImageSkill
+from helpers.input_class import InputField, InputPassword
+from helpers.list_class import TextList
+from helpers.line_break import LineBreak
+from structure.LevelingUP import mage1, draw, handle_event, draw_text
+from structure.request_function import MessageToServer
 
 pg.init()
 
@@ -70,7 +69,8 @@ class Windows:
                 elif b1.handle_event(event):
                     running = password_hard(password_input2.text)
                     if running == 'True':
-                        running = Message_To_Server.button_registration(login_input.text, password_input.text, password_input2.text)
+                        running = Message_To_Server.button_registration(login_input.text, password_input.text,
+                                                                        password_input2.text)
                         if running == 'MENU':
                             game.state = 'MENU'
                             break
@@ -215,7 +215,6 @@ class Windows:
             game.clock.tick(60)
             pg.display.update()
 
-
     def player_choose(self, game):
         i1 = ImageButton('res/images_for_window/img.png', (200, 200), 'Hello world')
         # i2 = ImageButton('res/images_for_window/img.png', (500, 200), 'Goodbay')
@@ -270,9 +269,9 @@ class Windows:
             draw(game.screen, mage1)
             draw_text(game.screen, mage1)
 
-
             game.clock.tick(60)
             pg.display.update()
+
     def input_room(self, game):
         b1 = Button('Назад', 430, 400, 100, 50)
         b2 = Button('Войти', 430, 300, 100, 50)
@@ -292,7 +291,8 @@ class Windows:
                     break
                 elif b2.handle_event(event):
                     game.data['name_of_room'] = name_room.text
-                    game.state = Message_To_Server.connect_to_room(name_room.text, password_room.text, game.data['name'])
+                    game.state = Message_To_Server.connect_to_room(name_room.text, password_room.text,
+                                                                   game.data['name'])
                     game.data['CREATER'] = False
                     break
                 name_room.handle_event(event)
@@ -329,7 +329,8 @@ class Windows:
                     break
                 elif b1.handle_event(event):
                     game.data['name_of_room'] = room_name.text
-                    game.state = Message_To_Server.create_a_room(room_name.text, room_password.text, room_max_player.text)
+                    game.state = Message_To_Server.create_a_room(room_name.text, room_password.text,
+                                                                 room_max_player.text)
                     if game.state == 'GAME_ROOM':
                         Message_To_Server.connect_to_room(room_name.text, room_password.text, game.data['name'])
                         game.data['CREATER'] = True

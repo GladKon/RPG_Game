@@ -3,12 +3,12 @@ import socket
 import threading
 import json
 
-from RPG_Game.structure.Settings import *
-from RPG_Game.helpers.player import Player
-from RPG_Game.helpers.users import User_game
-from RPG_Game.helpers.helper import res
-from RPG_Game.structure.map import TileMap, Camera
-from RPG_Game.structure.windows import Windows
+from structure.Settings import *
+from helpers.player import Player
+from helpers.users import User_game
+from helpers.helper import res
+from structure.map import TileMap, Camera
+from structure.windows import Windows
 
 
 class Game:

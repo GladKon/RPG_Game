@@ -1,7 +1,7 @@
 import pygame as pg
 import pygame.image
 
-from RPG_Game.helpers.line_break import LineBreak
+from helpers.line_break import LineBreak
 
 
 class ImageSkill():
@@ -45,8 +45,8 @@ class ImageSkill():
             screen.blit(self.image, self.rect)
     def draw_text(self, screen):
         if self.activate:
-            beakgraund_rect = pg.Rect(self.rect.right, self.rect.top, 250, (len(self.text.spisok) * 35))
+            beakgraund_rect = pg.Rect(self.rect.right, self.rect.top, 330, (len(self.text.spisok) * 35))
             pg.draw.rect(screen, (155, 150, 200), beakgraund_rect, border_radius=15)
             pg.draw.rect(screen, (100, 50, 200), beakgraund_rect.inflate(5, 5), 5, border_radius=15)
 
-            self.text.draw((self.rect.right, self.rect.top), screen)
+            self.text.draw((self.rect.right + 10, self.rect.top), screen)
