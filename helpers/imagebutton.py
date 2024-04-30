@@ -1,9 +1,11 @@
 import pygame.image
 
+from structure.path import path_to_font
+
 
 class ImageButton():
     def __init__(self, path, coords, text='', size=(150, 200)):
-        self.font = pygame.font.Font('fonts/test_font.ttf', 26)
+        self.font = pygame.font.Font(path_to_font/'test_font.ttf', 26)
         self.image = pygame.image.load(path)
         self.image = pygame.transform.scale(self.image, size)
         # self.image_ram = pygame.image.load(path_ram)

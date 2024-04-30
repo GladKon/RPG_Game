@@ -6,7 +6,7 @@ import json
 from structure.Settings import *
 from helpers.player import Player
 from helpers.users import User_game
-from helpers.helper import res
+from structure.path import res
 from structure.map import TileMap, Camera
 from structure.windows import Windows
 
@@ -16,7 +16,7 @@ class Game:
         pg.init()
         self.screen = pg.display.set_mode((Win_x, Win_y))
         pg.display.set_caption(Title)
-        pg.display.set_icon(pg.image.load(res / 'Images' / 'frog.png'))
+        pg.display.set_icon(pg.image.load(res / 'images' / 'frog.png'))
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.users = {}
         self.clock = pg.time.Clock()
@@ -29,10 +29,10 @@ class Game:
         self.all_sprite = pg.sprite.LayeredUpdates()
         for u in self.users:
             if u != self.number:
-                self.users[u] = User_game(self, res / 'Images' / 'player_sheet_2.png', (self.users[u][0], self.users[u][1]))
+                self.users[u] = User_game(self, res / 'images' / 'player_sheet_2.png', (self.users[u][0], self.users[u][1]))
             else:
 
-                self.player = Player(self, res / 'Images' / 'player_sheet.png', (self.users[u][0], self.users[u][1]), self.client)
+                self.player = Player(self, res / 'images' / 'player_sheet.png', (self.users[u][0], self.users[u][1]), self.client)
         self.map = TileMap(self, res / 'Map' / 'Png.png', res / 'Map' / 'Карта.csv', 16)
         self.camera = Camera()
 

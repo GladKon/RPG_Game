@@ -1,5 +1,5 @@
 import pygame as pg
-from pathlib import Path
+
 
 class SpriteHelper:
     def __init__(self, path, scale = 1):
@@ -12,7 +12,6 @@ class SpriteHelper:
     def get_image(self, x, y, w, h):
         return self.sheet.subsurface(x, y, w, h)
 
-res = Path('res')
 
 def password_hard(password):
     bukva = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x',

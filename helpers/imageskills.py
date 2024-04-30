@@ -1,12 +1,14 @@
 import pygame as pg
 import pygame.image
 
+
 from helpers.line_break import LineBreak
+from structure.path import path_to_font
 
 
 class ImageSkill():
     def __init__(self, path, coords, text='Привет мир и Россия и мы все дружно живём в социалистическом мире', step=3, size=(100, 100)):
-        self.font = pygame.font.Font('fonts/test_font.ttf', 16)
+        self.font = pygame.font.Font(path_to_font/'test_font.ttf', 16)
         self.image = pygame.image.load(path)
         self.image = pygame.transform.scale(self.image, size)
         self.rect = self.image.get_rect(center=coords)
