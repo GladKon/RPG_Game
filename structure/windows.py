@@ -217,9 +217,9 @@ class Windows:
 
     def player_choose(self, game):
         i1 = ImageButton('res/images_for_window/img.png', (200, 200), 'Hello world')
-        # i2 = ImageButton('res/images_for_window/img.png', (500, 200), 'Goodbay')
+        i2 = ImageButton('res/images_for_window/img.png', (700, 200), 'Goodbay')
         b1 = Button('Назад', 430, 500, 100, 50)
-        s1 = ImageSkill('res/images_for_window/img.png', (500, 200), 'Goodbay hello hello hello', 2)
+
 
         while game.state == 'PLAYER_CHOOSE':
             for event in pg.event.get():
@@ -229,9 +229,7 @@ class Windows:
                 elif i1.handle_event(event):
                     game.state = 'TREE_PLAYER'
                     break
-                # elif i2.handle_event(event):
-                #     pass
-                elif s1.handle_event(event):
+                elif i2.handle_event(event):
                     pass
                 elif b1.handle_event(event):
                     game.state = 'MENU'
@@ -240,10 +238,9 @@ class Windows:
             game.screen.fill((0, 250, 0))
 
             i1.draw(game.screen)
-            # i2.draw(game.screen)
+            i2.draw(game.screen)
             b1.draw(game.screen)
-            s1.draw(game.screen)
-            s1.draw_text(game.screen)
+
 
             game.clock.tick(60)
             pg.display.update()

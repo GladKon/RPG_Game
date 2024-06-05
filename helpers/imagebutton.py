@@ -14,9 +14,11 @@ class ImageButton():
         # self.rect_ram = self.image_ram.get_rect(center=(coords[0], coords[1]+20))
         self.text = text
         self.text_surface = self.font.render(self.text, True, (255, 255, 255))
-        self.text_cords = coords[0], int((coords[1] // 2 + coords[1]))
+        text_w, text_h = self.text_surface.get_size()
+        self.text_cords = (coords[0]-text_w//2, coords[1]+size[1]//2 )
 
-        self.font_hover = pygame.font.Font(None, int(56 * 1.2))
+
+        self.font_hover = pygame.font.Font(path_to_font/'test_font.ttf', int(26 * 1.2))
         self.text_surface_hover = self.font_hover.render(self.text, True, (255, 255, 255))
         self.text_rect = self.text_surface_hover.get_rect()
         self.text_rect.center = coords[0] , int((coords[1] // 2 + coords[1]) * 1.2)

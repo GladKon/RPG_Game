@@ -39,23 +39,23 @@ def draw_text(screen, node):
 
 
 
-mage1 = Node(ImageButton(path_to_image/'img.png', (300, 600), size=(100, 150)))
+mage1 = Node(ImageButton(path_to_image/'img.png', (450, 420), size=(100, 150)))
 
-mage1_1 = Node(ImageSkill(path_to_image/'img.png', (150, 400), size=(100, 150)))
+mage1_1 = Node(ImageSkill(path_to_image/'img.png', (200, 250), size=(100, 150)))
 mage1.children.append(mage1_1)
 
-mage1_2 = Node(ImageSkill(path_to_image/'img.png', (300, 400), size=(100, 150)))
+mage1_2 = Node(ImageSkill(path_to_image/'img.png', (450, 250), size=(100, 150)))
 mage1.children.append(mage1_2)
 
-mage1_3 = Node(ImageSkill(path_to_image/'img.png', (450, 400), size=(100, 150)))
+mage1_3 = Node(ImageSkill(path_to_image/'img.png', (700, 250), size=(100, 150)))
 mage1.children.append(mage1_3)
 
-mage1_1_1 = Node(ImageButton(path_to_image/'img.png', (100, 100), size=(100, 150)))
+mage1_1_1 = Node(ImageButton(path_to_image/'img.png', (200, 80), size=(100, 150)))
 mage1_1.children.append(mage1_1_1)
 
-mage1_2_1 = Node(ImageButton(path_to_image/'img.png', (300, 100), size=(100, 150)))
+mage1_2_1 = Node(ImageButton(path_to_image/'img.png', (500, 80), size=(100, 150)))
 mage1_2.children.append(mage1_2_1)
-mage1_2_2 = Node(ImageButton(path_to_image/'img.png', (400, 100), size=(100, 150)))
+mage1_2_2 = Node(ImageButton(path_to_image/'img.png', (400, 80), size=(100, 150)))
 mage1_2.children.append(mage1_2_2)
 # botton8 = Node(ImageButton(path_to_image/'img.png', (700, 300), size=(100, 150)))
 # botton9 = Node(ImageButton(path_to_image/'img.png', (700, 100), size=(100, 150)))

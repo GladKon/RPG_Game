@@ -13,10 +13,10 @@ Win = 100
 Kill = 50
 Lose = 30
 
-black = (1, 1, 1)
-white = (0, 0, 0)
-red = (1, 0, 0)
-green = (0, 153, 0)
-turquoise = (0, 153, 153)
-yellow = (255, 255, 60)
-blue = (9, 42, 255)
+BLACK = (1, 1, 1)
+WHITE = (0, 0, 0)
+RED = (1, 0, 0)
+GREEN = (0, 153, 0)
+TURQUOISE = (0, 153, 153)
+YELLOW = (255, 255, 60)
+BLUE = (9, 42, 255)
