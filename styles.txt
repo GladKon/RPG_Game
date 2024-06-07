@@ -4,5 +4,5 @@ venv = main
 Hello
 ASDasd
 
-status = 'Error!!!!'
-Hello
+status = 'Error'
+;)
