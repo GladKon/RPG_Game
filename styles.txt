@@ -1,3 +1,6 @@
 RGB = 250, 30, 56
+Сюда ещё
 venv = main
 :(
+Hello World!
+Привет, Мир!
