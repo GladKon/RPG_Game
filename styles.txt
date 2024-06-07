@@ -4,5 +4,10 @@ venv = main
 Hello
 ASDasd
 
+<<<<<<< HEAD
+status = 'Error!!!!'
+Hello
+=======
 status = 'Error'
 ;)
+>>>>>>> 805a076407320054c0e126027dec1db8b340c354
