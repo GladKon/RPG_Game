@@ -2,7 +2,7 @@ import csv
 
 import pygame as pg
 
-from structure.Settings import *
+from structure.settings import *
 
 
 class TileMap():

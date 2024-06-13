@@ -9,7 +9,7 @@ from helpers.imageskills import ImageSkill
 from helpers.input_class import InputField, InputPassword
 from helpers.list_class import TextList
 from helpers.line_break import LineBreak
-from structure.LevelingUP import mage1, draw, handle_event, draw_text
+from structure.leveling_up import mage1, draw, handle_event, draw_text
 from structure.request_function import MessageToServer
 
 pg.init()

@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 
 
 from room import Room, rooms
-from UserDAO import UserDAO
+from user_dao import UserDAO
 
 app = Flask(__name__)
 user_dao = UserDAO('users.db')

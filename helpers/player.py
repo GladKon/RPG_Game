@@ -3,7 +3,7 @@ import json
 
 from helpers.helper import SpriteHelper
 from pygame.math import Vector2
-from structure.Settings import Sloy_player
+from structure.settings import Sloy_player
 
 
 class Player(pg.sprite.Sprite):
@@ -40,7 +40,7 @@ class Player(pg.sprite.Sprite):
 
     def update(self):
         self._move()
-        self._Animation()
+        self._animation()
 
     def _move(self):
         self.v.update(0, 0)
@@ -70,7 +70,7 @@ class Player(pg.sprite.Sprite):
             data = json.dumps(target).encode('utf-8')
             self.client.send(data)
 
-    def _Animation(self, frame_len=100):
+    def _animation(self, frame_len=100):
 
         now = pg.time.get_ticks()
 

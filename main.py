@@ -3,12 +3,13 @@ import socket
 import threading
 import json
 
-from structure.Settings import *
+from structure.settings import *
 from helpers.player import Player
-from helpers.users import User_game
+from helpers.users import UserGame
 from structure.path import res
 from structure.map import TileMap, Camera
 from structure.windows import Windows
+
 
 
 class Game:
@@ -29,11 +30,11 @@ class Game:
         self.all_sprite = pg.sprite.LayeredUpdates()
         for u in self.users:
             if u != self.number:
-                self.users[u] = User_game(self, res / 'images' / 'player_sheet_2.png', (self.users[u][0], self.users[u][1]))
+                self.users[u] = UserGame(self, res / 'images' / 'player_sheet_2.png', (self.users[u][0], self.users[u][1]))
             else:
 
                 self.player = Player(self, res / 'images' / 'player_sheet.png', (self.users[u][0], self.users[u][1]), self.client)
-        self.map = TileMap(self, res / 'Map' / 'Png.png', res / 'Map' / 'Карта.csv', 16)
+        self.map = TileMap(self, res / 'map' / 'Png.png', res / 'map' / 'Карта.csv', 16)
         self.camera = Camera()
 
     def _contact_with_server(self):

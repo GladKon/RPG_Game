@@ -2,9 +2,9 @@ import pygame as pg
 
 from helpers.helper import SpriteHelper
 from pygame.math import Vector2
-from structure.Settings import Sloy_player
+from structure.settings import Sloy_player
 
-class User_game(pg.sprite.Sprite):
+class UserGame(pg.sprite.Sprite):
     speed = 3
 
     def __init__(self, game, path, pos):
@@ -41,10 +41,10 @@ class User_game(pg.sprite.Sprite):
 
     def change_direction(self, d):
         self.direction = d
-        self._Animation()
+        self._animation()
 
 
-    def _Animation(self, frame_len=100):
+    def _animation(self, frame_len=100):
 
         now = pg.time.get_ticks()
 

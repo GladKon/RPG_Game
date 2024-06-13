@@ -10,10 +10,10 @@ class User:
         self.leveling = 0
         self.lvl = 0
 
-    def Xpereance(self, result):
+    def xpereance(self, result):
         self.leveling += result
 
-    def Lvl(self):
+    def lvl(self):
         self.lvl = self.leveling // 100
 
     def generate_id(self):
