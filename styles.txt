@@ -1,3 +1,8 @@
-python file - snake_case
-class - PascalCase
-table - snake_case
+RGB = 250, 30, 56
+venv = main
+:(
+Hello
+ASDasd
+
+status = 'Error'
+;)
