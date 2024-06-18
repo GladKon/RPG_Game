@@ -1,13 +1,10 @@
 from flask import Flask, request, jsonify
 
-
 from room import Room, rooms
 from user_dao import UserDAO
 
 app = Flask(__name__)
 user_dao = UserDAO('users.db')
-user_dao.create_db()
-
 
 
 @app.route('/registration', methods=['POST'])
@@ -46,10 +43,8 @@ def create_room():
 def input_room():
     name = request.form['name']
     password = request.form['password']
-    username = request.form['username']
     for room in rooms:
         if room.name == name:
-            # room.add_user(username)
             return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify(
                 {'response': 'stop', 'status': 412})
     return jsonify({'response': 'stop', 'status': 401})
@@ -70,5 +65,6 @@ def start_game(name: str):
             room.start()
             return jsonify({'Response': 'Success'}), 200
     return jsonify({'Response': 'Not found'}), 404
+
 
 app.run()

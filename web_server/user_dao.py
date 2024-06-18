@@ -5,6 +5,9 @@ import bcrypt
 class UserDAO:
     def __init__(self, name):
         self._name = name
+        self.create_table_users()
+        self.create_table_character_types()
+        self.create_table_characters()
 
     def _connect(self):
         return sqlite3.connect(self._name)
@@ -31,7 +34,7 @@ class UserDAO:
             cursor.execute('''
             CREATE TABLE IF NOT EXISTS character_types (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                main_type TEXT UNIQUE NOT NULL,
+                main_type TEXT  NOT NULL,
                 type_name TEXT UNIQUE NOT NULL
                 
             )
@@ -65,9 +68,9 @@ class UserDAO:
         with self._connect() as connect:
             cursor = connect.cursor()
 
-
             cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)', (username, hashed_password))
             connect.commit()
+
     def delite_user(self, username):
         with self._connect() as connect:
             cursor = connect.cursor()
@@ -103,8 +106,6 @@ class UserDAO:
 
             connect.commit()
 
-
-
     def is_exist(self, username):
         with self._connect() as connect:
             cursor = connect.cursor()
@@ -117,19 +118,27 @@ class UserDAO:
         with self._connect() as connect:
             cursor = connect.cursor()
 
-            cursor.execute('SELECT password FROM users WHERE username = ?', (username,))
+            cursor.execute('SELECT password_hash FROM users WHERE username = ?', (username,))
             user = cursor.fetchone()
             if user:
                 stored_password = user[0]
                 return bcrypt.checkpw(password.encode('utf-8'), stored_password)
             return False
 
+    def add_character_type(self, main_type, type_name):
+        with self._connect() as connect:
+            cursor = connect.cursor()
+
+            cursor.execute('INSERT INTO character_types (main_type, type_name) VALUES (?, ?)', (main_type, type_name))
+            connect.commit()
+
 
 if __name__ == '__main__':
     userdao = UserDAO('users.db')
-    userdao.drop_table_users()
-    userdao.create_table_characters()
-    userdao.create_table_character_types()
-    userdao.create_table_users()
-    userdao.add_user('1','1')
-    userdao.add_user('2','2')
+    userdao.add_character_type('Archer', 'Sniper')
+    # userdao.drop_table_character_types()
+    # userdao.create_table_characters()
+    # userdao.create_table_character_types()
+    # userdao.create_table_users()
+    # userdao.add_user('1','1')
+    # userdao.add_user('2','2')
