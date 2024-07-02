@@ -216,8 +216,8 @@ class Windows:
             pg.display.update()
 
     def player_choose(self, game):
-        i1 = ImageButton('res/images_for_window/img.png', (200, 200), 'Hello world')
-        i2 = ImageButton('res/images_for_window/img.png', (700, 200), 'Goodbay')
+        i1 = ImageButton('res/images_for_window/img.png', (200, 200), 'Hunter')
+        i2 = ImageButton('res/images_for_window/img.png', (700, 200), 'Survival')
         b1 = Button('Назад', 430, 500, 100, 50)
 
 
@@ -227,7 +227,7 @@ class Windows:
                     game.state = 'EXIT'
                     break
                 elif i1.handle_event(event):
-                    game.state = 'TREE_PLAYER'
+                    game.state = 'CHOOSING_HERO'
                     break
                 elif i2.handle_event(event):
                     pass
@@ -241,6 +241,32 @@ class Windows:
             i2.draw(game.screen)
             b1.draw(game.screen)
 
+
+            game.clock.tick(60)
+            pg.display.update()
+
+
+    def choosing_hero(self,game):
+        i1 = ImageButton('res/images_for_window/img.png', (150, 200), 'Mage')
+        i2 = ImageButton('res/images_for_window/img.png', (450, 200), 'Archer')
+        i3 = ImageButton('res/images_for_window/img.png', (750, 200), 'Warrior')
+        while game.state == 'CHOOSING_HERO':
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    game.state = 'EXIT'
+                    break
+                elif i1.handle_event(event):
+                    game.state = 'TREE_PLAYER'
+                    break
+                elif i2.handle_event(event):
+                    pass
+                elif i3.handle_event(event):
+                    pass
+            game.screen.fill((0, 250, 0))
+
+            i1.draw(game.screen)
+            i2.draw(game.screen)
+            i3.draw(game.screen)
 
             game.clock.tick(60)
             pg.display.update()

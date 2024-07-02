@@ -2,7 +2,7 @@ import requests
 import json
 
 
-class MessageToServer():
+class MessageToServer:
 
     def check_users(self, login, password):
         try:
@@ -43,3 +43,17 @@ class MessageToServer():
                 return 'name_error'
         else:
             return 'password_error'
+
+    def create_character(self, user_id, character_type_id, character_name):
+        d = {'user_id': user_id, 'character_type_id': character_type_id,'character_name': character_name}
+        data = requests.post('http://127.0.0.1:5000/character/create', data=d)
+
+        if data.status_code == 201:
+            print('Create')
+        else:
+            print('Error')
+
+
+if __name__ == '__main__':
+    mesage = MessageToServer()
+    mesage.create_character(1,1,'Ice mage')

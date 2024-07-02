@@ -79,6 +79,8 @@ class Game:
                     self.window.room(self)
                 case 'PLAYER_CHOOSE':
                     self.window.player_choose(self)
+                case 'CHOOSING_HERO':
+                    self.window.choosing_hero(self)
                 case 'TREE_PLAYER':
                     self.window.tree_player(self)
                 case 'INPUT_ROOM':

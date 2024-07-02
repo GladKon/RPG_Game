@@ -4,7 +4,8 @@ from structure.path import path_to_font
 
 
 class ImageButton():
-    def __init__(self, path, coords, text='', size=(150, 200)):
+    def __init__(self, path, coords, text='', size=(150, 200), func=None):
+        self.func = func
         self.font = pygame.font.Font(path_to_font/'test_font.ttf', 26)
         self.image = pygame.image.load(path)
         self.image = pygame.transform.scale(self.image, size)

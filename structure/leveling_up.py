@@ -4,6 +4,7 @@ import pygame as pg
 from helpers.imagebutton import ImageButton
 from helpers.imageskills import ImageSkill
 from structure.path import path_to_image
+from web_server.web_server import create_character
 
 
 class Node():
@@ -27,7 +28,7 @@ def draw(screen, node, first=True, coords=(0,0)):
 
 
 def handle_event(event, node):
-    node.obj.handle_event(event)
+    print(node.obj.handle_event(event))
     for obj in node.children:
         handle_event(event, obj)
 
@@ -39,7 +40,7 @@ def draw_text(screen, node):
 
 
 
-mage1 = Node(ImageButton(path_to_image/'img.png', (450, 420), size=(100, 150)))
+mage1 = Node(ImageButton(path_to_image/'img.png', (450, 420), size=(100, 150)), create_character)
 
 mage1_1 = Node(ImageSkill(path_to_image/'img.png', (200, 250), size=(100, 150)))
 mage1.children.append(mage1_1)

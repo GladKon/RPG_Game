@@ -132,10 +132,19 @@ class UserDAO:
             cursor.execute('INSERT INTO character_types (main_type, type_name) VALUES (?, ?)', (main_type, type_name))
             connect.commit()
 
+    def add_character(self, user_id, character_type_id, character_name):
+        with self._connect() as connect:
+            cursor = connect.cursor()
+
+            cursor.execute('INSERT INTO characters (user_id, character_type_id, character_name) VALUES (?, ?, ?)',
+                           (user_id, character_type_id, character_name))
+            connect.commit()
+
 
 if __name__ == '__main__':
     userdao = UserDAO('users.db')
-    userdao.add_character_type('Archer', 'Sniper')
+    userdao.add_character(1, 1, 'Mage')
+    # userdao.add_character_type('Archer', 'Sniper')
     # userdao.drop_table_character_types()
     # userdao.create_table_characters()
     # userdao.create_table_character_types()
