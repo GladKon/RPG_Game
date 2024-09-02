@@ -3,6 +3,7 @@ import socket
 import threading
 import json
 
+from helpers.background import BackGround
 from structure.settings import *
 from helpers.player import Player
 from helpers.users import UserGame
@@ -25,6 +26,7 @@ class Game:
         self.state = 'START_WINDOW'
         self.data = {}
         self.window = Windows()
+        self.visual_info = {'Current_image': BackGround()}
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
