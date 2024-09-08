@@ -10,7 +10,7 @@ from helpers.imageskills import ImageSkill
 from helpers.input_class import InputField, InputPassword
 from helpers.list_class import TextList
 from helpers.line_break import LineBreak
-from structure.leveling_up import mage1, draw, handle_event, draw_text
+from structure.leveling_up import mage1, draw, handle_event, draw_text, archer1, handle_event_2, draw_text_2
 from structure.request_function import MessageToServer
 
 pg.init()
@@ -24,20 +24,20 @@ class Windows:
     def start_window(self, game):
         b1 = Button('Войти', 430, 200, 100, 50)
         b2 = Button('Зарегистрироваться', 360, 300, 300, 50)
-        background = game.visual_info['Current_image']
-        last_time = time.time()
-
+        background = game.visual_info['CURRENT_IMAGE']
+        last_time = game.visual_info['LAST_TIME']
         while game.state == 'START_WINDOW':
+            game.visual_info['LAST_TIME'] = last_time
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.visual_info['Current_image'] = background
+
                     game.state = 'EXIT'
                 elif b1.handle_event(event):
-                    game.visual_info['Current_image'] = background
+
                     game.state = 'INPUT'
                     break
                 elif b2.handle_event(event):
-                    game.visual_info['Current_image'] = background
+
                     game.state = 'REGISTRATION'
                     break
             now = time.time()
@@ -47,6 +47,7 @@ class Windows:
 
                 if 255 in background.sl_alpha_level:
                     last_time = time.time()
+
 
 
 
@@ -68,8 +69,8 @@ class Windows:
     def registration(self, game):
         b1 = Button('Зарегистрироваться', 340, 400, 300, 50)
         b2 = Button('Назад', 420, 500, 100, 50)
-        background = game.visual_info['Current_image']
-        last_time = time.time()
+        background = game.visual_info['CURRENT_IMAGE']
+        last_time = game.visual_info['LAST_TIME']
 
         login_input = InputField(360, 100, 200, 50)
         password_input = InputPassword(360, 200, 200, 50)
@@ -86,9 +87,10 @@ class Windows:
 
         running = None
         while game.state == 'REGISTRATION':
+            game.visual_info['LAST_TIME'] = last_time
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.visual_info['Current_image'] = background
+
                     game.state = 'EXIT'
                     break
                 elif b1.handle_event(event):
@@ -97,13 +99,13 @@ class Windows:
                         running = Message_To_Server.button_registration(login_input.text, password_input.text,
                                                                         password_input2.text)
                         if running == 'MENU':
-                            game.visual_info['Current_image'] = background
+
                             game.state = 'MENU'
                             break
 
 
                 elif b2.handle_event(event):
-                    game.visual_info['Current_image'] = background
+
                     game.state = 'START_WINDOW'
                     break
                 login_input.handle_event(event)
@@ -119,7 +121,7 @@ class Windows:
                     last_time = time.time()
 
             game.screen.fill((165, 250, 120))
-            game.screen.blit(background.image_1, (0, 0))
+            # game.screen.blit(background.image_1, (0, 0))
             game.screen.blit(background.image_4, (0, 0))
             game.screen.blit(background.image_3, (0, 0))
             game.screen.blit(background.image_2, (0, 0))
@@ -154,8 +156,8 @@ class Windows:
         b2 = Button('Назад', 420, 500, 100, 50)
         login_input = InputField(360, 100, 200, 50)
         password_input = InputPassword(360, 200, 200, 50)
-        background = game.visual_info['Current_image']
-        last_time = time.time()
+        background = game.visual_info['CURRENT_IMAGE']
+        last_time = game.visual_info['LAST_TIME']
 
         name = font.render('Введите никмейм', True, (0, 10, 0))
         password = font.render('Введите пароль', True, (0, 10, 0))
@@ -164,6 +166,7 @@ class Windows:
         running = None
 
         while game.state == 'INPUT':
+            game.visual_info['LAST_TIME'] = last_time
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     game.state = 'EXIT'
@@ -171,12 +174,12 @@ class Windows:
                 elif b1.handle_event(event):
                     running = Message_To_Server.check_users(login_input.text, password_input.text)
                     if running == 'MENU':
-                        game.visual_info['Current_image'] = background
+
                         game.state = 'MENU'
                         game.data['name'] = login_input.text
                         break
                 elif b2.handle_event(event):
-                    game.visual_info['Current_image'] = background
+
                     game.state = 'START_WINDOW'
                     break
                 login_input.handle_event(event)
@@ -218,10 +221,11 @@ class Windows:
         b2 = Button('Настройки', 400, 300, 160, 50)
         b3 = Button("Выбор персонажа", 400, 400, 160, 50)
         b4 = Button('Выход', 430, 500, 100, 50)
-        background = game.visual_info['Current_image']
-        last_time = time.time()
+        background = game.visual_info['CURRENT_IMAGE']
+        last_time = game.visual_info['LAST_TIME']
 
         while game.state == 'MENU':
+            game.visual_info['LAST_TIME'] = last_time
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     game.state = 'EXIT'
@@ -318,7 +322,7 @@ class Windows:
 
     def choosing_hero(self, game):
         i1 = ImageButton('res/images_for_window/img.png', (150, 200), 'Mage')
-        i2 = ImageButton('res/images_for_window/img.png', (450, 200), 'Archer')
+        i2 = ImageButton('res/images_for_window/idle_test_009.png', (450, 200), 'Archer')
         i3 = ImageButton('res/images_for_window/img.png', (750, 200), 'Warrior')
         while game.state == 'CHOOSING_HERO':
             for event in pg.event.get():
@@ -329,7 +333,8 @@ class Windows:
                     game.state = 'TREE_PLAYER'
                     break
                 elif i2.handle_event(event):
-                    pass
+                    game.state = 'TREE_PLAYER1'
+                    break
                 elif i3.handle_event(event):
                     pass
             game.screen.fill((0, 250, 0))
@@ -361,6 +366,30 @@ class Windows:
             b1.draw(game.screen)
             draw(game.screen, mage1)
             draw_text(game.screen, mage1)
+
+            game.clock.tick(60)
+            pg.display.update()
+
+    def tree_player1(self, game):
+        b1 = Button('Назад', 430, 500, 100, 50)
+        while game.state == 'TREE_PLAYER1':
+
+            for event in pg.event.get():
+                handle_event_2(event, archer1)
+                # displey.handle_event(event)
+                if event.type == pg.QUIT:
+                    game.state = 'EXIT'
+                    break
+
+                elif b1.handle_event(event):
+                    game.state = 'MENU'
+                    break
+
+            game.screen.fill((0, 250, 0))
+
+            b1.draw(game.screen)
+            draw(game.screen, archer1)
+            draw_text_2(game.screen, archer1)
 
             game.clock.tick(60)
             pg.display.update()

@@ -2,6 +2,7 @@ import pygame as pg
 import socket
 import threading
 import json
+import time
 
 from helpers.background import BackGround
 from structure.settings import *
@@ -26,7 +27,7 @@ class Game:
         self.state = 'START_WINDOW'
         self.data = {}
         self.window = Windows()
-        self.visual_info = {'Current_image': BackGround()}
+        self.visual_info = {'CURRENT_IMAGE': BackGround(),'LAST_TIME': time.time()}
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
@@ -85,6 +86,8 @@ class Game:
                     self.window.choosing_hero(self)
                 case 'TREE_PLAYER':
                     self.window.tree_player(self)
+                case 'TREE_PLAYER1':
+                    self.window.tree_player1(self)
                 case 'INPUT_ROOM':
                     self.window.input_room(self)
                 case 'CREATE_ROOM':
@@ -97,7 +100,7 @@ class Game:
                     self.start_game()
 
     def connect_player(self):
-        self.client.connect(('127.0.0.1', 19451))
+        self.client.connect(('127.0.0.1', 19452))
         self.client.send(json.dumps(self.data).encode('utf-8'))
         self.number = self.client.recv(1024).decode('utf-8')
 

@@ -1,6 +1,6 @@
-Win_x = 900
-Win_y = 600
-FPS = 60
+Win_x = 1400
+Win_y = 800
+FPS = 100
 Win_RGB = (1, 1, 1)
 Title = 'RPG'
 Tile_size = 32

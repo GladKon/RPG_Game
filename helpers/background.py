@@ -9,18 +9,22 @@ class BackGround:
         self.image_1 = pg.image.load(
             path_to_image_background / 'background_1.png').convert_alpha()
         self.image_1 = pg.transform.scale(self.image_1, (Win_x, Win_y))
+        self.image_1.set_alpha(255)
 
         self.image_2 = pg.image.load(
             path_to_image_background / 'background_2.png').convert_alpha()
         self.image_2 = pg.transform.scale(self.image_2, (Win_x, Win_y))
+        self.image_2.set_alpha(0)
 
         self.image_3 = pg.image.load(
             path_to_image_background / 'background_3.png').convert_alpha()
         self.image_3 = pg.transform.scale(self.image_3, (Win_x, Win_y))
+        self.image_3.set_alpha(0)
 
         self.image_4 = pg.image.load(
             path_to_image_background / 'background_4.png').convert_alpha()
         self.image_4 = pg.transform.scale(self.image_4, (Win_x, Win_y))
+        self.image_4.set_alpha(0)
 
         self.sl_image = [self.image_1, self.image_2, self.image_3, self.image_4]
 
@@ -35,7 +39,7 @@ class BackGround:
 
 
     def change_alpha(self):
-        print(self.sl_alpha_level)
+
 
         if self.count != len(self.sl_alpha_level):
 

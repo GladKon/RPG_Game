@@ -6,7 +6,7 @@ import threading
 import json
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('127.0.0.1', 19451))
+server.bind(('127.0.0.1', 19452))
 server.listen()
 
 
