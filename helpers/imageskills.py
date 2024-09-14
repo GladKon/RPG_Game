@@ -7,7 +7,8 @@ from structure.path import path_to_font
 
 
 class ImageSkill():
-    def __init__(self, path, coords, text='Привет мир и Россия и мы все дружно живём в социалистическом мире', step=3, size=(100, 100)):
+    def __init__(self, path, coords, text='Привет мир и Россия и мы все дружно живём в социалистическом мире', step=3, size=(100, 100), obj_to_request=None):
+        self.obj_to_request = obj_to_request
         self.font = pygame.font.Font(path_to_font/'test_font.ttf', 16)
         self.image = pygame.image.load(path)
         self.image = pygame.transform.scale(self.image, size)

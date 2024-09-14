@@ -125,6 +125,16 @@ class UserDAO:
                 return bcrypt.checkpw(password.encode('utf-8'), stored_password)
             return False
 
+
+    def get_id(self, username):
+        with self._connect() as connect:
+            cursor = connect.cursor()
+
+            cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
+            player_id = cursor.fetchone()
+            return player_id
+
+
     def add_character_type(self, main_type, type_name):
         with self._connect() as connect:
             cursor = connect.cursor()

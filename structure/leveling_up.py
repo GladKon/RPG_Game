@@ -41,24 +41,29 @@ def draw_text(screen, node):
 
 
 obj = MessageToServer()
-mage1 = Node(ImageButton(path_to_image / 'img.png', (450, 420), size=(100, 150), obj_to_request=obj))
+mage1 = Node(ImageSkill(path_to_image / 'img.png', (450, 420),
+                        text='Способность 1) огненый шар - летит в указанном направлении и наностит определённый урон.'
+                             '\nСпособность 2) Ледяной выстрел - летит в указанном направлении -'
+                             ' при пападании замораживает противника',
+                        size=(100, 150), obj_to_request=obj))
 
-mage1_1 = Node(ImageSkill(path_to_image / 'img.png', (200, 250), size=(100, 150)))
+mage1_1 = Node(ImageSkill(path_to_image / 'img.png', (200, 250), size=(100, 150), obj_to_request=obj))
 mage1.children.append(mage1_1)
 
-mage1_2 = Node(ImageSkill(path_to_image / 'img.png', (450, 250), size=(100, 150)))
+mage1_2 = Node(ImageSkill(path_to_image / 'img.png', (450, 250), size=(100, 150), obj_to_request=obj))
 mage1.children.append(mage1_2)
 
-mage1_3 = Node(ImageSkill(path_to_image / 'img.png', (700, 250), size=(100, 150)))
+mage1_3 = Node(ImageSkill(path_to_image / 'img.png', (700, 250), size=(100, 150), obj_to_request=obj))
 mage1.children.append(mage1_3)
 
-mage1_1_1 = Node(ImageButton(path_to_image / 'img.png', (200, 80), size=(100, 150)))
+mage1_1_1 = Node(ImageButton(path_to_image / 'img.png', (200, 80), size=(100, 150), obj_to_request=obj))
 mage1_1.children.append(mage1_1_1)
 
-mage1_2_1 = Node(ImageButton(path_to_image / 'img.png', (500, 80), size=(100, 150)))
+mage1_2_1 = Node(ImageButton(path_to_image / 'img.png', (500, 80), size=(100, 150), obj_to_request=obj))
 mage1_2.children.append(mage1_2_1)
-mage1_2_2 = Node(ImageButton(path_to_image / 'img.png', (400, 80), size=(100, 150)))
+mage1_2_2 = Node(ImageButton(path_to_image / 'img.png', (400, 80), size=(100, 150), obj_to_request=obj))
 mage1_2.children.append(mage1_2_2)
+
 
 def handle_event_2(event, node):
     print(node.obj.handle_event(event))
@@ -67,11 +72,13 @@ def handle_event_2(event, node):
     if node.obj.handle_event(event):
         node.obj.obj_to_request.create_character(1, 1, 'Archer')
 
+
 def draw_text_2(screen, node):
     if hasattr(node.obj, 'draw_text'):
         node.obj.draw_text(screen)
     for obj in node.children:
         draw_text(screen, obj)
+
 
 # obj = MessageToServer()
 archer1 = Node(ImageButton(path_to_image / 'idle_test_009.png', (450, 420), size=(100, 150), obj_to_request=obj))
@@ -93,4 +100,3 @@ archer1_2.children.append(archer1_2_1)
 
 archer1_2_2 = Node(ImageButton(path_to_image / 'idle_test_009.png', (400, 80), size=(100, 150)))
 archer1_2.children.append(archer1_2_2)
-

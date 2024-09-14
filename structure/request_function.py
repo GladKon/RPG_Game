@@ -9,7 +9,7 @@ class MessageToServer:
             d = {'name': login, 'password': password}
             data = requests.post('http://127.0.0.1:5000/input', data=d)
             return_data = json.loads(data.text)
-            if return_data == {'response': 'input', 'status': 200}:
+            if return_data['status'] == 200:
                 return 'MENU'
             else:
                 return 'error'

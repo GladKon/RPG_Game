@@ -24,7 +24,8 @@ def input():
     username = request.form['name']
     password = request.form['password']
     if user_dao.validate_user(username, password):
-        return jsonify({'response': 'input', 'status': 200})
+        player_id = user_dao.get_id(username)
+        return jsonify({'response': 'input', 'status': 200, 'player_id': player_id})
     else:
         return jsonify({'response': 'exsit', 'status': 401})
 
