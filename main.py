@@ -27,7 +27,7 @@ class Game:
         self.state = 'START_WINDOW'
         self.data = {}
         self.window = Windows()
-        self.visual_info = {'CURRENT_IMAGE': BackGround(),'LAST_TIME': time.time()}
+        self.visual_info = {'CURRENT_IMAGE': BackGround()}
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()

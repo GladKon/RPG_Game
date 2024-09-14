@@ -25,9 +25,9 @@ class Windows:
         b1 = Button('Войти', 430, 200, 100, 50)
         b2 = Button('Зарегистрироваться', 360, 300, 300, 50)
         background = game.visual_info['CURRENT_IMAGE']
-        last_time = game.visual_info['LAST_TIME']
+
         while game.state == 'START_WINDOW':
-            game.visual_info['LAST_TIME'] = last_time
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
 
@@ -40,24 +40,14 @@ class Windows:
 
                     game.state = 'REGISTRATION'
                     break
-            now = time.time()
 
-            if now - last_time > 1:
-                background.change_alpha()
-
-                if 255 in background.sl_alpha_level:
-                    last_time = time.time()
 
 
 
 
 
             game.screen.fill((165, 250, 120))
-            game.screen.blit(background.image_1, (0, 0))
-            game.screen.blit(background.image_4, (0, 0))
-            game.screen.blit(background.image_3, (0, 0))
-            game.screen.blit(background.image_2, (0, 0))
-            game.screen.blit(background.image_1, (0, 0))
+            background.draw(game)
 
             game.clock.tick(60)
 
@@ -70,7 +60,7 @@ class Windows:
         b1 = Button('Зарегистрироваться', 340, 400, 300, 50)
         b2 = Button('Назад', 420, 500, 100, 50)
         background = game.visual_info['CURRENT_IMAGE']
-        last_time = game.visual_info['LAST_TIME']
+
 
         login_input = InputField(360, 100, 200, 50)
         password_input = InputPassword(360, 200, 200, 50)
@@ -87,7 +77,7 @@ class Windows:
 
         running = None
         while game.state == 'REGISTRATION':
-            game.visual_info['LAST_TIME'] = last_time
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
 
@@ -112,20 +102,8 @@ class Windows:
                 password_input.handle_event(event)
                 password_input2.handle_event(event)
 
-            now = time.time()
-
-            if now - last_time > 1:
-                background.change_alpha()
-
-                if 255 in background.sl_alpha_level:
-                    last_time = time.time()
-
             game.screen.fill((165, 250, 120))
-            # game.screen.blit(background.image_1, (0, 0))
-            game.screen.blit(background.image_4, (0, 0))
-            game.screen.blit(background.image_3, (0, 0))
-            game.screen.blit(background.image_2, (0, 0))
-            game.screen.blit(background.image_1, (0, 0))
+            background.draw(game)
             game.screen.blit(name, (100, 100))
 
             if running == 'name_error':
@@ -157,7 +135,7 @@ class Windows:
         login_input = InputField(360, 100, 200, 50)
         password_input = InputPassword(360, 200, 200, 50)
         background = game.visual_info['CURRENT_IMAGE']
-        last_time = game.visual_info['LAST_TIME']
+
 
         name = font.render('Введите никмейм', True, (0, 10, 0))
         password = font.render('Введите пароль', True, (0, 10, 0))
@@ -166,7 +144,7 @@ class Windows:
         running = None
 
         while game.state == 'INPUT':
-            game.visual_info['LAST_TIME'] = last_time
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     game.state = 'EXIT'
@@ -185,20 +163,11 @@ class Windows:
                 login_input.handle_event(event)
                 password_input.handle_event(event)
 
-            now = time.time()
 
-            if now - last_time > 1:
-                background.change_alpha()
-
-                if 255 in background.sl_alpha_level:
-                    last_time = time.time()
 
             game.screen.fill((165, 250, 120))
-            game.screen.blit(background.image_1, (0, 0))
-            game.screen.blit(background.image_4, (0, 0))
-            game.screen.blit(background.image_3, (0, 0))
-            game.screen.blit(background.image_2, (0, 0))
-            game.screen.blit(background.image_1, (0, 0))
+            background.draw(game)
+
             game.screen.blit(name, (100, 100))
 
             if running == 'error':
@@ -222,10 +191,10 @@ class Windows:
         b3 = Button("Выбор персонажа", 400, 400, 160, 50)
         b4 = Button('Выход', 430, 500, 100, 50)
         background = game.visual_info['CURRENT_IMAGE']
-        last_time = game.visual_info['LAST_TIME']
+
 
         while game.state == 'MENU':
-            game.visual_info['LAST_TIME'] = last_time
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     game.state = 'EXIT'
@@ -240,20 +209,10 @@ class Windows:
                     game.state = 'EXIT'
                     break
 
-            now = time.time()
 
-            if now - last_time > 1:
-                background.change_alpha()
-
-                if 255 in background.sl_alpha_level:
-                    last_time = time.time()
 
             game.screen.fill((165, 250, 120))
-            game.screen.blit(background.image_1, (0, 0))
-            game.screen.blit(background.image_4, (0, 0))
-            game.screen.blit(background.image_3, (0, 0))
-            game.screen.blit(background.image_2, (0, 0))
-            game.screen.blit(background.image_1, (0, 0))
+            background.draw(game)
 
 
             b1.draw(game.screen)

@@ -1,4 +1,5 @@
 import pygame as pg
+import time
 
 from structure.path import path_to_image_background
 from structure.settings import Win_x, Win_y
@@ -36,10 +37,10 @@ class BackGround:
         self.sl_alpha_level = [self.alpha_level_1, self.alpha_level_2, self.alpha_level_3, self.alpha_level_4]
 
         self.count = 1
+        self.last_time = time.time()
 
 
     def change_alpha(self):
-
 
         if self.count != len(self.sl_alpha_level):
 
@@ -66,6 +67,19 @@ class BackGround:
 
             if self.sl_alpha_level[0] == 255:
                 self.count = 1
+
+    def draw(self, game):
+        now = time.time()
+
+        if now - self.last_time > 1:
+            self.change_alpha()
+
+            if 255 in self.sl_alpha_level:
+                self.last_time = time.time()
+
+        for i in range(len(self.sl_alpha_level)):
+            if self.sl_alpha_level[i] != 0:
+                game.screen.blit(self.sl_image[i], (0, 0))
 
 
 
