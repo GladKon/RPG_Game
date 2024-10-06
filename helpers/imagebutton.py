@@ -32,7 +32,7 @@ class ImageButton():
 
     def handle_event(self, event):
         if self.rect.collidepoint(pygame.mouse.get_pos()):
-            if event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONUP and not (event.button == 4 or event.button == 5):
                 if self.activate:
                     return True
                 else:

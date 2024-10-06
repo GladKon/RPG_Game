@@ -16,7 +16,8 @@ def registration():
         return jsonify({'response': 'Aleready exist', 'status': 409})
     else:
         user_dao.add_user(username, password)
-        return jsonify({'response': 'create', 'status': 201})
+        player_id = user_dao.get_id(username)
+        return jsonify({'response': 'create', 'status': 201, 'player_id': player_id})
 
 
 @app.route('/input', methods=['POST'])
@@ -25,9 +26,9 @@ def input():
     password = request.form['password']
     if user_dao.validate_user(username, password):
         player_id = user_dao.get_id(username)
-        return jsonify({'response': 'input', 'status': 200, 'player_id': player_id})
+        return jsonify({'response': 'Allowed', 'status': 200, 'player_id': player_id})
     else:
-        return jsonify({'response': 'exsit', 'status': 401})
+        return jsonify({'response': 'Not Allowed', 'status': 401})
 
 
 @app.route('/create_room', methods=['POST'])

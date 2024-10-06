@@ -4,12 +4,13 @@ import json
 
 class MessageToServer:
 
-    def check_users(self, login, password):
+    def check_users(self, login, password, game):
         try:
             d = {'name': login, 'password': password}
             data = requests.post('http://127.0.0.1:5000/input', data=d)
             return_data = json.loads(data.text)
             if return_data['status'] == 200:
+                game.data['player_id'] = return_data['player_id']
                 return 'MENU'
             else:
                 return 'error'
@@ -44,8 +45,8 @@ class MessageToServer:
         else:
             return 'password_error'
 
-    def create_character(self, user_id, character_type_id, character_name):
-        d = {'user_id': user_id, 'character_type_id': character_type_id,'character_name': character_name}
+    def create_character(self, game, character_type_id, character_name):
+        d = {'user_id': game.data['player_id'], 'character_type_id': character_type_id,'character_name': character_name}
         data = requests.post('http://127.0.0.1:5000/character/create', data=d)
 
         if data.status_code == 201:

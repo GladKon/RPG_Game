@@ -10,8 +10,10 @@ from helpers.imageskills import ImageSkill
 from helpers.input_class import InputField, InputPassword
 from helpers.list_class import TextList
 from helpers.line_break import LineBreak
-from structure.leveling_up import mage1, draw, handle_event, draw_text, archer1, handle_event_2, draw_text_2
+from structure.leveling_up import mage1, draw, handle_event, draw_text, archer1
+from structure.path import path_to_image_background
 from structure.request_function import MessageToServer
+from structure.settings import Win_x, Win_y
 
 pg.init()
 
@@ -150,7 +152,7 @@ class Windows:
                     game.state = 'EXIT'
                     break
                 elif b1.handle_event(event):
-                    running = Message_To_Server.check_users(login_input.text, password_input.text)
+                    running = Message_To_Server.check_users(login_input.text, password_input.text, game)
                     if running == 'MENU':
 
                         game.state = 'MENU'
@@ -283,6 +285,8 @@ class Windows:
         i1 = ImageButton('res/images_for_window/img.png', (150, 200), 'Mage')
         i2 = ImageButton('res/images_for_window/idle_test_009.png', (450, 200), 'Archer')
         i3 = ImageButton('res/images_for_window/img.png', (750, 200), 'Warrior')
+        image = pg.image.load(path_to_image_background / 'background_hunter.webp')
+        image = pg.transform.scale(image, (Win_x, Win_y))
         while game.state == 'CHOOSING_HERO':
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -297,6 +301,7 @@ class Windows:
                 elif i3.handle_event(event):
                     pass
             game.screen.fill((0, 250, 0))
+            game.screen.blit(image, (0, 0))
 
             i1.draw(game.screen)
             i2.draw(game.screen)
@@ -307,10 +312,12 @@ class Windows:
 
     def tree_player(self, game):
         b1 = Button('Назад', 430, 500, 100, 50)
+        image = pg.image.load(path_to_image_background/'background_mage.webp')
+        image = pg.transform.scale(image, (Win_x, Win_y))
         while game.state == 'TREE_PLAYER':
 
             for event in pg.event.get():
-                handle_event(event, mage1)
+                handle_event(event, mage1, game)
                 # displey.handle_event(event)
                 if event.type == pg.QUIT:
                     game.state = 'EXIT'
@@ -321,6 +328,7 @@ class Windows:
                     break
 
             game.screen.fill((0, 250, 0))
+            game.screen.blit(image, (0, 0))
 
             b1.draw(game.screen)
             draw(game.screen, mage1)
@@ -331,10 +339,12 @@ class Windows:
 
     def tree_player1(self, game):
         b1 = Button('Назад', 430, 500, 100, 50)
+        image = pg.image.load(path_to_image_background / 'background_archer.webp')
+        image = pg.transform.scale(image, (Win_x, Win_y))
         while game.state == 'TREE_PLAYER1':
 
             for event in pg.event.get():
-                handle_event_2(event, archer1)
+                handle_event(event, archer1, game)
                 # displey.handle_event(event)
                 if event.type == pg.QUIT:
                     game.state = 'EXIT'
@@ -345,10 +355,11 @@ class Windows:
                     break
 
             game.screen.fill((0, 250, 0))
+            game.screen.blit(image,(0,0))
 
             b1.draw(game.screen)
             draw(game.screen, archer1)
-            draw_text_2(game.screen, archer1)
+            draw_text(game.screen, archer1)
 
             game.clock.tick(60)
             pg.display.update()
@@ -395,6 +406,9 @@ class Windows:
         b1 = Button('Создать', 430, 350, 100, 50)
         b2 = Button('Назад', 430, 450, 100, 50)
 
+        image = pg.image.load(path_to_image_background / 'background_create_room.webp')
+        image = pg.transform.scale(image, (Win_x, Win_y))
+
         room_name = InputField(410, 90, 200, 50)
         room_password = InputField(410, 190, 200, 50)
         room_max_player = InputField(470, 290, 50, 50)
@@ -422,6 +436,7 @@ class Windows:
                 room_max_player.handle_event(event)
 
             game.screen.fill((0, 250, 0))
+            game.screen.blit(image,(0,0))
             game.screen.blit(name_room, (100, 100))
             game.screen.blit(text_password, (100, 200))
             game.screen.blit(text_max_player, (100, 300))
