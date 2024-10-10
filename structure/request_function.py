@@ -45,8 +45,8 @@ class MessageToServer:
         else:
             return 'password_error'
 
-    def create_character(self, game, character_type_id, character_name):
-        d = {'user_id': game.data['player_id'], 'character_type_id': character_type_id,'character_name': character_name}
+    def create_character(self, game, character_name):
+        d = {'user_id': game.data['player_id'], 'character_name': character_name}
         data = requests.post('http://127.0.0.1:5000/character/create', data=d)
 
         if data.status_code == 201:

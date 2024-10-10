@@ -142,9 +142,14 @@ class UserDAO:
             cursor.execute('INSERT INTO character_types (main_type, type_name) VALUES (?, ?)', (main_type, type_name))
             connect.commit()
 
-    def add_character(self, user_id, character_type_id, character_name):
+    def add_character(self, user_id, character_name):
         with self._connect() as connect:
             cursor = connect.cursor()
+
+            result = cursor.execute('SELECT id FROM character_types WHERE type_name = (?)',
+                           (character_name, ))
+
+            character_type_id = result.fetchone()[0]
 
             cursor.execute('INSERT INTO characters (user_id, character_type_id, character_name) VALUES (?, ?, ?)',
                            (user_id, character_type_id, character_name))

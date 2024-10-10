@@ -7,9 +7,8 @@ from structure.path import path_to_font
 
 
 class ImageSkill():
-    def __init__(self, path, coords, character_id=1,character_name='Mage', text='Привет мир и Россия и мы все дружно живём в социалистическом мире', step=3,
+    def __init__(self, path, coords,character_name='Mage', text='Привет мир и Россия и мы все дружно живём в социалистическом мире', step=3,
                  image_size=(300, 300), obj_to_request=None, text_size=(200, 100)):
-        self.character_id = character_id
         self.character_name = character_name
         self.obj_to_request = obj_to_request
         self.font = pygame.font.Font(path_to_font / 'test_font.ttf', 16)

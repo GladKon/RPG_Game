@@ -29,7 +29,7 @@ def handle_event(event, node, game):
     for obj in node.children:
         handle_event(event, obj, game)
     if node.obj.handle_event(event):
-        node.obj.obj_to_request.create_character(game, node.obj.character_id, node.obj.character_name)
+        node.obj.obj_to_request.create_character(game, node.obj.character_name)
 
 
 def draw_text(screen, node):
@@ -40,7 +40,7 @@ def draw_text(screen, node):
 
 
 obj = MessageToServer()
-mage1 = Node(ImageSkill(path_to_image / 'img.png', (450, 420), character_id=5,character_name='Mage',
+mage1 = Node(ImageSkill(path_to_image / 'img.png', (450, 420),character_name='Mage',
                         text='Способность 1) огненый шар - летит в указанном направлении и наностит определённый урон.'
                              '\nСпособность 2) Ледяной выстрел - летит в указанном направлении -'
                              ' при пападании замораживает противника',

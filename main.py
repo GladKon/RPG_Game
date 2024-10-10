@@ -4,6 +4,7 @@ import threading
 import json
 import time
 
+from helpers.enums import StateOfGame
 from helpers.background import BackGround
 from structure.settings import *
 from helpers.player import Player
@@ -24,7 +25,7 @@ class Game:
         self.users = {}
         self.clock = pg.time.Clock()
         self.life = True
-        self.state = 'START_WINDOW'
+        self.state = StateOfGame.START_WINDOW.name
         self.data = {}
         self.window = Windows()
         self.visual_info = {'CURRENT_IMAGE': BackGround()}
@@ -68,9 +69,9 @@ class Game:
                 self.player.Sprint = 1
 
     def run(self):
-        while self.state != 'EXIT':
+        while self.state != StateOfGame.EXIT.name:
             match self.state:
-                case 'START_WINDOW':
+                case StateOfGame.START_WINDOW.name:
                     self.window.start_window(self)
                 case 'INPUT':
                     self.window.window_input(self)

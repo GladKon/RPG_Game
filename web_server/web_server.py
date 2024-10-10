@@ -72,11 +72,10 @@ def start_game(name: str):
 @app.route('/character/create', methods=['POST'])
 def create_character():
     user_id = request.form['user_id']
-    character_type_id = request.form['character_type_id']
     character_name = request.form['character_name']
 
     try:
-        user_dao.add_character(user_id, character_type_id, character_name)
+        user_dao.add_character(user_id, character_name)
         return jsonify({'response': 'create'}), 201
     except Exception as e:
         return jsonify({'response': str(e)}), 404

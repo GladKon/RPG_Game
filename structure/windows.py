@@ -2,6 +2,7 @@ import pygame as pg
 import requests
 import time
 
+from helpers.enums import StateOfGame
 from helpers.background import BackGround
 from helpers.button_class import Button
 from helpers.helper import password_hard
