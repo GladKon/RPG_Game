@@ -73,30 +73,30 @@ class Game:
             match self.state:
                 case StateOfGame.START_WINDOW.name:
                     self.window.start_window(self)
-                case 'INPUT':
+                case StateOfGame.INPUT.name:
                     self.window.window_input(self)
-                case 'REGISTRATION':
+                case StateOfGame.REGISTRATION.name:
                     self.window.registration(self)
-                case 'MENU':
+                case StateOfGame.MENU.name:
                     self.window.menu(self)
-                case 'ROOM':
+                case StateOfGame.ROOM.name:
                     self.window.room(self)
-                case 'PLAYER_CHOOSE':
+                case StateOfGame.PLAYER_CHOOSE.name:
                     self.window.player_choose(self)
-                case 'CHOOSING_HERO':
+                case StateOfGame.CHOOSING_HERO.name:
                     self.window.choosing_hero(self)
-                case 'TREE_PLAYER':
+                case StateOfGame.TREE_PLAYER.name:
                     self.window.tree_player(self)
-                case 'TREE_PLAYER1':
+                case StateOfGame.TREE_PLAYER1.name:
                     self.window.tree_player1(self)
-                case 'INPUT_ROOM':
+                case StateOfGame.INPUT_ROOM.name:
                     self.window.input_room(self)
-                case 'CREATE_ROOM':
+                case StateOfGame.CREATE_ROOM.name:
                     self.window.create_room(self)
-                case 'GAME_ROOM':
+                case StateOfGame.GAME_ROOM.name:
                     self.connect_player()
                     self.window.game_room(self)
-                case 'GAME':
+                case StateOfGame.GAME_ROOM.name:
                     self.new()
                     self.start_game()
 

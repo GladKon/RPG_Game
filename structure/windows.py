@@ -1,6 +1,7 @@
 import pygame as pg
 import requests
 import time
+from helpers.enums import StateOfGame
 
 from helpers.enums import StateOfGame
 from helpers.background import BackGround
@@ -29,25 +30,17 @@ class Windows:
         b2 = Button('Зарегистрироваться', 360, 300, 300, 50)
         background = game.visual_info['CURRENT_IMAGE']
 
-        while game.state == 'START_WINDOW':
+        while game.state == StateOfGame.START_WINDOW.name:
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                 elif b1.handle_event(event):
-
-                    game.state = 'INPUT'
+                    game.state = StateOfGame.INPUT.name
                     break
                 elif b2.handle_event(event):
-
-                    game.state = 'REGISTRATION'
+                    game.state = StateOfGame.REGISTRATION.name
                     break
-
-
-
-
-
 
             game.screen.fill((165, 250, 120))
             background.draw(game)
@@ -64,7 +57,6 @@ class Windows:
         b2 = Button('Назад', 420, 500, 100, 50)
         background = game.visual_info['CURRENT_IMAGE']
 
-
         login_input = InputField(360, 100, 200, 50)
         password_input = InputPassword(360, 200, 200, 50)
         password_input2 = InputPassword(360, 300, 200, 50)
@@ -79,27 +71,22 @@ class Windows:
         slogno = LineBreak('Пароль должен содержать символы', 3, (100, 0, 0))
 
         running = None
-        while game.state == 'REGISTRATION':
+        while game.state == StateOfGame.REGISTRATION.name:
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
                 elif b1.handle_event(event):
                     running = password_hard(password_input2.text)
                     if running == 'True':
                         running = Message_To_Server.button_registration(login_input.text, password_input.text,
                                                                         password_input2.text)
-                        if running == 'MENU':
-
-                            game.state = 'MENU'
+                        if running == StateOfGame.REGISTRATION.name:
+                            game.state = StateOfGame.REGISTRATION.name
                             break
-
-
                 elif b2.handle_event(event):
-
-                    game.state = 'START_WINDOW'
+                    game.state = StateOfGame.START_WINDOW.name
                     break
                 login_input.handle_event(event)
                 password_input.handle_event(event)
@@ -139,34 +126,31 @@ class Windows:
         password_input = InputPassword(360, 200, 200, 50)
         background = game.visual_info['CURRENT_IMAGE']
 
-
         name = font.render('Введите никмейм', True, (0, 10, 0))
         password = font.render('Введите пароль', True, (0, 10, 0))
         error = font.render('Неверное имя или пароль!', True, (255, 0, 0))
         server_error = LineBreak('На сервере ошибка', 1, (250, 0, 0))
         running = None
 
-        while game.state == 'INPUT':
-
+        while game.state == StateOfGame.INPUT.name:
+            print(game.state)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
                 elif b1.handle_event(event):
                     running = Message_To_Server.check_users(login_input.text, password_input.text, game)
-                    if running == 'MENU':
-
-                        game.state = 'MENU'
+                    print(running)
+                    if running == StateOfGame.MENU.name:
+                        game.state = StateOfGame.MENU.name
                         game.data['name'] = login_input.text
                         break
                 elif b2.handle_event(event):
 
-                    game.state = 'START_WINDOW'
+                    game.state = StateOfGame.START_WINDOW.name
                     break
                 login_input.handle_event(event)
                 password_input.handle_event(event)
-
-
 
             game.screen.fill((165, 250, 120))
             background.draw(game)
@@ -195,28 +179,24 @@ class Windows:
         b4 = Button('Выход', 430, 500, 100, 50)
         background = game.visual_info['CURRENT_IMAGE']
 
-
-        while game.state == 'MENU':
+        while game.state == StateOfGame.MENU.name:
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
                 elif b1.handle_event(event):
-                    game.state = 'ROOM'
+                    game.state = StateOfGame.ROOM.name
                     break
                 elif b3.handle_event(event):
-                    game.state = 'PLAYER_CHOOSE'
+                    game.state = StateOfGame.PLAYER_CHOOSE.name
                     break
                 elif b4.handle_event(event):
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
-
-
 
             game.screen.fill((165, 250, 120))
             background.draw(game)
-
 
             b1.draw(game.screen)
             b2.draw(game.screen)
@@ -230,19 +210,19 @@ class Windows:
         b1 = Button('Создать комнату', 400, 200, 220, 50)
         b2 = Button('Войти в комнату', 400, 300, 220, 50)
         b3 = Button('Назад', 430, 400, 100, 50)
-        while game.state == 'ROOM':
+        while game.state == StateOfGame.ROOM.name:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
                 elif b1.handle_event(event):
-                    game.state = 'CREATE_ROOM'
+                    game.state = StateOfGame.CREATE_ROOM.name
                     break
                 elif b2.handle_event(event):
-                    game.state = 'INPUT_ROOM'
+                    game.state = StateOfGame.INPUT_ROOM.name
                     break
                 elif b3.handle_event(event):
-                    game.state = 'MENU'
+                    game.state = StateOfGame.REGISTRATION.name
                     break
 
             game.screen.fill((0, 250, 0))
@@ -259,18 +239,18 @@ class Windows:
         i2 = ImageButton('res/images_for_window/img.png', (700, 200), 'Survival')
         b1 = Button('Назад', 430, 500, 100, 50)
 
-        while game.state == 'PLAYER_CHOOSE':
+        while game.state == StateOfGame.PLAYER_CHOOSE.name:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
                 elif i1.handle_event(event):
-                    game.state = 'CHOOSING_HERO'
+                    game.state = StateOfGame.CHOOSING_HERO.name
                     break
                 elif i2.handle_event(event):
                     pass
                 elif b1.handle_event(event):
-                    game.state = 'MENU'
+                    game.state = StateOfGame.REGISTRATION.name
                     break
 
             game.screen.fill((0, 250, 0))
@@ -288,16 +268,16 @@ class Windows:
         i3 = ImageButton('res/images_for_window/img.png', (750, 200), 'Warrior')
         image = pg.image.load(path_to_image_background / 'background_hunter.webp')
         image = pg.transform.scale(image, (Win_x, Win_y))
-        while game.state == 'CHOOSING_HERO':
+        while game.state == StateOfGame.CHOOSING_HERO.name:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
                 elif i1.handle_event(event):
-                    game.state = 'TREE_PLAYER'
+                    game.state = StateOfGame.TREE_PLAYER.name
                     break
                 elif i2.handle_event(event):
-                    game.state = 'TREE_PLAYER1'
+                    game.state = StateOfGame.TREE_PLAYER1.name
                     break
                 elif i3.handle_event(event):
                     pass
@@ -313,19 +293,19 @@ class Windows:
 
     def tree_player(self, game):
         b1 = Button('Назад', 430, 500, 100, 50)
-        image = pg.image.load(path_to_image_background/'background_mage.webp')
+        image = pg.image.load(path_to_image_background / 'background_mage.webp')
         image = pg.transform.scale(image, (Win_x, Win_y))
-        while game.state == 'TREE_PLAYER':
+        while game.state == StateOfGame.TREE_PLAYER.name:
 
             for event in pg.event.get():
                 handle_event(event, mage1, game)
                 # displey.handle_event(event)
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
 
                 elif b1.handle_event(event):
-                    game.state = 'MENU'
+                    game.state = StateOfGame.REGISTRATION.name
                     break
 
             game.screen.fill((0, 250, 0))
@@ -342,21 +322,21 @@ class Windows:
         b1 = Button('Назад', 430, 500, 100, 50)
         image = pg.image.load(path_to_image_background / 'background_archer.webp')
         image = pg.transform.scale(image, (Win_x, Win_y))
-        while game.state == 'TREE_PLAYER1':
+        while game.state == StateOfGame.TREE_PLAYER1.name:
 
             for event in pg.event.get():
                 handle_event(event, archer1, game)
                 # displey.handle_event(event)
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
 
                 elif b1.handle_event(event):
-                    game.state = 'MENU'
+                    game.state = StateOfGame.REGISTRATION.name
                     break
 
             game.screen.fill((0, 250, 0))
-            game.screen.blit(image,(0,0))
+            game.screen.blit(image, (0, 0))
 
             b1.draw(game.screen)
             draw(game.screen, archer1)
@@ -374,13 +354,13 @@ class Windows:
         name = font.render('Введите название комнаты', True, (0, 10, 0))
         password = font.render('Введите пароль от комнаты', True, (0, 10, 0))
 
-        while game.state == 'INPUT_ROOM':
+        while game.state == StateOfGame.INPUT_ROOM.name:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
                 elif b1.handle_event(event):
-                    game.state = 'MENU'
+                    game.state = StateOfGame.REGISTRATION.name
                     break
                 elif b2.handle_event(event):
                     game.data['name_of_room'] = name_room.text
@@ -418,26 +398,26 @@ class Windows:
         text_password = font.render('Введите пароль комнаты', True, (0, 10, 0))
         text_max_player = font.render('Максимальное число игроков', True, (0, 10, 0))
 
-        while game.state == 'CREATE_ROOM':
+        while game.state == StateOfGame.CREATE_ROOM.name:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                     break
                 elif b1.handle_event(event):
                     game.data['name_of_room'] = room_name.text
                     game.state = Message_To_Server.create_a_room(room_name.text, room_password.text,
                                                                  room_max_player.text)
-                    if game.state == 'GAME_ROOM':
+                    if game.state == StateOfGame.GAME_ROOM.name:
                         Message_To_Server.connect_to_room(room_name.text, room_password.text, game.data['name'])
                         game.data['CREATER'] = True
                 elif b2.handle_event(event):
-                    game.state = 'ROOM'
+                    game.state = StateOfGame.ROOM.name
                 room_name.handle_event(event)
                 room_password.handle_event(event)
                 room_max_player.handle_event(event)
 
             game.screen.fill((0, 250, 0))
-            game.screen.blit(image,(0,0))
+            game.screen.blit(image, (0, 0))
             game.screen.blit(name_room, (100, 100))
             game.screen.blit(text_password, (100, 200))
             game.screen.blit(text_max_player, (100, 300))
@@ -458,7 +438,7 @@ class Windows:
         b2 = Button('Запустить', 430, 450, 100, 45)
         l1 = TextList(users, (236, 10, 100), 430, 100, 50)
         start = time.time()
-        while game.state == 'GAME_ROOM':
+        while game.state == StateOfGame.GAME_ROOM.name:
             # код нужно улучшить
             if time.time() - start >= 2:
                 users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
@@ -467,13 +447,13 @@ class Windows:
             # конец
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    game.state = 'EXIT'
+                    game.state = StateOfGame.EXIT.name
                 elif b1.handle_event(event):
-                    game.state = 'ROOM'
+                    game.state = StateOfGame.ROOM.name
                 elif b2.handle_event(event) and game.data['CREATER']:
                     data = requests.get(f'http://127.0.0.1:5000/room/{game.data["name_of_room"]}/start_game')
                     if data.status_code == 200:
-                        game.state = 'GAME'
+                        game.state = StateOfGame.GAME_ROOM.name
 
                 game.screen.fill((0, 250, 0))
 
