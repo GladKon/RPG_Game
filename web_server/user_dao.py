@@ -1,168 +1,79 @@
 import sqlite3
 import bcrypt
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from db.models import Character, CharacterType, User, engine
 
 
 class UserDAO:
-    def __init__(self, name):
-        self._name = name
-        self.create_table_users()
-        self.create_table_character_types()
-        self.create_table_characters()
-
-    def _connect(self):
-        return sqlite3.connect(self._name)
-
-    def create_table_users(self):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-
-            cursor.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT NOT NULL UNIQUE,
-                password_hash TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIME
-            )
-            ''')
-
-            connect.commit()
-
-    def create_table_character_types(self):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-
-            cursor.execute('''
-            CREATE TABLE IF NOT EXISTS character_types (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                main_type TEXT  NOT NULL,
-                type_name TEXT UNIQUE NOT NULL
-                
-            )
-            ''')
-
-            connect.commit()
-
-    def create_table_characters(self):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-
-            cursor.execute('''
-            CREATE TABLE IF NOT EXISTS characters (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER,
-                character_type_id INTEGER,
-                character_name TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIME,
-                FOREIGN KEY(user_id) REFERENCES users(id),
-                FOREIGN KEY(character_type_id) REFERENCES character_types(id)
-                
-            )
-            ''')
-
-            connect.commit()
+    def __init__(self, engine):
+        # self.engine = create_engine(db_url)
+        # Base.metadata.create_all(self.engine)
+        self.engine = engine
+        self.session = sessionmaker(bind=self.engine)
 
     def add_user(self, username, password):
         password = password.encode('utf-8')
         hashed_password = bcrypt.hashpw(password, bcrypt.gensalt(rounds=5))
+        session = self.session()
 
-        with self._connect() as connect:
-            cursor = connect.cursor()
+        user = User(username=username, password_hash=hashed_password)
+        session.add(user)
+        session.commit()
 
-            cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)', (username, hashed_password))
-            connect.commit()
+    def delete_user(self, username):
+        session = self.session()
+        user = session.query(User).filter_by(username=username).first()
 
-    def delite_user(self, username):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-            connect.execute("DELETE FROM users WHERE username= ?", (username,))
-
-            connect.commit()
-            cursor.close()
-
-    def drop_table_users(self):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-            cursor.execute('''
-                DROP TABLE IF EXISTS users;
-            ''')
-
-            connect.commit()
-
-    def drop_table_character_types(self):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-            cursor.execute('''
-                DROP TABLE IF EXISTS character_types;
-            ''')
-
-            connect.commit()
-
-    def drop_table_character(self):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-            cursor.execute('''
-                   DROP TABLE IF EXISTS character;
-               ''')
-
-            connect.commit()
+        if user:
+            session.delete(user)
+            session.commit()
 
     def is_exist(self, username):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-
-            cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
-            user = cursor.fetchone()
-            return user is not None
+        session = self.session()
+        user = session.query(User).filter_by(username=username).first()
+        return user is not None
 
     def validate_user(self, username, password):
-        with self._connect() as connect:
-            cursor = connect.cursor()
+        session = self.session()
+        user = session.query(User).filter_by(username=username).first()
 
-            cursor.execute('SELECT password_hash FROM users WHERE username = ?', (username,))
-            user = cursor.fetchone()
-            if user:
-                stored_password = user[0]
-                return bcrypt.checkpw(password.encode('utf-8'), stored_password)
-            return False
-
+        if user:
+            return bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8'))
+        return False
 
     def get_id(self, username):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-
-            cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
-            player_id = cursor.fetchone()
-            return player_id
-
+        session = self.session()
+        user = session.query(User).filter_by(username=username).first()
+        if user:
+            return user.id
+        return None
 
     def add_character_type(self, main_type, type_name):
-        with self._connect() as connect:
-            cursor = connect.cursor()
-
-            cursor.execute('INSERT INTO character_types (main_type, type_name) VALUES (?, ?)', (main_type, type_name))
-            connect.commit()
+        session = self.session()
+        character_type = CharacterType(main_type=main_type, type_name=type_name)
+        session.add(character_type)
+        session.commit()
 
     def add_character(self, user_id, character_name):
-        with self._connect() as connect:
-            cursor = connect.cursor()
+        session = self.session()
 
-            result = cursor.execute('SELECT id FROM character_types WHERE type_name = (?)',
-                           (character_name, ))
+        character_type = session.query(CharacterType).filter_by(type_name=character_name).first()
 
-            character_type_id = result.fetchone()[0]
-
-            cursor.execute('INSERT INTO characters (user_id, character_type_id, character_name) VALUES (?, ?, ?)',
-                           (user_id, character_type_id, character_name))
-            connect.commit()
+        if character_type:
+            character = Character(user_id=user_id, character_type_id=character_type.id, character_name=character_name)
+            session.add(character)
+            session.commit()
 
 
 if __name__ == '__main__':
-    userdao = UserDAO('users.db')
-    userdao.add_character(1, 1, 'Mage')
+    userdao = UserDAO(engine=engine)
+    # userdao.add_character(1, 1, 'Mage')
     # userdao.add_character_type('Archer', 'Sniper')
     # userdao.drop_table_character_types()
     # userdao.create_table_characters()
     # userdao.create_table_character_types()
     # userdao.create_table_users()
-    # userdao.add_user('1','1')
+    userdao.add_user('1','1')
     # userdao.add_user('2','2')

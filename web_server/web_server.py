@@ -2,9 +2,10 @@ from flask import Flask, request, jsonify
 
 from room import Room, rooms
 from user_dao import UserDAO
+from db.models import engine
 
 app = Flask(__name__)
-user_dao = UserDAO('users.db')
+user_dao = UserDAO(engine)
 
 
 @app.route('/registration', methods=['POST'])
