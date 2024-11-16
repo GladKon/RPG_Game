@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey,
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
 
-engine = create_engine('postgresql://postgres:mysecretpassword@localhost:15433/my_db')
+engine = create_engine('postgresql://GladKon:546372819r@localhost:15432/rpggame_db')
 
 Base = declarative_base()
 
@@ -51,5 +51,7 @@ class Room(Base):
     password_of_room = Column(String(20), nullable=True)
     created_at = Column(DateTime, server_default=func.now())
     active = Column(Boolean, nullable=False)
+    creater_id = Column(Integer, nullable=False)
+    type = Column(String(20), nullable=False)
 
     characters = relationship("Character", back_populates="room")
