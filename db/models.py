@@ -47,11 +47,12 @@ class Room(Base):
     __tablename__ = "rooms"
 
     id = Column(Integer, primary_key=True)
-    name_of_room = Column(String(20), nullable=False)
+    name_of_room = Column(String(20), nullable=False, unique=True)
     password_of_room = Column(String(20), nullable=True)
     created_at = Column(DateTime, server_default=func.now())
     active = Column(Boolean, nullable=False)
     creater_id = Column(Integer, nullable=False)
     type = Column(String(20), nullable=False)
+    limited = Column(Integer, nullable=False)
 
     characters = relationship("Character", back_populates="room")

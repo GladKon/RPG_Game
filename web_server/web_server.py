@@ -36,12 +36,13 @@ def input():
 def create_room():
     name_room = request.form['name']
     password = request.form['password']
-    active = request.form['active']
-    creater_id = request.form['creater_id']
+    active = bool(request.form['active'])
+    creater_id = int(request.form['creater_id'])
     type = request.form['type']
+    limited = int(request.form['limited'])
     # r = Room(name_room, password, active, creater_id, type)
     # rooms.append(r)
-    user_dao.add_room(name_room, password, active, creater_id, type)
+    user_dao.add_room(name_room, password, active, creater_id, type, limited)
     return jsonify({'response': 'create', 'status': 201}), 201
 
 

@@ -22,8 +22,9 @@ class MessageToServer:
         data = requests.post('http://127.0.0.1:5000/input_room', data=d)
         return 'GAME_ROOM' if data.status_code == 200 else 'INPUT_ROOM'
 
-    def create_a_room(self, name, password, max_player=15):
-        d = {'name': name, 'password': password, 'limited': max_player}
+    def create_a_room(self, name, password, creater_id, type, max_player=15):
+        d = {'name': name, 'password': password, 'active': True, 'creater_id': creater_id, 'type': type,
+             'limited': max_player}
         data = requests.post('http://127.0.0.1:5000/create_room', data=d)
         return 'GAME_ROOM' if data.status_code == 201 else 'CREATE_ROOM'
 
@@ -57,4 +58,6 @@ class MessageToServer:
 
 if __name__ == '__main__':
     mesage = MessageToServer()
-    mesage.create_character(1,1,'Ice mage')
+    # mesage.create_character(1, 1, 'Ice mage')
+    mesage.create_a_room('1', '', 11, 'one')
+    mesage.create_a_room('1', 'None', 11, 'Two')

@@ -73,11 +73,11 @@ class UserDAO:
             session.add(character)
             session.commit()
 
-    def add_room(self, name_of_room: str, password_of_room: str, active: bool, creater: int, type: str):
+    def add_room(self, name_of_room: str, password_of_room: str, active: bool, creater: int, type: str, limited: int):
         session = self.session()
 
         room = Room(name_of_room=name_of_room, password_of_room=password_of_room, active=active, creater_id=creater,
-                    type=type)
+                    type=type, limited=limited)
         session.add(room)
         session.commit()
 
@@ -92,7 +92,7 @@ class UserDAO:
 
 if __name__ == '__main__':
     userdao = UserDAO(engine=engine)
-    userdao.add_room('1', '2', True, 2, '4')
+    # userdao.add_room('1', '2', True, 2, '4')
     # userdao.delete_room('1')
     # userdao.add_character(1, 1, 'Mage')
     # userdao.add_character_type('Archer', 'Sniper')
