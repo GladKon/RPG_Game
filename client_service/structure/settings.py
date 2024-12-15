@@ -1,3 +1,8 @@
+import os
+import dotenv
+
+dotenv.load_dotenv()
+
 Win_x = 1400
 Win_y = 800
 FPS = 100
@@ -20,3 +25,9 @@ GREEN = (0, 153, 0)
 TURQUOISE = (0, 153, 153)
 YELLOW = (255, 255, 60)
 BLUE = (9, 42, 255)
+
+POSTGRES_USER = os.getenv('POSTGRES_USER')
+POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+POSTGRES_PORT = os.getenv('POSTGRES_PORT')
+POSTGRES_DB = os.getenv('POSTGRES_DB')

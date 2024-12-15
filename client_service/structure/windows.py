@@ -1,21 +1,18 @@
 import pygame as pg
 import requests
 import time
-from helpers.enums import StateOfGame
 
-from helpers.enums import StateOfGame
-from helpers.background import BackGround
-from helpers.button_class import Button
-from helpers.helper import password_hard
-from helpers.imagebutton import ImageButton
-from helpers.imageskills import ImageSkill
-from helpers.input_class import InputField, InputPassword
-from helpers.list_class import TextList
-from helpers.line_break import LineBreak
-from structure.leveling_up import mage1, draw, handle_event, draw_text, archer1
-from structure.path import path_to_image_background
-from structure.request_function import MessageToServer
-from structure.settings import Win_x, Win_y
+from client_service.helpers.enums import StateOfGame
+from client_service.helpers.button_class import Button
+from client_service.helpers.helper import password_hard
+from client_service.helpers.imagebutton import ImageButton
+from client_service.helpers.input_class import InputField, InputPassword
+from client_service.helpers.list_class import TextList
+from client_service.helpers.line_break import LineBreak
+from client_service.structure.leveling_up import mage1, draw, handle_event, draw_text, archer1
+from client_service.structure.path import path_to_image_background
+from client_service.structure.request_function import MessageToServer
+from client_service.structure.settings import Win_x, Win_y
 
 pg.init()
 

@@ -1,8 +1,9 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, DateTime, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
+from client_service.structure.settings import POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_HOST,POSTGRES_PORT,POSTGRES_DB
 
-engine = create_engine('postgresql://GladKon:546372819r@localhost:15432/rpggame_db')
+engine = create_engine(f'postgresql://{POSTGRES_USER}]:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}]')
 
 Base = declarative_base()
 

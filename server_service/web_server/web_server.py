@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 
-from room import Room, rooms
+from room import rooms
 from user_dao import UserDAO
-from db.models import engine
+from server_service.db.models import engine
 
 app = Flask(__name__)
 user_dao = UserDAO(engine)

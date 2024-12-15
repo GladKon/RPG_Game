@@ -1,6 +1,6 @@
 import pygame as pg
 
-from structure.path import path_to_font
+from client_service.structure.path import path_to_font
 
 pg.init()
 font = pg.font.Font(path_to_font/'test_font.ttf', 16)

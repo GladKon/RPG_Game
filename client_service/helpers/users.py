@@ -1,19 +1,18 @@
 import pygame as pg
-import json
 
-from helpers.helper import SpriteHelper
+from client_service.helpers.helper import SpriteHelper
 from pygame.math import Vector2
-from structure.settings import Sloy_player
+from client_service.structure.settings import Sloy_player
 
-
-class Player(pg.sprite.Sprite):
+class UserGame(pg.sprite.Sprite):
     speed = 3
 
-    def __init__(self, game, path, pos, client):
-        self.game = game
-        self.client = client
+    def __init__(self, game, path, pos):
         self._layer = Sloy_player
         super().__init__(game.all_sprite)
+        self.name = ''
+        # self.sprite_sheet = SpriteHelper(path)
+        # self.image = self.sprite_sheet.get_image(0, 0, 32, 32)
         sprite_sheet = SpriteHelper(path, scale=2)
         self._load_sprite(sprite_sheet)
         self.image = self.sprite_S[0]
@@ -23,8 +22,6 @@ class Player(pg.sprite.Sprite):
         self.last_update = 0
         self.animate = 0
         self.Sprint = 1
-
-
 
     def _load_sprite(self, sprite_sheet):
         w, h = sprite_sheet.w // 4, sprite_sheet.h // 4
@@ -39,56 +36,37 @@ class Player(pg.sprite.Sprite):
                          sprite_sheet.get_image(w * 2, h, w, h), sprite_sheet.get_image(w * 3, h, w, h)]
 
     def update(self):
-        self._move()
+        pass
+        # self._Animation()
+
+    def change_direction(self, d):
+        self.direction = d
         self._animation()
 
-    def _move(self):
-        self.v.update(0, 0)
-
-        keys = pg.key.get_pressed()
-
-        if keys[pg.K_w]:
-            self.v.y = -1
-        if keys[pg.K_s]:
-            self.v.y = 1
-        if keys[pg.K_d]:
-            self.v.x = 1
-        if keys[pg.K_a]:
-            self.v.x = -1
-
-        # if self.v.length() > 1:
-        #     self.v.x = 0
-
-        self.v *= (Player.speed * self.Sprint)
-        self.rect.center += self.v
-        is_tup = False
-        if keys[pg.K_w] or keys[pg.K_s] or keys[pg.K_d] or keys[pg.K_a]:
-            is_tup = True
-        if is_tup:
-            X, Y = self.rect.center
-            target = {'x': X, 'y': Y, 'N': self.game.number}
-            data = json.dumps(target).encode('utf-8')
-            self.client.send(data)
 
     def _animation(self, frame_len=100):
 
         now = pg.time.get_ticks()
 
-        if now - self.last_update > frame_len // self.Sprint and self.v.length() > 0:
+        if now - self.last_update > frame_len // self.Sprint:
 
-            if self.v.y < 0:
+            if self.direction == 'u':
                 self.aimation = self.sprite_W
-            if self.v.y > 0:
+            elif self.direction == 'd':
                 self.aimation = self.sprite_S
-            if self.v.x < 0:
+            elif self.direction == 'l':
                 self.aimation = self.sprite_A
-            if self.v.x > 0:
+            elif self.direction == 'r':
                 self.aimation = self.sprite_D
+            else:
+                self.aimation = self.sprite_S
 
             self.image = self.aimation[self.animate]
+
 
             self.animate += 1
             if self.animate == 4:
                 self.animate = 0
 
             self.last_update = now
+

@@ -1,9 +1,7 @@
-import sqlite3
 import bcrypt
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from db.models import Character, CharacterType, User, engine, Room
+from server_service.db.models import Character, CharacterType, User, engine, Room
 
 
 class UserDAO:

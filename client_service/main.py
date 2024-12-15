@@ -2,16 +2,15 @@ import pygame as pg
 import socket
 import threading
 import json
-import time
 
-from helpers.enums import StateOfGame
-from helpers.background import BackGround
-from structure.settings import *
-from helpers.player import Player
-from helpers.users import UserGame
-from structure.path import res
-from structure.map import TileMap, Camera
-from structure.windows import Windows
+from client_service.helpers.enums import StateOfGame
+from client_service.helpers.background import BackGround
+from client_service.structure.settings import *
+from client_service.helpers.player import Player
+from client_service.helpers.users import UserGame
+from client_service.structure.path import res
+from client_service.structure.map import TileMap, Camera
+from client_service.structure.windows import Windows
 
 
 
