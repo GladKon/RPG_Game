@@ -1,8 +1,8 @@
 import pygame as pg
 import time
 
-from client_service.structure.path import path_to_image_background
-from client_service.structure.settings import Win_x, Win_y
+from structure.path import path_to_image_background
+from structure.settings import Win_x, Win_y
 
 
 class BackGround:

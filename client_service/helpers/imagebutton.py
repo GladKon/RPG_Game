@@ -1,6 +1,6 @@
 import pygame.image
 
-from client_service.structure.path import path_to_font
+from structure.path import path_to_font
 
 
 class ImageButton():

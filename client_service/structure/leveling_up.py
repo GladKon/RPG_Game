@@ -1,8 +1,8 @@
 import pygame as pg
-from client_service.helpers.imagebutton import ImageButton
-from client_service.helpers.imageskills import ImageSkill
-from client_service.structure.path import path_to_image
-from client_service.structure.request_function import MessageToServer
+from helpers.imagebutton import ImageButton
+from helpers.imageskills import ImageSkill
+from structure.path import path_to_image
+from structure.request_function import MessageToServer
 
 
 class Node():

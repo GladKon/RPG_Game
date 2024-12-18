@@ -1,7 +1,7 @@
 import bcrypt
 from sqlalchemy.orm import sessionmaker
 
-from server_service.db.models import Character, CharacterType, User, engine, Room
+from db.models import Character, CharacterType, User, engine, Room
 
 
 class UserDAO:

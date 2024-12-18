@@ -1,8 +1,8 @@
 import pygame.image
 
-from client_service.helpers.line_break import LineBreak
-from client_service.helpers.text_box import TextBox
-from client_service.structure.path import path_to_font
+from helpers.line_break import LineBreak
+from helpers.text_box import TextBox
+from structure.path import path_to_font
 
 
 class ImageSkill():

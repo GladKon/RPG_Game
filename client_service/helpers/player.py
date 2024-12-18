@@ -1,9 +1,9 @@
 import pygame as pg
 import json
 
-from client_service.helpers.helper import SpriteHelper
+from helpers.helper import SpriteHelper
 from pygame.math import Vector2
-from client_service.structure.settings import Sloy_player
+from structure.settings import Sloy_player
 
 
 class Player(pg.sprite.Sprite):
