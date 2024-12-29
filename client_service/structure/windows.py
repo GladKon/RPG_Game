@@ -394,16 +394,18 @@ class Windows:
         name_room = font.render('Введите имя комнаты', True, (0, 10, 0))
         text_password = font.render('Введите пароль комнаты', True, (0, 10, 0))
         text_max_player = font.render('Максимальное число игроков', True, (0, 10, 0))
+        error = font.render('Данное имя комнаты занято', True, (255, 0, 0))
 
-        while game.state == StateOfGame.CREATE_ROOM.name:
+        while game.state == StateOfGame.CREATE_ROOM.name or game.state == 'ERROR':
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     game.state = StateOfGame.EXIT.name
                     break
                 elif b1.handle_event(event):
                     game.data['name_of_room'] = room_name.text
-                    game.state = Message_To_Server.create_a_room(room_name.text, room_password.text,
+                    game.state = Message_To_Server.create_a_room(room_name.text, room_password.text,1, 'privat',
                                                                  room_max_player.text)
+                    print(game.state)
                     if game.state == StateOfGame.GAME_ROOM.name:
                         Message_To_Server.connect_to_room(room_name.text, room_password.text, game.data['name'])
                         game.data['CREATER'] = True
@@ -416,8 +418,11 @@ class Windows:
             game.screen.fill((0, 250, 0))
             game.screen.blit(image, (0, 0))
             game.screen.blit(name_room, (100, 100))
+            if game.state == 'ERROR':
+                game.screen.blit(error, (650, 100))
             game.screen.blit(text_password, (100, 200))
             game.screen.blit(text_max_player, (100, 300))
+
 
             b1.draw(game.screen)
             b2.draw(game.screen)

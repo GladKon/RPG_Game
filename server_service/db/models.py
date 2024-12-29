@@ -1,9 +1,10 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
-from web_server.settings import POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_HOST,POSTGRES_PORT,POSTGRES_DB
+from web_server.settings import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB
 
-engine = create_engine(f'postgresql://{POSTGRES_USER}]:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}]')
+engine = create_engine(
+    f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}')
 
 Base = declarative_base()
 

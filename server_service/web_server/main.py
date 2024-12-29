@@ -1,3 +1,4 @@
+import sqlalchemy
 from flask import Flask, request, jsonify
 
 from room import rooms
@@ -42,8 +43,11 @@ def create_room():
     limited = int(request.form['limited'])
     # r = Room(name_room, password, active, creater_id, type)
     # rooms.append(r)
-    user_dao.add_room(name_room, password, active, creater_id, type, limited)
-    return jsonify({'response': 'create', 'status': 201}), 201
+    try:
+        user_dao.add_room(name_room, password, active, creater_id, type, limited)
+        return jsonify({'response': 'create', 'status': 201}), 201
+    except sqlalchemy.exc.IntegrityError:
+        return jsonify({'response': 'already exists', 'status': 409}), 409
 
 
 @app.route('/input_room', methods=['POST'])
@@ -79,7 +83,7 @@ def create_character():
     user_id = request.form['user_id']
     character_name = request.form['character_name']
 
-    try:
+    try:#todo метка
         user_dao.add_character(user_id, character_name)
         return jsonify({'response': 'create'}), 201
     except Exception as e:

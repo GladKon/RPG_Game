@@ -22,11 +22,23 @@ class MessageToServer:
         data = requests.post('http://127.0.0.1:5000/input_room', data=d)
         return 'GAME_ROOM' if data.status_code == 200 else 'INPUT_ROOM'
 
-    def create_a_room(self, name, password, creater_id, type, max_player=15):
+    def create_a_room(self, name, password, creater_id, type, max_player):
+        if not max_player.isdigit():
+            max_player = 15
+
         d = {'name': name, 'password': password, 'active': True, 'creater_id': creater_id, 'type': type,
              'limited': max_player}
         data = requests.post('http://127.0.0.1:5000/create_room', data=d)
-        return 'GAME_ROOM' if data.status_code == 201 else 'CREATE_ROOM'
+
+        if data.status_code == 201:
+            return 'GAME_ROOM'
+        elif data.status_code == 409:
+            return "ERROR"
+        else:
+            return 'CREATE_ROOM'
+
+
+
 
     def get_list_of_users(self, name):
         data = requests.get(f'http://127.0.0.1:5000/room/{name}/get_users')
