@@ -11,6 +11,7 @@ from helpers.users import UserGame
 from structure.path import res
 from structure.map import TileMap, Camera
 from structure.windows import Windows
+from structure.settings import SOCKET_HOST,SOCKET_PORT
 
 
 
@@ -100,12 +101,15 @@ class Game:
                     self.start_game()
 
     def connect_player(self):
-        self.client.connect(('127.0.0.1', 19452))
-        self.client.send(json.dumps(self.data).encode('utf-8'))
-        self.number = self.client.recv(1024).decode('utf-8')
+        print(self.data)
+        self.client.connect((SOCKET_HOST, SOCKET_PORT))
 
-        t = threading.Thread(target=self.join_the_game, args=())
-        t.start()
+
+        self.client.send(json.dumps(self.data).encode('utf-8'))
+        # self.number = self.client.recv(1024).decode('utf-8')
+        #
+        # t = threading.Thread(target=self.join_the_game, args=())
+        # t.start()
 
     def join_the_game(self):
         self.users = json.loads(self.client.recv(1024).decode('utf-8'))

@@ -1,3 +1,8 @@
+import os
+import dotenv
+
+dotenv.load_dotenv()
+
 
 Win_x = 1400
 Win_y = 800
@@ -22,3 +27,5 @@ TURQUOISE = (0, 153, 153)
 YELLOW = (255, 255, 60)
 BLUE = (9, 42, 255)
 
+SOCKET_HOST = os.getenv('SOCKET_HOST')
+SOCKET_PORT = int(os.getenv('SOCKET_PORT'))

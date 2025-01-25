@@ -405,10 +405,11 @@ class Windows:
                     game.data['name_of_room'] = room_name.text
                     game.state = Message_To_Server.create_a_room(room_name.text, room_password.text,1, 'privat',
                                                                  room_max_player.text)
-                    print(game.state)
+
                     if game.state == StateOfGame.GAME_ROOM.name:
                         Message_To_Server.connect_to_room(room_name.text, room_password.text, game.data['name'])
                         game.data['CREATER'] = True
+
                 elif b2.handle_event(event):
                     game.state = StateOfGame.ROOM.name
                 room_name.handle_event(event)
@@ -434,8 +435,8 @@ class Windows:
             pg.display.update()
 
     def game_room(self, game):
-        users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
-
+        # users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
+        users = []
         b1 = Button('Назад', 430, 500, 100, 45)
         b2 = Button('Запустить', 430, 450, 100, 45)
         l1 = TextList(users, (236, 10, 100), 430, 100, 50)
@@ -443,7 +444,7 @@ class Windows:
         while game.state == StateOfGame.GAME_ROOM.name:
             # код нужно улучшить
             if time.time() - start >= 2:
-                users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
+                # users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
                 l1 = TextList(users, (236, 10, 100), 430, 100, 50)
                 start = time.time()
             # конец

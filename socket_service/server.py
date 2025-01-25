@@ -19,22 +19,38 @@
 #     client_socket, client_adress = server_socket.accept()
 #     print(f'Client accepted: {client_adress}')
 #     _thread.start_new_thread(client_thread, (client_socket,))
+import json
 
 import socket
 import threading
 
 
+def handle_server_message_from_client(client_socket, client_address):
+    while True:
+        message = client_socket.recv(1024)
+        if not message:
+            print(f"Клиент {client_address} отключился")
+            break
+
+        massage = json.loads(message.decode("utf-8"))
+
+        print(f'Сообщение от {client_address}: {massage}')
+
 def handle_client(client_socket, client_address):
     print(f"New connect:{client_address}")
+    threading_client = threading.Thread(target=handle_server_message_from_client, args=(client_socket, client_address))
+    threading_client.start()
     try:
         client_socket.sendall(b"Hello\n")
         while True:
-            message = client_socket.recv(1024)
-            if not message:
-                print(f"Клиент {client_address} отключился")
-                break
-            print(f'Сообщение от {client_address}: {message.decode("utf-8")}')
-            client_socket.sendall(f"You said: {message.decode('utf-8')}".encode('utf-8'))
+            # message = client_socket.recv(1024)
+            # if not message:
+            #     print(f"Клиент {client_address} отключился")
+            #     break
+            # print(f'Сообщение от {client_address}: {message.decode("utf-8")}')
+            # client_socket.sendall(f"You said: {message.decode('utf-8')}".encode('utf-8'))
+            data = input()
+            client_socket.sendall(data.encode('utf-8'))
     except ConnectionResetError:
         print(f'Клиент {client_address} принудительно закрыл соединение.')
     finally:
