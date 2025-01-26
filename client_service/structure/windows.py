@@ -137,7 +137,7 @@ class Windows:
                     break
                 elif b1.handle_event(event):
                     running = Message_To_Server.check_users(login_input.text, password_input.text, game)
-                    print(running)
+
                     if running == StateOfGame.MENU.name:
                         game.state = StateOfGame.MENU.name
                         game.data['name'] = login_input.text
