@@ -1,5 +1,6 @@
 import sqlalchemy
 from flask import Flask, request, jsonify
+from sqlalchemy.dialects.postgresql import psycopg2
 
 from room import rooms
 from user_dao import UserDAO
@@ -26,11 +27,14 @@ def registration():
 def input():
     username = request.form['name']
     password = request.form['password']
-    if user_dao.validate_user(username, password):
-        player_id = user_dao.get_id(username)
-        return jsonify({'response': 'Allowed', 'status': 200, 'player_id': player_id})
-    else:
-        return jsonify({'response': 'Not Allowed', 'status': 401})
+    try:
+        if user_dao.validate_user(username, password):
+            player_id = user_dao.get_id(username)
+            return jsonify({'response': 'Allowed', 'status': 200, 'player_id': player_id})
+        else:
+            return jsonify({'response': 'Not Allowed', 'status': 401})
+    except sqlalchemy.exc.OperationalError:
+        return jsonify({'response': 'Not Data Base', 'status': 500})
 
 
 @app.route('/create_room', methods=['POST'])
@@ -71,11 +75,13 @@ def get_users(name: str):
 
 @app.route('/room/<string:name>/start_game', methods=['GET'])
 def start_game(name: str):
-    for room in rooms:
-        if name == room.name:
-            room.start()
-            return jsonify({'Response': 'Success'}), 200
-    return jsonify({'Response': 'Not found'}), 404
+    # print(rooms)
+    # for room in rooms:
+    #     if name == room.name:
+    #         room.start()
+    #         return jsonify({'Response': 'Success'}), 200
+    # return jsonify({'Response': 'Not found'}), 404
+    return jsonify({'Response': 'Success'}), 200
 
 
 @app.route('/character/create', methods=['POST'])

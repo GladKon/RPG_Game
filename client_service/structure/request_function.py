@@ -12,6 +12,8 @@ class MessageToServer:
             if return_data['status'] == 200:
                 game.data['player_id'] = return_data['player_id']
                 return 'MENU'
+            elif return_data['status'] == 500:
+                return 'data_base_error'
             else:
                 return 'error'
         except requests.exceptions.ConnectionError:

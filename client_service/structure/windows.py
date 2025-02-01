@@ -1,3 +1,5 @@
+import json
+
 import pygame as pg
 import requests
 import time
@@ -126,11 +128,12 @@ class Windows:
         name = font.render('Введите никмейм', True, (0, 10, 0))
         password = font.render('Введите пароль', True, (0, 10, 0))
         error = font.render('Неверное имя или пароль!', True, (255, 0, 0))
+        data_base_error = LineBreak('База данных не отвечает!', 1, (250, 0, 0))
         server_error = LineBreak('На сервере ошибка', 1, (250, 0, 0))
         running = None
 
         while game.state == StateOfGame.INPUT.name:
-            print(game.state)
+            # print(game.state)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     game.state = StateOfGame.EXIT.name
@@ -158,6 +161,8 @@ class Windows:
                 game.screen.blit(error, (570, 150))
             elif running == 'error_server':
                 server_error.draw((570, 150), game.screen, 40)
+            elif running == 'data_base_error':
+                data_base_error.draw((570, 150), game.screen, 40)
 
             game.screen.blit(password, (100, 200))
 
@@ -436,16 +441,14 @@ class Windows:
 
     def game_room(self, game):
         # users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
-        users = []
         b1 = Button('Назад', 430, 500, 100, 45)
         b2 = Button('Запустить', 430, 450, 100, 45)
-        l1 = TextList(users, (236, 10, 100), 430, 100, 50)
+        l1 = TextList([], (236, 10, 100), 430, 100, 50)
         start = time.time()
         while game.state == StateOfGame.GAME_ROOM.name:
             # код нужно улучшить
             if time.time() - start >= 2:
-                # users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
-                l1 = TextList(users, (236, 10, 100), 430, 100, 50)
+                l1 = TextList(game.data['Players_list'], (236, 10, 100), 430, 100, 50)
                 start = time.time()
             # конец
             for event in pg.event.get():
@@ -455,8 +458,15 @@ class Windows:
                     game.state = StateOfGame.ROOM.name
                 elif b2.handle_event(event) and game.data['CREATER']:
                     data = requests.get(f'http://127.0.0.1:5000/room/{game.data["name_of_room"]}/start_game')
+                    print(data)
                     if data.status_code == 200:
-                        game.state = StateOfGame.GAME_ROOM.name
+                        print(data)
+                        game.data['Status'] = 'Run'
+                        game.client.send(json.dumps(game.data).encode('utf-8'))
+                        # message = data.client_socket.recv(1024)
+                        # message = json.loads(message.decode("utf-8"))
+                        # if message == 'Run':
+                        #     game.state = StateOfGame.GAME_ROOM.name
 
                 game.screen.fill((0, 250, 0))
 

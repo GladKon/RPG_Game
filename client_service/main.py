@@ -101,15 +101,29 @@ class Game:
                     self.start_game()
 
     def connect_player(self):
-        print(self.data)
+
         self.client.connect((SOCKET_HOST, SOCKET_PORT))
 
 
         self.client.send(json.dumps(self.data).encode('utf-8'))
+        thread = threading.Thread(target=self.messege_server, args=())
+        thread.start()
         # self.number = self.client.recv(1024).decode('utf-8')
         #
         # t = threading.Thread(target=self.join_the_game, args=())
         # t.start()
+
+    def messege_server(self):
+        while True:
+            message = self.client.recv(1024)
+            try:
+                message = json.loads(message.decode("utf-8"))
+                self.data['Players_list'] = message
+                print(message)
+            except json.decoder.JSONDecodeError:
+                message = message.decode("utf-8")
+                if message == 'Run':
+                    game.state = StateOfGame.GAME_ROOM.name
 
     def join_the_game(self):
         self.users = json.loads(self.client.recv(1024).decode('utf-8'))
