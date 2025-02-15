@@ -17,9 +17,11 @@ class Button:
 
     def handle_event(self, event):
         """Обрабатывает события кнопки."""
+
         if event.type == pygame.MOUSEBUTTONUP:
-            if self.rect.collidepoint(pygame.mouse.get_pos()):
-                return True
+            if event.button==1:
+                if self.rect.collidepoint(pygame.mouse.get_pos()):
+                    return True
 
     def draw(self, screen):
         """Рисует кнопку с прямоугольной тенью."""

@@ -32,12 +32,12 @@ class Game:
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
-        for u in self.users:
-            if u != self.number:
-                self.users[u] = UserGame(self, res / 'images' / 'player_sheet_2.png', (self.users[u][0], self.users[u][1]))
+        for u in self.data['Players_list']:
+            if u != self.data['name']:
+                self.users[u] = UserGame(self, res / 'images' / 'player_sheet_2.png', (self.data["Players_coords"][u][0], self.data["Players_coords"][u][1]))
             else:
+                self.player = Player(self, res / 'images' / 'player_sheet.png', (self.data["Players_coords"][u][0], self.data["Players_coords"][u][1]), self.client)
 
-                self.player = Player(self, res / 'images' / 'player_sheet.png', (self.users[u][0], self.users[u][1]), self.client)
         self.map = TileMap(self, res / 'map' / 'Png.png', res / 'map' / 'Карта.csv', 16)
         self.camera = Camera()
 
@@ -96,7 +96,9 @@ class Game:
                 case StateOfGame.GAME_ROOM.name:
                     self.connect_player()
                     self.window.game_room(self)
-                case StateOfGame.GAME_ROOM.name:
+                case StateOfGame.GAME.name:
+
+                    # print('RUN_GAME')
                     self.new()
                     self.start_game()
 
@@ -118,12 +120,25 @@ class Game:
             message = self.client.recv(1024)
             try:
                 message = json.loads(message.decode("utf-8"))
-                self.data['Players_list'] = message
-                print(message)
+
+                if type(message) == list:
+                    self.data['Players_list'] = message
+                elif message['Status'] == 'Run':
+                    print(self.data)
+                    self.data['Status'] = 'Run'
+                    self.data['Time_start'] = message['Time_start']
+                    self.data['Players_coords'] = message['Players_coords']
+
+
+
+
+
             except json.decoder.JSONDecodeError:
                 message = message.decode("utf-8")
-                if message == 'Run':
-                    game.state = StateOfGame.GAME_ROOM.name
+                print('Hello', message)
+                # if message == 'Run':
+                #     game.data['Status'] = 'Run'
+
 
     def join_the_game(self):
         self.users = json.loads(self.client.recv(1024).decode('utf-8'))

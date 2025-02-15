@@ -15,7 +15,7 @@ from structure.leveling_up import mage1, draw, handle_event, draw_text, archer1
 from structure.path import path_to_image_background
 from structure.request_function import MessageToServer
 from structure.settings import Win_x, Win_y
-
+from structure.path import path_to_font
 pg.init()
 
 font = pg.font.Font(None, 36)
@@ -408,7 +408,7 @@ class Windows:
                     break
                 elif b1.handle_event(event):
                     game.data['name_of_room'] = room_name.text
-                    game.state = Message_To_Server.create_a_room(room_name.text, room_password.text,1, 'privat',
+                    game.state = Message_To_Server.create_a_room(room_name.text, room_password.text, 1, 'privat',
                                                                  room_max_player.text)
 
                     if game.state == StateOfGame.GAME_ROOM.name:
@@ -429,7 +429,6 @@ class Windows:
             game.screen.blit(text_password, (100, 200))
             game.screen.blit(text_max_player, (100, 300))
 
-
             b1.draw(game.screen)
             b2.draw(game.screen)
             room_name.draw(game.screen)
@@ -440,14 +439,19 @@ class Windows:
             pg.display.update()
 
     def game_room(self, game):
+        font = pg.font.Font(path_to_font / 'test_font.ttf', 400)
         # users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
         b1 = Button('Назад', 430, 500, 100, 45)
         b2 = Button('Запустить', 430, 450, 100, 45)
         l1 = TextList([], (236, 10, 100), 430, 100, 50)
+        one = font.render('1', True, (255, 1, 1))
+        two = font.render('2', True, (255, 1, 1))
+        there = font.render('3', True, (255, 1, 1))
         start = time.time()
+
         while game.state == StateOfGame.GAME_ROOM.name:
             # код нужно улучшить
-            if time.time() - start >= 2:
+            if time.time() - start >= 1:
                 l1 = TextList(game.data['Players_list'], (236, 10, 100), 430, 100, 50)
                 start = time.time()
             # конец
@@ -458,24 +462,33 @@ class Windows:
                     game.state = StateOfGame.ROOM.name
                 elif b2.handle_event(event) and game.data['CREATER']:
                     data = requests.get(f'http://127.0.0.1:5000/room/{game.data["name_of_room"]}/start_game')
-                    print(data)
+                    # print(data)
                     if data.status_code == 200:
-                        print(data)
+                        # print(data)
                         game.data['Status'] = 'Run'
+                        game.data['Time_start'] = time.time()
                         game.client.send(json.dumps(game.data).encode('utf-8'))
-                        # message = data.client_socket.recv(1024)
-                        # message = json.loads(message.decode("utf-8"))
-                        # if message == 'Run':
-                        #     game.state = StateOfGame.GAME_ROOM.name
 
-                game.screen.fill((0, 250, 0))
 
-                b1.draw(game.screen)
 
-                if game.data['CREATER']:
-                    b2.draw(game.screen)
+            game.screen.fill((0, 250, 0))
 
-                l1.draw(game.screen)
+            if game.data.get('Status', 'Lobby') == 'Run':
+                # print(time.time() - game.data['Time_start'])
+                if time.time() - game.data['Time_start'] >= 0 and time.time() - game.data['Time_start'] < 1:
+                    game.screen.blit(there, (500, -300))
+                elif time.time() - game.data['Time_start'] >= 1 and time.time() - game.data['Time_start'] < 2:
+                    game.screen.blit(two, (500, 10))
+                elif time.time() - game.data['Time_start'] >= 2 and time.time() - game.data['Time_start'] < 3:
+                    game.screen.blit(one, (500, 10))
+                elif time.time() - game.data['Time_start'] >= 3 and time.time() - game.data['Time_start'] < 4:
+                    game.state = StateOfGame.GAME.name
+            b1.draw(game.screen)
 
-                game.clock.tick(60)
-                pg.display.update()
+            if game.data['CREATER']:
+                b2.draw(game.screen)
+
+            l1.draw(game.screen)
+
+            game.clock.tick(60)
+            pg.display.update()

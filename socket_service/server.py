@@ -39,6 +39,8 @@ def handle_server_message_from_client(client_socket, client_address):
         if message['CREATER']:
 
             lobbies[message['name_of_room']]['Status'] = message['Status']
+            lobbies[message['name_of_room']]['Time_start'] = message['Time_start']
+
         print(lobbies)
         # if type(message) != dict:
         #     print(f'Сообщение от {client_address}: {message}')
@@ -86,9 +88,15 @@ def handle_client(client_socket, client_address):
             # data = input()
             # client_socket.sendall(data.encode('utf-8'))
             if lobbies[room]['Status'] == 'Run':
-                data = 'Run'
-                client_socket.sendall(data.encode('utf-8'))
+                print('Open the door')
+                Players_coords = {}
+                for player in lobbies[room]['Players_list']:
+                    Players_coords[player] = [100,100]
+                data={'Status': lobbies[room]['Status'],'Time_start':lobbies[room]['Time_start'],'Players_coords': Players_coords}
+                client_socket.send(json.dumps(data).encode('utf-8'))
+
                 lobbies[room]['Status'] = 'Running'
+                print(lobbies[room])
 
     except ConnectionResetError:
         print(f'Клиент {client_address} принудительно закрыл соединение.')

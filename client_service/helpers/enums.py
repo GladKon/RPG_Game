@@ -15,3 +15,4 @@ class StateOfGame(enum.Enum):
     INPUT_ROOM = 11
     CREATE_ROOM = 12
     GAME_ROOM = 13
+    GAME = 14

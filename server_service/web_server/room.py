@@ -6,7 +6,7 @@ import threading
 import json
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('127.0.0.1', 19452))
+server.bind(('127.0.0.1', 19453))
 server.listen()
 
 
@@ -52,7 +52,7 @@ class Room:
 
     def start(self):
         d = {}
-        for user in self._players_in_room:
+        for user in self._players_in_room: # Старый код
             d[user.number] = randint(30, 300), randint(30, 300)
 
         for user in self._players_in_room:
@@ -89,7 +89,7 @@ def listening_user():
         client, a = server.accept()
         data = json.loads(client.recv(1024).decode('utf-8'))
         for room in rooms:
-            if room.name == data['name_of_room']:
+            if room.name == data['name_of_room']: # Старый код
                 number = str(room.get_amount()).encode('utf-8')
                 user = User(data['name'], client, str(room.get_amount()))
                 room.add_user(user)

@@ -66,9 +66,9 @@ class Player(pg.sprite.Sprite):
             is_tup = True
         if is_tup:
             X, Y = self.rect.center
-            target = {'x': X, 'y': Y, 'N': self.game.number}
-            data = json.dumps(target).encode('utf-8')
-            self.client.send(data)
+            # target = {'x': X, 'y': Y, 'N': self.game.number}
+            # data = json.dumps(target).encode('utf-8')
+            # self.client.send(data)
 
     def _animation(self, frame_len=100):
 

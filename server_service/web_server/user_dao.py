@@ -99,4 +99,4 @@ if __name__ == '__main__':
     # userdao.create_table_character_types()
     # userdao.create_table_users()
     # userdao.add_user('1','1')
-    # userdao.add_user('1','1')
+    userdao.add_user('2','2')
