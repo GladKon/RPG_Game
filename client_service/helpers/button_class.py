@@ -19,7 +19,7 @@ class Button:
         """Обрабатывает события кнопки."""
 
         if event.type == pygame.MOUSEBUTTONUP:
-            if event.button==1:
+            if event.button == 1:
                 if self.rect.collidepoint(pygame.mouse.get_pos()):
                     return True
 

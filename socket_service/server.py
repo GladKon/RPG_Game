@@ -28,18 +28,32 @@ from settings import SERVER_IP, SERVER_PORT
 
 
 def handle_server_message_from_client(client_socket, client_address):
+    room = ''
+
     while True:
         message = client_socket.recv(1024)
         if not message:
             print(f"Клиент {client_address} отключился")
             break
 
-        message = json.loads(message.decode("utf-8"))
+        message = message.decode("utf-8")
+        print(message.split('\n'))
+        if '\n' not in message:
+            message = json.loads(message)
         print(message)
-        if message['CREATER']:
+        if message.get('CREATER', False):
+            room = message['name_of_room']
 
             lobbies[message['name_of_room']]['Status'] = message['Status']
             lobbies[message['name_of_room']]['Time_start'] = message['Time_start']
+
+        else:
+
+            message = message.split('\n')[-2]
+            message = message.encode('utf-8')
+            for oponnent in lobbies[room]['Sockets_list']:
+                if oponnent != client_socket:
+                    oponnent.sendall(message)
 
         print(lobbies)
         # if type(message) != dict:

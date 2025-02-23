@@ -70,6 +70,7 @@ class Game:
 
     def run(self):
         while self.state != StateOfGame.EXIT.name:
+            print(self.data)
             match self.state:
                 case StateOfGame.START_WINDOW.name:
                     self.window.start_window(self)
@@ -128,6 +129,8 @@ class Game:
                     self.data['Status'] = 'Run'
                     self.data['Time_start'] = message['Time_start']
                     self.data['Players_coords'] = message['Players_coords']
+                else:
+                    print(message)
 
 
 

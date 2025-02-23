@@ -1,5 +1,6 @@
 import pygame as pg
 import json
+import time
 
 from helpers.helper import SpriteHelper
 from pygame.math import Vector2
@@ -23,6 +24,7 @@ class Player(pg.sprite.Sprite):
         self.last_update = 0
         self.animate = 0
         self.Sprint = 1
+        self.send = time.time()
 
 
 
@@ -66,9 +68,12 @@ class Player(pg.sprite.Sprite):
             is_tup = True
         if is_tup:
             X, Y = self.rect.center
-            # target = {'x': X, 'y': Y, 'N': self.game.number}
-            # data = json.dumps(target).encode('utf-8')
-            # self.client.send(data)
+            target = {'x': X, 'y': Y, 'Name': self.game.data['name']}
+            if time.time() - self.send >= 0.001:
+                target = json.dumps(target) + '\n'
+                data = target.encode('utf-8')
+                self.client.sendall(data)
+                self.send = time.time()
 
     def _animation(self, frame_len=100):
 
