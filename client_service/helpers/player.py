@@ -69,11 +69,11 @@ class Player(pg.sprite.Sprite):
         if is_tup:
             X, Y = self.rect.center
             target = {'x': X, 'y': Y, 'Name': self.game.data['name']}
-            if time.time() - self.send >= 0.001:
-                target = json.dumps(target) + '\n'
-                data = target.encode('utf-8')
-                self.client.sendall(data)
-                self.send = time.time()
+            data = json.dumps({'type_message': 'running_game', 'content': target}).encode('utf-8')
+            len_message = f'{len(data):04d}'
+            print(data)
+            self.client.send(len_message.encode('utf-8'))
+            self.client.send(data)
 
     def _animation(self, frame_len=100):
 

@@ -23,6 +23,7 @@ import json
 
 import socket
 import threading
+from plistlib import loads
 
 from settings import SERVER_IP, SERVER_PORT
 
@@ -59,11 +60,11 @@ def handle_server_message_from_client(client_socket, client_address):
         # if type(message) != dict:
         #     print(f'Сообщение от {client_address}: {message}')
 
-def first_message(client_socket,lobies):
+def first_message(client_socket,message):
 
-    message = client_socket.recv(1024)
-    message = json.loads(message.decode("utf-8"))
-    room = message['name_of_room']
+    # message = client_socket.recv(1024)
+    # message = json.loads(message.decode("utf-8"))
+    # room = message['name_of_room']
     # print(message)
     if message['CREATER']:
         lobbies[message['name_of_room']] = {'Status': 'Lobby', 'Admin': message['player_id'],
@@ -79,38 +80,48 @@ def first_message(client_socket,lobies):
         for client in lobbies[message['name_of_room']]['Sockets_list']:
 
             client.send(json.dumps(data).encode('utf-8'))
-    return lobbies,room
+
 
 
 def handle_client(client_socket, client_address):
     print(f"New connect:{client_address}")
     global lobbies
 
-    lobbies,room = first_message(client_socket, lobbies)
-
-    threading_client = threading.Thread(target=handle_server_message_from_client, args=(client_socket, client_address))
-    threading_client.start()
     try:
-        client_socket.sendall(b"Hello\n")
         while True:
-            # message = client_socket.recv(1024)
-            # if not message:
-            #     print(f"Клиент {client_address} отключился")
-            #     break
-            # print(f'Сообщение от {client_address}: {message.decode("utf-8")}')
-            # client_socket.sendall(f"You said: {message.decode('utf-8')}".encode('utf-8'))
-            # data = input()
-            # client_socket.sendall(data.encode('utf-8'))
-            if lobbies[room]['Status'] == 'Run':
+            len_message = int(client_socket.recv(4).decode('utf-8'))
+            message = json.loads(client_socket.recv(len_message).decode('utf-8'))
+            type_message = message['type_message']
+            content = message['content']
+
+            # print(lobbies)
+            if type_message == 'first_message':
+                first_message_thread = threading.Thread(target=first_message, args=(client_socket,content))
+                first_message_thread.start()
+            elif type_message == 'start_lobby':
+
                 print('Open the door')
                 Players_coords = {}
-                for player in lobbies[room]['Players_list']:
-                    Players_coords[player] = [100,100]
-                data={'Status': lobbies[room]['Status'],'Time_start':lobbies[room]['Time_start'],'Players_coords': Players_coords}
-                client_socket.send(json.dumps(data).encode('utf-8'))
+                for player in content['Players_list']:
+                    Players_coords[player] = [100, 100]
+                data = {'Status': content['Status'], 'Time_start': content['Time_start'],
+                        'Players_coords': Players_coords}
+                for client in lobbies[content['name_of_room']]['Sockets_list']:
+                    client.send(json.dumps(data).encode('utf-8'))
 
-                lobbies[room]['Status'] = 'Running'
-                print(lobbies[room])
+                # print(lobbies)
+                lobbies[content['name_of_room']]['Status'] = 'Running'
+            elif type_message == 'running_game':
+
+
+                print(content)
+                for client in lobbies[content['name_of_room']]['Sockets_list']:
+                    if client != client_socket:
+                        client.send(json.dumps(content).encode('utf-8'))
+
+
+
+
 
     except ConnectionResetError:
         print(f'Клиент {client_address} принудительно закрыл соединение.')

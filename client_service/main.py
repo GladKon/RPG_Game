@@ -106,9 +106,11 @@ class Game:
     def connect_player(self):
 
         self.client.connect((SOCKET_HOST, SOCKET_PORT))
+        data = json.dumps({'type_message':'first_message','content':self.data}).encode('utf-8')
+        len_message = f'{len(data):04d}'
 
-
-        self.client.send(json.dumps(self.data).encode('utf-8'))
+        self.client.send(len_message.encode('utf-8'))
+        self.client.send(data)
         thread = threading.Thread(target=self.messege_server, args=())
         thread.start()
         # self.number = self.client.recv(1024).decode('utf-8')

@@ -467,7 +467,11 @@ class Windows:
                         # print(data)
                         game.data['Status'] = 'Run'
                         game.data['Time_start'] = time.time()
-                        game.client.send(json.dumps(game.data).encode('utf-8'))
+                        data = json.dumps({'type_message': 'start_lobby', 'content': game.data}).encode('utf-8')
+                        len_message = f'{len(data):04d}'
+                        print(data)
+                        game.client.send(len_message.encode('utf-8'))
+                        game.client.send(data)
 
 
 
