@@ -11,8 +11,7 @@ from helpers.users import UserGame
 from structure.path import res
 from structure.map import TileMap, Camera
 from structure.windows import Windows
-from structure.settings import SOCKET_HOST,SOCKET_PORT
-
+from structure.settings import SOCKET_HOST, SOCKET_PORT
 
 
 class Game:
@@ -32,11 +31,14 @@ class Game:
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()
-        for u in self.data['Players_list']:
+        for u in self.data['players_list']:
             if u != self.data['name']:
-                self.users[u] = UserGame(self, res / 'images' / 'player_sheet_2.png', (self.data["Players_coords"][u][0], self.data["Players_coords"][u][1]))
+                self.users[u] = UserGame(self, res / 'images' / 'player_sheet_2.png',
+                                         (self.data["Players_coords"][u][0], self.data["Players_coords"][u][1]))
             else:
-                self.player = Player(self, res / 'images' / 'player_sheet.png', (self.data["Players_coords"][u][0], self.data["Players_coords"][u][1]), self.client)
+                self.player = Player(self, res / 'images' / 'player_sheet.png',
+                                     (self.data["Players_coords"][u][0], self.data["Players_coords"][u][1]),
+                                     self.client)
 
         self.map = TileMap(self, res / 'map' / 'Png.png', res / 'map' / 'Карта.csv', 16)
         self.camera = Camera()
@@ -45,7 +47,7 @@ class Game:
         while self.life:
             data = self.client.recv(1024)
             data = json.loads(data.decode('utf-8'))
-            x_old, y_old = self.users[data['N']].rect.center
+            x_old, y_old = self.users[data['name']].rect.center
             x_new, y_new = (data['x'], data['y'])
             direction = None
             if x_new < x_old:
@@ -70,7 +72,6 @@ class Game:
 
     def run(self):
         while self.state != StateOfGame.EXIT.name:
-            print(self.data)
             match self.state:
                 case StateOfGame.START_WINDOW.name:
                     self.window.start_window(self)
@@ -106,44 +107,55 @@ class Game:
     def connect_player(self):
 
         self.client.connect((SOCKET_HOST, SOCKET_PORT))
-        data = json.dumps({'type_message':'first_message','content':self.data}).encode('utf-8')
-        len_message = f'{len(data):04d}'
+        data = json.dumps({'type_message': 'first_message', 'content': self.data}).encode('utf-8')
+        len_message = f'{len(data):04d}'.encode('utf-8')
 
-        self.client.send(len_message.encode('utf-8'))
+        self.client.send(len_message)
         self.client.send(data)
         thread = threading.Thread(target=self.messege_server, args=())
         thread.start()
-        # self.number = self.client.recv(1024).decode('utf-8')
-        #
-        # t = threading.Thread(target=self.join_the_game, args=())
-        # t.start()
 
     def messege_server(self):
         while True:
             message = self.client.recv(1024)
             try:
                 message = json.loads(message.decode("utf-8"))
+                # print(message)
+                type_of_message = message["type_of_message"]
+                content = message["content"]
 
-                if type(message) == list:
-                    self.data['Players_list'] = message
-                elif message['Status'] == 'Run':
-                    print(self.data)
+                if type_of_message == "first_message_admin":
+                    self.data['players_list'] = content
+
+                elif type_of_message == "first_message_not_admin":
+                    self.data['players_list'] = content
+
+                elif type_of_message == "start_game":
                     self.data['Status'] = 'Run'
+                    message = message['content']
                     self.data['Time_start'] = message['Time_start']
                     self.data['Players_coords'] = message['Players_coords']
+                elif type_of_message == "coords":
+                    x_old, y_old = self.users[content['Name']].rect.center
+                    x_new, y_new = (content['x'], content['y'])
+                    direction = None
+                    if x_new < x_old:
+                        direction = 'l'
+                    elif x_new > x_old:
+                        direction = 'r'
+                    elif y_new < y_old:
+                        direction = 'u'
+                    elif y_new > y_old:
+                        direction = 'd'
+                    self.users[content['Name']].change_direction(direction)
+                    self.users[content['Name']].rect.center = (content['x'], content['y'])
                 else:
-                    print(message)
-
-
-
-
-
+                    print("what is it???")
             except json.decoder.JSONDecodeError:
                 message = message.decode("utf-8")
-                print('Hello', message)
+                # print('Hello', message)
                 # if message == 'Run':
                 #     game.data['Status'] = 'Run'
-
 
     def join_the_game(self):
         self.users = json.loads(self.client.recv(1024).decode('utf-8'))
@@ -162,8 +174,6 @@ class Game:
         pg.display.flip()
 
     def start_game(self):
-        tread = threading.Thread(target=self._contact_with_server)
-        tread.start()
         while self.life:
             self._event()
             self._draw()

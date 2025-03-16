@@ -1,13 +1,11 @@
 import bcrypt
 from sqlalchemy.orm import sessionmaker
 
-from db.models import Character, CharacterType, User, engine, Room
+from db.models import Character, CharacterType, User, Room
 
 
 class UserDAO:
     def __init__(self, engine):
-        # self.engine = create_engine(db_url)
-        # Base.metadata.create_all(self.engine)
         self.engine = engine
         self.session = sessionmaker(bind=self.engine)
 
@@ -36,17 +34,10 @@ class UserDAO:
     def validate_user(self, username, password):
         session = self.session()
         user = session.query(User).filter_by(username=username).first()
-        print(user)
         if user:
             stored_password = user.password_hash
             return bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8'))
         return False
-
-        # if user:
-        #
-        #     return True
-        #     # return bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8'))
-        # return False
 
     def get_id(self, username):
         session = self.session()
@@ -79,7 +70,7 @@ class UserDAO:
         session.add(room)
         session.commit()
 
-    def delete_room(self,name_of_room):
+    def delete_room(self, name_of_room: str):
         session = self.session()
         room = session.query(Room).filter_by(name_of_room=name_of_room).first()
 
@@ -89,6 +80,8 @@ class UserDAO:
 
 
 if __name__ == '__main__':
+    from db.models import engine
+
     userdao = UserDAO(engine=engine)
     # userdao.add_room('1', '2', True, 2, '4')
     # userdao.delete_room('1')
@@ -98,5 +91,5 @@ if __name__ == '__main__':
     # userdao.create_table_characters()
     # userdao.create_table_character_types()
     # userdao.create_table_users()
-    userdao.add_user('1','1')
+    # userdao.add_user('1','1')
     userdao.add_user('2','2')

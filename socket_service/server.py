@@ -60,27 +60,26 @@ def handle_server_message_from_client(client_socket, client_address):
         # if type(message) != dict:
         #     print(f'Сообщение от {client_address}: {message}')
 
-def first_message(client_socket,message):
 
+def first_message(client_socket, message):
     # message = client_socket.recv(1024)
     # message = json.loads(message.decode("utf-8"))
     # room = message['name_of_room']
     # print(message)
     if message['CREATER']:
         lobbies[message['name_of_room']] = {'Status': 'Lobby', 'Admin': message['player_id'],
-                                            'Players_list': [message['name']], 'Sockets_list': [client_socket]}
-        data = lobbies[message['name_of_room']]['Players_list']
-
-        client_socket.send(json.dumps(data).encode('utf-8'))
+                                            'players_list': [message['name']], 'Sockets_list': [client_socket]}
+        data = lobbies[message['name_of_room']]['players_list']
+        final_message = {'type_of_message': "first_message_admin", "content": data}
+        client_socket.send(json.dumps(final_message).encode('utf-8'))
 
     else:
-        lobbies[message['name_of_room']]['Players_list'].append(message['name'])
+        lobbies[message['name_of_room']]['players_list'].append(message['name'])
         lobbies[message['name_of_room']]['Sockets_list'].append(client_socket)
-        data = lobbies[message['name_of_room']]['Players_list']
+        data = lobbies[message['name_of_room']]['players_list']
+        final_message = {"type_of_message": "first_message_not_admin", "content": data}
         for client in lobbies[message['name_of_room']]['Sockets_list']:
-
-            client.send(json.dumps(data).encode('utf-8'))
-
+            client.send(json.dumps(final_message).encode('utf-8'))
 
 
 def handle_client(client_socket, client_address):
@@ -96,28 +95,29 @@ def handle_client(client_socket, client_address):
 
             # print(lobbies)
             if type_message == 'first_message':
-                first_message_thread = threading.Thread(target=first_message, args=(client_socket,content))
+                first_message_thread = threading.Thread(target=first_message, args=(client_socket, content))
                 first_message_thread.start()
             elif type_message == 'start_lobby':
 
-                print('Open the door')
+                # print('Open the door')
                 Players_coords = {}
-                for player in content['Players_list']:
+                for player in content['players_list']:
                     Players_coords[player] = [100, 100]
                 data = {'Status': content['Status'], 'Time_start': content['Time_start'],
                         'Players_coords': Players_coords}
+                final_message = {"type_of_message": "start_game", "content": data}
                 for client in lobbies[content['name_of_room']]['Sockets_list']:
-                    client.send(json.dumps(data).encode('utf-8'))
+                    client.send(json.dumps(final_message).encode('utf-8'))
 
                 # print(lobbies)
                 lobbies[content['name_of_room']]['Status'] = 'Running'
             elif type_message == 'running_game':
 
-
                 print(content)
+                final_message = {"type_of_message": "coords", "content": content}
                 for client in lobbies[content['name_of_room']]['Sockets_list']:
                     if client != client_socket:
-                        client.send(json.dumps(content).encode('utf-8'))
+                        client.send(json.dumps(final_message).encode('utf-8'))
 
 
 
@@ -128,7 +128,10 @@ def handle_client(client_socket, client_address):
     finally:
         client_socket.close()
 
+
 lobbies = {}
+
+
 def main():
     server_ip = SERVER_IP
     server_port = SERVER_PORT

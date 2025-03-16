@@ -68,10 +68,10 @@ class Player(pg.sprite.Sprite):
             is_tup = True
         if is_tup:
             X, Y = self.rect.center
-            target = {'x': X, 'y': Y, 'Name': self.game.data['name']}
+            target = {'x': X, 'y': Y, 'Name': self.game.data['name'], "name_of_room": self.game.data['name_of_room']}
             data = json.dumps({'type_message': 'running_game', 'content': target}).encode('utf-8')
             len_message = f'{len(data):04d}'
-            print(data)
+            # print(data)
             self.client.send(len_message.encode('utf-8'))
             self.client.send(data)
 

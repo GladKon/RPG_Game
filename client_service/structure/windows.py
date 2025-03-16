@@ -452,7 +452,7 @@ class Windows:
         while game.state == StateOfGame.GAME_ROOM.name:
             # код нужно улучшить
             if time.time() - start >= 1:
-                l1 = TextList(game.data['Players_list'], (236, 10, 100), 430, 100, 50)
+                l1 = TextList(game.data['players_list'], (236, 10, 100), 430, 100, 50)
                 start = time.time()
             # конец
             for event in pg.event.get():
@@ -462,14 +462,11 @@ class Windows:
                     game.state = StateOfGame.ROOM.name
                 elif b2.handle_event(event) and game.data['CREATER']:
                     data = requests.get(f'http://127.0.0.1:5000/room/{game.data["name_of_room"]}/start_game')
-                    # print(data)
                     if data.status_code == 200:
-                        # print(data)
                         game.data['Status'] = 'Run'
                         game.data['Time_start'] = time.time()
                         data = json.dumps({'type_message': 'start_lobby', 'content': game.data}).encode('utf-8')
                         len_message = f'{len(data):04d}'
-                        print(data)
                         game.client.send(len_message.encode('utf-8'))
                         game.client.send(data)
 
@@ -478,6 +475,7 @@ class Windows:
             game.screen.fill((0, 250, 0))
 
             if game.data.get('Status', 'Lobby') == 'Run':
+                print(game.data)
                 # print(time.time() - game.data['Time_start'])
                 if time.time() - game.data['Time_start'] >= 0 and time.time() - game.data['Time_start'] < 1:
                     game.screen.blit(there, (500, -300))

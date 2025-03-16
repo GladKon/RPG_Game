@@ -64,10 +64,10 @@ class MessageToServer:
         d = {'user_id': game.data['player_id'], 'character_name': character_name}
         data = requests.post('http://127.0.0.1:5000/character/create', data=d)
 
-        if data.status_code == 201:
-            print('Create')
-        else:
-            print('Error')
+        # if data.status_code == 201:
+        #     print('Create')
+        # else:
+        #     print('Error')
 
 
 if __name__ == '__main__':

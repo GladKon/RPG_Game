@@ -1,6 +1,5 @@
 import sqlalchemy
 from flask import Flask, request, jsonify
-from sqlalchemy.dialects.postgresql import psycopg2
 
 from room import rooms
 from user_dao import UserDAO
@@ -45,8 +44,6 @@ def create_room():
     creater_id = int(request.form['creater_id'])
     type = request.form['type']
     limited = int(request.form['limited'])
-    # r = Room(name_room, password, active, creater_id, type)
-    # rooms.append(r)
     try:
         user_dao.add_room(name_room, password, active, creater_id, type, limited)
         return jsonify({'response': 'create', 'status': 201}), 201
@@ -75,12 +72,6 @@ def get_users(name: str):
 
 @app.route('/room/<string:name>/start_game', methods=['GET'])
 def start_game(name: str):
-    # print(rooms)
-    # for room in rooms:
-    #     if name == room.name:
-    #         room.start()
-    #         return jsonify({'Response': 'Success'}), 200
-    # return jsonify({'Response': 'Not found'}), 404
     return jsonify({'Response': 'Success'}), 200
 
 
@@ -89,7 +80,7 @@ def create_character():
     user_id = request.form['user_id']
     character_name = request.form['character_name']
 
-    try:#todo метка
+    try:
         user_dao.add_character(user_id, character_name)
         return jsonify({'response': 'create'}), 201
     except Exception as e:
