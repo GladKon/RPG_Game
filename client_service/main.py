@@ -99,8 +99,6 @@ class Game:
                     self.connect_player()
                     self.window.game_room(self)
                 case StateOfGame.GAME.name:
-
-                    # print('RUN_GAME')
                     self.new()
                     self.start_game()
 
@@ -120,7 +118,6 @@ class Game:
             message = self.client.recv(1024)
             try:
                 message = json.loads(message.decode("utf-8"))
-                # print(message)
                 type_of_message = message["type_of_message"]
                 content = message["content"]
 
