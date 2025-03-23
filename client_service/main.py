@@ -28,6 +28,7 @@ class Game:
         self.data = {}
         self.window = Windows()
         self.visual_info = {'CURRENT_IMAGE': BackGround()}
+        self.client.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 
     def new(self):
         self.all_sprite = pg.sprite.LayeredUpdates()

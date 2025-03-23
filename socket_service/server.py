@@ -68,6 +68,7 @@ def main():
     server_ip = SERVER_IP
     server_port = SERVER_PORT
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
     server_socket.bind((server_ip, server_port))
     server_socket.listen(5)
 
