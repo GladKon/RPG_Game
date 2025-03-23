@@ -27,6 +27,22 @@ def first_message(client_socket, message) -> None:
         for client in lobbies[message['name_of_room']]['Sockets_list']:
             client.send(json.dumps(final_message).encode('utf-8'))
 
+def start_lobby(content):
+    Players_coords = {}
+    for player in content['players_list']:
+        Players_coords[player] = [100, 100]
+    data = {'Status': content['Status'], 'Time_start': content['Time_start'],
+            'Players_coords': Players_coords}
+    final_message = {"type_of_message": "start_game", "content": data}
+    for client in lobbies[content['name_of_room']]['Sockets_list']:
+        client.send(json.dumps(final_message).encode('utf-8'))
+    lobbies[content['name_of_room']]['Status'] = 'Running'
+
+def running_game(content,client_socket):
+    final_message = {"type_of_message": "coords", "content": content}
+    for client in lobbies[content['name_of_room']]['Sockets_list']:
+        if client != client_socket:
+            client.send(json.dumps(final_message).encode('utf-8'))
 
 def handle_client(client_socket, client_address):
     print(f"New connect: {client_address}")
@@ -36,25 +52,14 @@ def handle_client(client_socket, client_address):
             message = json.loads(client_socket.recv(len_message).decode('utf-8'))
             type_message = message['type_message']
             content = message['content']
-
-            if type_message == 'first_message':
-                first_message_thread = threading.Thread(target=first_message, args=(client_socket, content))
-                first_message_thread.start()
-            elif type_message == 'start_lobby':
-                Players_coords = {}
-                for player in content['players_list']:
-                    Players_coords[player] = [100, 100]
-                data = {'Status': content['Status'], 'Time_start': content['Time_start'],
-                        'Players_coords': Players_coords}
-                final_message = {"type_of_message": "start_game", "content": data}
-                for client in lobbies[content['name_of_room']]['Sockets_list']:
-                    client.send(json.dumps(final_message).encode('utf-8'))
-                lobbies[content['name_of_room']]['Status'] = 'Running'
-            elif type_message == 'running_game':
-                final_message = {"type_of_message": "coords", "content": content}
-                for client in lobbies[content['name_of_room']]['Sockets_list']:
-                    if client != client_socket:
-                        client.send(json.dumps(final_message).encode('utf-8'))
+            match type_message:
+                case 'first_message':
+                    first_message_thread = threading.Thread(target=first_message, args=(client_socket, content))
+                    first_message_thread.start()
+                case 'start_lobby':
+                    start_lobby(content)
+                case 'running_game':
+                    running_game(content, client_socket)
     except ConnectionResetError:
         print(f'Клиент {client_address} принудительно закрыл соединение.')
     finally:

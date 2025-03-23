@@ -122,33 +122,42 @@ class Game:
                 type_of_message = message["type_of_message"]
                 content = message["content"]
 
-                if type_of_message == "first_message_admin":
-                    self.data['players_list'] = content
+                match type_of_message:
+                    case "first_message_admin":
+                        player_list(self.data, content)
+                    case "first_message_not_admin":
+                        player_list(self.data, content)
+                    case "start_game":
+                        start_game(self.data,content)
+                    case "coords":
+                        coords(self.users,content)
+                # if type_of_message == "first_message_admin":
+                #     self.data['players_list'] = content
+                #
+                # elif type_of_message == "first_message_not_admin":
+                #     self.data['players_list'] = content
 
-                elif type_of_message == "first_message_not_admin":
-                    self.data['players_list'] = content
-
-                elif type_of_message == "start_game":
-                    self.data['Status'] = 'Run'
-                    message = message['content']
-                    self.data['Time_start'] = message['Time_start']
-                    self.data['Players_coords'] = message['Players_coords']
-                elif type_of_message == "coords":
-                    x_old, y_old = self.users[content['Name']].rect.center
-                    x_new, y_new = (content['x'], content['y'])
-                    direction = None
-                    if x_new < x_old:
-                        direction = 'l'
-                    elif x_new > x_old:
-                        direction = 'r'
-                    elif y_new < y_old:
-                        direction = 'u'
-                    elif y_new > y_old:
-                        direction = 'd'
-                    self.users[content['Name']].change_direction(direction)
-                    self.users[content['Name']].rect.center = (content['x'], content['y'])
-                else:
-                    print("what is it???")
+                # elif type_of_message == "start_game":
+                #     self.data['Status'] = 'Run'
+                #     message = message['content']
+                #     self.data['Time_start'] = message['Time_start']
+                #     self.data['Players_coords'] = message['Players_coords']
+                # elif type_of_message == "coords":
+                #     x_old, y_old = self.users[content['Name']].rect.center
+                #     x_new, y_new = (content['x'], content['y'])
+                #     direction = None
+                #     if x_new < x_old:
+                #         direction = 'l'
+                #     elif x_new > x_old:
+                #         direction = 'r'
+                #     elif y_new < y_old:
+                #         direction = 'u'
+                #     elif y_new > y_old:
+                #         direction = 'd'
+                #     self.users[content['Name']].change_direction(direction)
+                #     self.users[content['Name']].rect.center = (content['x'], content['y'])
+                # else:
+                #     print("what is it???")
             except json.decoder.JSONDecodeError:
                 message = message.decode("utf-8")
                 # print('Hello', message)
@@ -178,6 +187,28 @@ class Game:
             self._update()
             self.clock.tick(FPS)
 
+def player_list(data,content):
+    data['players_list'] = content
+
+def start_game(data, content):
+    data['Status'] = 'Run'
+    data['Time_start'] = content['Time_start']
+    data['Players_coords'] = content['Players_coords']
+
+def coords(users,content):
+    x_old, y_old = users[content['Name']].rect.center
+    x_new, y_new = (content['x'], content['y'])
+    direction = None
+    if x_new < x_old:
+        direction = 'l'
+    elif x_new > x_old:
+        direction = 'r'
+    elif y_new < y_old:
+        direction = 'u'
+    elif y_new > y_old:
+        direction = 'd'
+    users[content['Name']].change_direction(direction)
+    users[content['Name']].rect.center = (content['x'], content['y'])
 
 if __name__ == '__main__':
     game = Game()
