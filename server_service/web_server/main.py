@@ -1,7 +1,7 @@
 import sqlalchemy
 from flask import Flask, request, jsonify
 
-from room import rooms
+
 from user_dao import UserDAO
 from db.models import engine
 
@@ -50,24 +50,16 @@ def create_room():
     except sqlalchemy.exc.IntegrityError:
         return jsonify({'response': 'already exists', 'status': 409}), 409
 
-
+# todo переделать
 @app.route('/input_room', methods=['POST'])
 def input_room():
     name = request.form['name']
     password = request.form['password']
-    for room in rooms:
-        if room.name == name:
-            return jsonify({'response': 'input', 'status': 200}) if room.pasword == password else jsonify(
+    if user_dao.room_is_exist(name):
+            return jsonify({'response': 'input', 'status': 200}) if user_dao.check_password_room(name,password) else jsonify(
                 {'response': 'stop', 'status': 412})
     return jsonify({'response': 'stop', 'status': 401})
 
-
-@app.route('/room/<string:name>/get_users', methods=['GET'])
-def get_users(name: str):
-    for room in rooms:
-        if name == room.name:
-            return jsonify({'Response': 'Success', 'User': room.get_names()}), 200
-    return jsonify({'Response': 'Not found'}), 404
 
 
 @app.route('/room/<string:name>/start_game', methods=['GET'])

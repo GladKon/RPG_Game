@@ -1,8 +1,10 @@
 import bcrypt
 from flask import session
+from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
 from db.models import Character, CharacterType, User, Room
+
 
 
 class UserDAO:
@@ -95,6 +97,36 @@ class UserDAO:
         finally:
             session.close()
 
+    def room_is_exist(self, name_of_room: str):
+        try:
+            session = self.session()
+            room = session.query(Room).filter_by(name_of_room=name_of_room).first()
+            if room:
+                return True
+            else:
+                return False
+        finally:
+            session.close()
+    def check_password_room(self, name_of_room: str, password_of_room: str):
+        try:
+            session = self.session()
+            room = session.query(Room).filter_by(name_of_room=name_of_room).first()
+            password = session.query(Room).filter_by(name_of_room=password_of_room).first()
+            if room and password:
+                return True
+            else:
+                return False
+        finally:
+            session.close()
+    def clear_room(self):
+        try:
+            session = self.session()
+            session.execute(text("TRUNCATE TABLE rooms CASCADE;"))
+
+            session.commit()
+        finally:
+            session.close()
+
     def delete_room(self, name_of_room: str):
         try:
             session = self.session()
@@ -111,4 +143,5 @@ if __name__ == '__main__':
     from db.models import engine
 
     userdao = UserDAO(engine=engine)
-    userdao.add_user('2','2')
+    userdao.clear_room()
+    # userdao.add_user('2','2')

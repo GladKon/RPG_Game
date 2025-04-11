@@ -41,11 +41,11 @@ class MessageToServer:
 
 
 
-
-    def get_list_of_users(self, name):
-        data = requests.get(f'http://127.0.0.1:5000/room/{name}/get_users')
-        return_data = json.loads(data.text)
-        return return_data['User']
+    # todo удалить
+    # def get_list_of_users(self, name):
+    #     data = requests.get(f'http://127.0.0.1:5000/room/{name}/get_users')
+    #     return_data = json.loads(data.text)
+    #     return return_data['User']
 
     def button_registration(self, login_input, password_input, password_input2):
         if password_input == password_input2:

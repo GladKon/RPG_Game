@@ -440,7 +440,6 @@ class Windows:
 
     def game_room(self, game):
         font = pg.font.Font(path_to_font / 'test_font.ttf', 400)
-        # users = Message_To_Server.get_list_of_users(game.data['name_of_room'])
         b1 = Button('Назад', 430, 500, 100, 45)
         b2 = Button('Запустить', 430, 450, 100, 45)
         l1 = TextList([], (236, 10, 100), 430, 100, 50)
