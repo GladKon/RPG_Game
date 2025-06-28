@@ -1,1 +1,1 @@
-web: python socket_service/server.py
+web: python server.py
