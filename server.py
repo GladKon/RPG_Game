@@ -3,8 +3,8 @@ import os
 import socket
 import threading
 
-SERVER_IP=welcoming-truth.railway.app
-SERVER_PORT=int(os.getenv('PORT',8081))
+SERVER_IP=rpg-game-1.onrender.com
+SERVER_PORT=int(os.getenv('SERVER_PORT',5000))
 
 
 def first_message(client_socket, message) -> None:
