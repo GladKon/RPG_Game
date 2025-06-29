@@ -3,7 +3,7 @@ import os
 import socket
 import threading
 
-SERVER_IP=rpg-game-1.onrender.com
+SERVER_IP=216.24.57.252
 SERVER_PORT=int(os.getenv('SERVER_PORT',5000))
 
 
